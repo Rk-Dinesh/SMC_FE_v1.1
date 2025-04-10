@@ -15,14 +15,21 @@ import PayOutDetails from './pages/Refer & Earn/PayOutDetails';
 import ReferralTerms from './pages/Refer & Earn/ReferralTerms';
 import StudyGroups from './pages/study groups/StudyGroups';
 import ViewGroup from './pages/study groups/ViewGroup';
+import GenerateCourse from './pages/courses/GenerateCourse';
+import ListTopics from './pages/courses/ListTopics';
+import Content from './pages/courses/Content';
 
 const App = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
+        <Route path="/content" element={<Content />} />
           <Route path="/" element={<Layout />}>
+
           <Route path="/dashboard" element={<Dashboard />}/>
+          <Route path="/generate_courses" element={<GenerateCourse />} />
+          <Route path="/topics" element={<ListTopics />} />
           <Route path="/study_group" element={<StudyGroups/>}/>
           <Route path="/view_group" element={<ViewGroup/>}/>
           <Route path="/refer_dashboard" element={<ReferralDashboard/>}/>
