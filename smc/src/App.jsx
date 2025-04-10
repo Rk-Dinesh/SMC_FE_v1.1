@@ -14,8 +14,16 @@ import MyLinks from './pages/Refer & Earn/MyLinks';
 import BankDetails from './pages/Refer & Earn/BankDetails';
 import PayOutDetails from './pages/Refer & Earn/PayOutDetails';
 import ReferralTerms from './pages/Refer & Earn/ReferralTerms';
-import StudyGroups from './pages/study groups/StudyGroups';
-import ViewGroup from './pages/study groups/ViewGroup';
+import ViewGroup from "./pages/study groups/ViewGroup";
+import GenerateCourse from "./pages/courses/GenerateCourse";
+import ListTopics from "./pages/courses/ListTopics";
+import Content from "./pages/courses/Content";
+import StudyGroups from "./pages/study groups/StudyGroups";
+import SignIn from "./pages/auth/SignIn";
+import SignUp from "./pages/auth/SignUp";
+import PhoneOtp from "./pages/auth/PhoneOtp";
+import EmailOtp from "./pages/auth/EmailOtp";
+import { ToastContainer } from "react-toastify";
 import Profile from "./pages/profile/Profile";
 
 const App = () => {
@@ -23,7 +31,7 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/content" element={<Content />} />
+          <Route path="/content" element={<Content/>} />
           <Route path="" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/phone_otp" element={<PhoneOtp />} />
