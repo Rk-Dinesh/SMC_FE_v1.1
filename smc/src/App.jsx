@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './pages/layout/Layout'
 import Dashboard from './pages/dashboard/Dashboard';
@@ -19,7 +19,7 @@ import ViewGroup from './pages/study groups/ViewGroup';
 const App = () => {
   return (
     <>
-    <BrowserRouter>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />}/>
@@ -34,13 +34,25 @@ const App = () => {
           <Route path="/my_courses" element={<Courses />} />
             <Route path="/my_certificates" element={<Certificate/>} />
             <Route path="/terms_conditions" element={<Terms_Conditions />} />
-          <Route path="/my_earnings" element={<EarningTable/>}/>
-          <Route path="/notifications" element={<Notifications/>}/>
+            <Route path="/my_earnings" element={<EarningTable />} />
+            <Route path="/notifications" element={<Notifications />} />
           </Route>
         </Routes>
       </BrowserRouter>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
