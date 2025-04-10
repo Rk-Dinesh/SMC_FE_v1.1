@@ -80,6 +80,7 @@ const PhoneOtp = () => {
 
       // Extract the required user data for email OTP
       const { fname, lname, email } = userData;
+    
 
       // Call API to send email OTP
       const response = await axios.post(`${API}/api/otp`, {

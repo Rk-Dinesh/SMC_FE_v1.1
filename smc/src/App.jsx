@@ -23,7 +23,7 @@ import SignUp from "./pages/auth/SignUp";
 import PhoneOtp from "./pages/auth/PhoneOtp";
 import EmailOtp from "./pages/auth/EmailOtp";
 import { ToastContainer } from "react-toastify";
-import Profile from "./pages/profile/Profile";
+// import Profile from "./pages/profile/Profile";
 
 const App = () => {
   return (
@@ -52,7 +52,7 @@ const App = () => {
             <Route path="/terms_conditions" element={<Terms_Conditions />} />
           <Route path="/my_earnings" element={<EarningTable/>}/>
           <Route path="/notifications" element={<Notifications/>}/>
-          <Route path="/profile" element={<Profile />} />
+          {/* <Route path="/profile" element={<Profile />} /> */}
           </Route>
         </Routes>
       </BrowserRouter>

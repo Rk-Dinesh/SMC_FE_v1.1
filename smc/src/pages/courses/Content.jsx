@@ -516,10 +516,10 @@ const Content = () => {
                 <button
                   onClick={() => handleOpenClose(topic.title)}
                   type="button"
-                  className={`inline-flex  justify-between w-full text-left text-lg  text-white px-6 py-2.5 ${
+                  className={`inline-flex  justify-between w-full text-left text-sm  text-white px-6 py-2.5  ${
                     openTopics[topic.title]
-                      ? "bg-gradient-to-r from-[#110038] to-[#08006B]"
-                      : ""
+                      ? "bg-teal-500"
+                      : "border border-teal-500 mt-0.5"
                   }`}
                 >
                   {topic.title}
@@ -531,19 +531,20 @@ const Content = () => {
                 </button>
 
                 {openTopics[topic.title] && (
-                  <div className="px-5">
+                  <div className="px-1">
                     <div
-                      className="py-0.5"
+                      className="py-1"
                       role="menu"
                       aria-orientation="vertical"
                     >
                       {topic.subtopics.map((subtopic) => (
+                        <>
                         <p
                           key={subtopic.title}
                           onClick={() =>
                             handleSelect(topic.title, subtopic.title)
                           }
-                          className="flex py-1 text-base items-center font-extralight text-white cursor-pointer"
+                          className="flex py-1.5 px-2 justify-start gap-5 text-sm items-center font-extralight text-white cursor-pointer "
                           role="menuitem"
                         >
                           {subtopic.title}
@@ -551,6 +552,8 @@ const Content = () => {
                             <FaCheck className="ml-2" size={12} />
                           )}
                         </p>
+                        <div className="h-0.5 w-full -translate-y-2/4 bg-gray-500 mt-1"></div>
+                        </>
                       ))}
                     </div>
                   </div>
@@ -567,8 +570,8 @@ const Content = () => {
     <>
      
       {!mainTopic ? null : (
-        <div className="flex flex-col h-screen bg-gradient-to-r from-[#110038] to-[#08006B] ">
-          import {motion} from "framer-motion";
+        <div className="flex flex-col h-screen  text-white">
+          
           {isAnimationVisible && (
             <motion.div
               initial={{ opacity: 0, y: 100 }}
@@ -597,11 +600,11 @@ const Content = () => {
             {/* <img src={robot} alt="Image" /> */}
             Heloo
           </div>
-          <div className="flex flex-row overflow-y-auto mt-12 ">
+          <div className="flex flex-row overflow-y-auto  ">
             <div
               className={`${
                 isSidebarOpen ? "w-full" : "w-0"
-              } md:w-3/12 bg-[#200098] overflow-y-auto transition-all duration-300 relative`}
+              } md:w-3/12 bg-black overflow-y-auto transition-all duration-300 relative`}
             >
               <div className="mt-3">
                 {jsonData &&
@@ -614,15 +617,15 @@ const Content = () => {
               } md:w-9/12`}
             >
               <button
-                className="md:hidden block p-2 bg-[#200098] text-white fixed top-12 left-0 z-30 w-full"
+                className="md:hidden block p-2 bg-teal-500 text-black fixed top-0 left-0 z-30 w-full"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               >
                 ☰ Open Sub Topics
               </button>
-              <nav className="py-5 bg-gradient-to-b from-[#110038] via-[#150243] to-[#150243] border-b border-white flex items-center">
+              <nav className="py-5 bg-gray-900 border-b border-gray-500 flex items-center">
                 <div className="ml-1  flex flex-col w-1/2">
                   <TruncatedText text={mainTopic} len={10} />
-                  {isComplete ? (
+                  {/* {isComplete ? (
                     <p
                       onClick={finish}
                       className="mr-3 underline text-white font-normal mx-8"
@@ -640,12 +643,12 @@ const Content = () => {
                       </div>
                       <p className="mx-6 mt-0.5 text-sm">Completion status</p>
                     </span>
-                  )}
+                  )} */}
                 </div>
               </nav>
-              <div className="px-5 text-white bg-gradient-to-b from-[#110038] via-[#150243] to-[#300080] pt-5 font-poppins font-extralight">
-                <p className="text-white font-normal text-lg">{selected}</p>
-                <div className="overflow-hidden mt-4 text-white text-base pb-10 max-w-full">
+              <div className="px-5 text-white bg-gray-900 pt-5 font-poppins font-extralight">
+                <p className="text-white font-normal text-sm">{selected}</p>
+                <div className="overflow-hidden mt-4 text-white text-sm pb-10 max-w-full">
                   {type === "video & text course" ? (
                     <div>
                       <YouTube
