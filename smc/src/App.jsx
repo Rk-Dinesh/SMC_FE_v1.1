@@ -15,6 +15,7 @@ import PayOutDetails from './pages/Refer & Earn/PayOutDetails';
 import ReferralTerms from './pages/Refer & Earn/ReferralTerms';
 import StudyGroups from './pages/study groups/StudyGroups';
 import ViewGroup from './pages/study groups/ViewGroup';
+import Profile from "./pages/profile/Profile";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
             <Route path="/terms_conditions" element={<Terms_Conditions />} />
           <Route path="/my_earnings" element={<EarningTable/>}/>
           <Route path="/notifications" element={<Notifications/>}/>
+          <Route path="/profile" element={<Profile />} />
           </Route>
         </Routes>
       </BrowserRouter>
