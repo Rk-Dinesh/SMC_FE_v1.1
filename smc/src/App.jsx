@@ -1,29 +1,22 @@
 import React from "react";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./pages/layout/Layout";
-import Dashboard from "./pages/dashboard/Dashboard";
-import ReferralDashboard from "./pages/Refer & Earn/ReferralDashboard";
-import Notifications from "./pages/Notifications/Notifications";
-import EarningTable from "./pages/Refer & Earn/EarningTable";
-import Courses from "./pages/courses/Courses";
-import Certificate from "./pages/certificate/Certificates";
-import Terms_Conditions from "./pages/terms & conditions/Terms_Conditions";
-import EarningView from "./pages/Refer & Earn/EarningView";
-import MyLinks from "./pages/Refer & Earn/MyLinks";
-import BankDetails from "./pages/Refer & Earn/BankDetails";
-import PayOutDetails from "./pages/Refer & Earn/PayOutDetails";
-import ReferralTerms from "./pages/Refer & Earn/ReferralTerms";
-import ViewGroup from "./pages/study groups/ViewGroup";
-import GenerateCourse from "./pages/courses/GenerateCourse";
-import ListTopics from "./pages/courses/ListTopics";
-import Content from "./pages/courses/Content";
-import StudyGroups from "./pages/study groups/StudyGroups";
-import SignIn from "./pages/auth/SignIn";
-import SignUp from "./pages/auth/SignUp";
-import PhoneOtp from "./pages/auth/PhoneOtp";
-import EmailOtp from "./pages/auth/EmailOtp";
-import { ToastContainer } from "react-toastify";
+import Layout from './pages/layout/Layout'
+import Dashboard from './pages/dashboard/Dashboard';
+import ReferralDashboard from './pages/Refer & Earn/ReferralDashboard';
+import Notifications from './pages/Notifications/Notifications';
+import EarningTable from './pages/Refer & Earn/EarningTable';
+import Courses from './pages/courses/Courses';
+import Certificate from './pages/certificate/Certificates';
+import Terms_Conditions from './pages/terms & conditions/Terms_Conditions';
+import EarningView from './pages/Refer & Earn/EarningView';
+import MyLinks from './pages/Refer & Earn/MyLinks';
+import BankDetails from './pages/Refer & Earn/BankDetails';
+import PayOutDetails from './pages/Refer & Earn/PayOutDetails';
+import ReferralTerms from './pages/Refer & Earn/ReferralTerms';
+import StudyGroups from './pages/study groups/StudyGroups';
+import ViewGroup from './pages/study groups/ViewGroup';
+import Profile from "./pages/profile/Profile";
 
 const App = () => {
   return (
@@ -50,8 +43,9 @@ const App = () => {
             <Route path="/my_courses" element={<Courses />} />
             <Route path="/my_certificates" element={<Certificate />} />
             <Route path="/terms_conditions" element={<Terms_Conditions />} />
-            <Route path="/my_earnings" element={<EarningTable />} />
-            <Route path="/notifications" element={<Notifications />} />
+          <Route path="/my_earnings" element={<EarningTable/>}/>
+          <Route path="/notifications" element={<Notifications/>}/>
+          <Route path="/profile" element={<Profile />} />
           </Route>
         </Routes>
       </BrowserRouter>
