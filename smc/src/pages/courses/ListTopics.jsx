@@ -11,17 +11,17 @@ const ListTopics = () => {
   const navigate = useNavigate();
 //   const {global,setGlobal} = useContext(ThemeContext);
   const [processing, setProcessing] = useState(false);
-//   const { jsonData, mainTopic, type,lang } = state || {};
-const mainTopic = "ai"
-  const generatedText = {
-    "generatedText": "```json\n{\n  \"ai\": [\n    {\n      \"title\": \"MERN Stack Development with AI Integration\",\n      \"subtopics\": [\n        {\"title\": \"Integrating AI models into React frontend\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Building AI-powered APIs with Node.js and Express\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Deploying MERN stack AI applications to cloud platforms\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    },\n    {\n      \"title\": \"AI-powered features in MERN applications\",\n      \"subtopics\": [\n        {\"title\": \"Implementing AI-driven search functionality\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Using AI for image recognition and processing\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Building a chatbot with AI using Dialogflow or similar\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    },\n    {\n      \"title\": \"AI Model Training and Deployment within a MERN Stack\",\n      \"subtopics\": [\n        {\"title\": \"Setting up a machine learning pipeline using Python and MongoDB\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Training and deploying custom AI models using TensorFlow.js\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Model optimization and performance tuning for MERN applications\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    },\n    {\n      \"title\": \"Data Management and AI in MERN\",\n      \"subtopics\": [\n        {\"title\": \"Designing efficient database schemas for AI-related data in MongoDB\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Data preprocessing and cleaning for AI model training\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Implementing data security and privacy measures for AI applications\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    }\n  ]\n}\n```\n"
-}
-const cleanedJsonString = generatedText.generatedText
-        .replace(/```json/g, "")
-        .replace(/```/g, "");
-        const parsedJson = JSON.parse(cleanedJsonString);
-    const jsonData = parsedJson;
-    console.log(jsonData);
+  const { jsonData, mainTopic, type,lang } = state || {};
+// const mainTopic = "ai"
+//   const generatedText = {
+//     "generatedText": "```json\n{\n  \"ai\": [\n    {\n      \"title\": \"MERN Stack Development with AI Integration\",\n      \"subtopics\": [\n        {\"title\": \"Integrating AI models into React frontend\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Building AI-powered APIs with Node.js and Express\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Deploying MERN stack AI applications to cloud platforms\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    },\n    {\n      \"title\": \"AI-powered features in MERN applications\",\n      \"subtopics\": [\n        {\"title\": \"Implementing AI-driven search functionality\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Using AI for image recognition and processing\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Building a chatbot with AI using Dialogflow or similar\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    },\n    {\n      \"title\": \"AI Model Training and Deployment within a MERN Stack\",\n      \"subtopics\": [\n        {\"title\": \"Setting up a machine learning pipeline using Python and MongoDB\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Training and deploying custom AI models using TensorFlow.js\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Model optimization and performance tuning for MERN applications\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    },\n    {\n      \"title\": \"Data Management and AI in MERN\",\n      \"subtopics\": [\n        {\"title\": \"Designing efficient database schemas for AI-related data in MongoDB\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Data preprocessing and cleaning for AI model training\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Implementing data security and privacy measures for AI applications\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    }\n  ]\n}\n```\n"
+// }
+// const cleanedJsonString = generatedText.generatedText
+//         .replace(/```json/g, "")
+//         .replace(/```/g, "");
+//         const parsedJson = JSON.parse(cleanedJsonString);
+//     const jsonData = parsedJson;
+//     console.log(jsonData);
     
 
 
@@ -34,11 +34,6 @@ const cleanedJsonString = generatedText.generatedText
   const redirectform = () => {
     navigate("/create");
   };
-
-  const redircontent = () => {
-    navigate("/content");
-  };
-
 
   function redirectCourse() {
     const mainTopicData = jsonData[mainTopic][0];
@@ -102,19 +97,11 @@ const cleanedJsonString = generatedText.generatedText
     jsonData[mainTopic][0].subtopics[0].image = image;
 
     const user = localStorage.getItem("user");
-    const fname = localStorage.getItem('fname');
-    const email = localStorage.getItem('email');
-    const phone = localStorage.getItem('phone');
-    const lname = localStorage.getItem('lname');
     const content = JSON.stringify(jsonData);
     const postURL = API + "/api/course";
     const response = await axios.post(postURL, {
       user,
       content,
-      fname,
-      lname,
-      email,
-      phone,
       type,
       mainTopic,
       lang
@@ -153,18 +140,10 @@ const cleanedJsonString = generatedText.generatedText
     jsonData[mainTopic][0].subtopics[0].youtube = image;
 
     const user = localStorage.getItem("user");
-    const fname = localStorage.getItem('fname');
-    const email = localStorage.getItem('email');
-    const phone = localStorage.getItem('phone');
-    const lname = localStorage.getItem('lname');
     const content = JSON.stringify(jsonData);
     const postURL = API + "/api/course";
     const response = await axios.post(postURL, {
       user,
-      fname,
-      lname,
-      email,
-      phone,
       content,
       type,
       mainTopic,
@@ -322,7 +301,7 @@ const cleanedJsonString = generatedText.generatedText
         </button>
         <button
           className={` text-base bg-teal-500 w-48 py-2  font-normal `}
-           onClick={redircontent}
+           onClick={redirectCourse}
         >
           {processing ?  <span className="flex justify-center gap-3"> <AiOutlineLoading className="h-6 w-6 animate-spin" /> <p>Generating ....</p></span> : "Generate Course" }
         </button>

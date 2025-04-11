@@ -13,6 +13,7 @@ import { API } from "../../Host";
 import { AiFillHome } from "react-icons/ai";
 import { HiDownload } from "react-icons/hi";
 import { RiShareFill } from "react-icons/ri";
+import html2pdf from 'html2pdf.js';
 
 // import robot from "../../assets/robot.png";
 import { motion } from "framer-motion";
@@ -25,129 +26,129 @@ const Content = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [key, setkey] = useState("");
   const { state } = useLocation();
-  //   const { mainTopic, type, courseId, end } = state || {};
-  const mainTopic = "ai";
-  const type = "text & image course";
-  const courseId = "67f7a5a2ab84caf1262f1f29";
-  const end = "2023-10-01";
-  const pass = false;
-  const lang = "English";
-  //const jsonData = JSON.parse(localStorage.getItem("jsonData"));
-  const jsonData = {
-    ai: [
-      {
-        title: "MERN Stack Development with AI Integration",
-        subtopics: [
-          {
-            title: "Integrating AI models into React frontend",
-            theory:
-              "<p>Integrating AI models into a React frontend involves using JavaScript libraries to interact with a backend AI service or directly running lightweight AI models within the browser.  The approach depends on the complexity of the model and performance requirements.</p>\n<p><strong>Method 1: Backend AI Service & API</strong></p>\n<p>This is the most common approach for complex models.  A backend service (e.g., using Python with frameworks like Flask or FastAPI, or Node.js with Express.js) hosts the AI model.  The React frontend communicates with this backend via API calls (typically REST or GraphQL).  The frontend sends data to the API, receives the model's predictions, and displays the results.</p>\n<ul>\n<li><p><strong>Example:</strong> A React app for image classification. The frontend takes an image uploaded by the user, sends it to a backend service running a pre-trained image classification model (like a ResNet), receives the predicted class labels and probabilities, and displays them to the user.</p></li>\n<li><p><strong>Advantages:</strong>  Handles computationally intensive models efficiently, keeps the frontend lightweight, and improves security by preventing direct access to the model.</p></li>\n<li><p><strong>Disadvantages:</strong> Requires a separate backend infrastructure, introduces network latency.</p></li>\n</ul>\n<p><strong>Method 2: Client-Side AI with TensorFlow.js or similar</strong></p>\n<p>For less complex models, it's possible to run inference directly in the browser using libraries like TensorFlow.js, ONNX.js, or WebAssembly-based solutions.  This allows for faster response times as it avoids backend communication.</p>\n<ul>\n<li><p><strong>Example:</strong> A React app performing simple sentiment analysis on user input. A lightweight sentiment analysis model (possibly a smaller version of a pre-trained model or a custom-trained one) is loaded using TensorFlow.js. The user's text is passed to the model, the sentiment score is calculated, and the result is displayed on the screen.</p></li>\n<li><p><strong>Advantages:</strong> Faster response times, no backend needed.</p></li>\n<li><p><strong>Disadvantages:</strong>  Limits the size and complexity of models due to browser limitations, increased frontend load time and potentially higher resource consumption on the client-side, security concerns if sensitive models are loaded directly into the browser.</p></li>\n</ul>\n<p><strong>General Steps for Integration (for both methods):</strong></p>\n<ol>\n<li><p><strong>Model Selection/Training:</strong> Choose or train an AI model suitable for the task.</p></li>\n<li><p><strong>Backend (if applicable):</strong> Set up a backend service to host the model and handle API requests.</p></li>\n<li><p><strong>Frontend Integration:</strong></p>\n<ul>\n<li>Install necessary JavaScript libraries (e.g., <code>axios</code> for API calls, TensorFlow.js, etc.).</li>\n<li>Make API requests to the backend or load and run the client-side model.</li>\n<li>Handle the model's response and update the React component's state.</li>\n<li>Display the results to the user using React's rendering capabilities.</li></ul></li>\n<li><p><strong>Error Handling and Loading States:</strong> Implement robust error handling to manage API failures or model loading issues. Display appropriate loading indicators while the model is processing.</p></li>\n</ol>\n<p>The choice between backend and client-side AI depends on the trade-off between performance, complexity, and infrastructure requirements.  For most real-world applications involving substantial AI processing, a backend-based approach is preferable.</p>",
-            youtube: "",
-            image:
-              "https://stream-blog-v2.imgix.net/blog/wp-content/uploads/03071c0b102eb9b4d5a43a6a11995014/Chat-AI-React.png?auto\\u003dformat\\u0026auto\\u003dcompress",
-            done: true,
-          },
-          {
-            title: "Building AI-powered APIs with Node.js and Express",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-          {
-            title: "Deploying MERN stack AI applications to cloud platforms",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-        ],
-      },
-      {
-        title: "AI-powered features in MERN applications",
-        subtopics: [
-          {
-            title: "Implementing AI-driven search functionality",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-          {
-            title: "Using AI for image recognition and processing",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-          {
-            title: "Building a chatbot with AI using Dialogflow or similar",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-        ],
-      },
-      {
-        title: "AI Model Training and Deployment within a MERN Stack",
-        subtopics: [
-          {
-            title:
-              "Setting up a machine learning pipeline using Python and MongoDB",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-          {
-            title:
-              "Training and deploying custom AI models using TensorFlow.js",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-          {
-            title:
-              "Model optimization and performance tuning for MERN applications",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-        ],
-      },
-      {
-        title: "Data Management and AI in MERN",
-        subtopics: [
-          {
-            title:
-              "Designing efficient database schemas for AI-related data in MongoDB",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-          {
-            title: "Data preprocessing and cleaning for AI model training",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-          {
-            title:
-              "Implementing data security and privacy measures for AI applications",
-            theory: "",
-            youtube: "",
-            image: "",
-            done: false,
-          },
-        ],
-      },
-    ],
-  };
+  const { mainTopic, type, courseId, end, pass, lang } = state || {};
+  // const mainTopic = "ai";
+  // const type = "text & image course";
+  // const courseId = "67f7a5a2ab84caf1262f1f29";
+  // const end = "2023-10-01";
+  // const pass = false;
+  // const lang = "English";
+  const jsonData = JSON.parse(localStorage.getItem("jsonData"));
+  // const jsonData = {
+  //   ai: [
+  //     {
+  //       title: "MERN Stack Development with AI Integration",
+  //       subtopics: [
+  //         {
+  //           title: "Integrating AI models into React frontend",
+  //           theory:
+  //             "<p>Integrating AI models into a React frontend involves using JavaScript libraries to interact with a backend AI service or directly running lightweight AI models within the browser.  The approach depends on the complexity of the model and performance requirements.</p>\n<p><strong>Method 1: Backend AI Service & API</strong></p>\n<p>This is the most common approach for complex models.  A backend service (e.g., using Python with frameworks like Flask or FastAPI, or Node.js with Express.js) hosts the AI model.  The React frontend communicates with this backend via API calls (typically REST or GraphQL).  The frontend sends data to the API, receives the model's predictions, and displays the results.</p>\n<ul>\n<li><p><strong>Example:</strong> A React app for image classification. The frontend takes an image uploaded by the user, sends it to a backend service running a pre-trained image classification model (like a ResNet), receives the predicted class labels and probabilities, and displays them to the user.</p></li>\n<li><p><strong>Advantages:</strong>  Handles computationally intensive models efficiently, keeps the frontend lightweight, and improves security by preventing direct access to the model.</p></li>\n<li><p><strong>Disadvantages:</strong> Requires a separate backend infrastructure, introduces network latency.</p></li>\n</ul>\n<p><strong>Method 2: Client-Side AI with TensorFlow.js or similar</strong></p>\n<p>For less complex models, it's possible to run inference directly in the browser using libraries like TensorFlow.js, ONNX.js, or WebAssembly-based solutions.  This allows for faster response times as it avoids backend communication.</p>\n<ul>\n<li><p><strong>Example:</strong> A React app performing simple sentiment analysis on user input. A lightweight sentiment analysis model (possibly a smaller version of a pre-trained model or a custom-trained one) is loaded using TensorFlow.js. The user's text is passed to the model, the sentiment score is calculated, and the result is displayed on the screen.</p></li>\n<li><p><strong>Advantages:</strong> Faster response times, no backend needed.</p></li>\n<li><p><strong>Disadvantages:</strong>  Limits the size and complexity of models due to browser limitations, increased frontend load time and potentially higher resource consumption on the client-side, security concerns if sensitive models are loaded directly into the browser.</p></li>\n</ul>\n<p><strong>General Steps for Integration (for both methods):</strong></p>\n<ol>\n<li><p><strong>Model Selection/Training:</strong> Choose or train an AI model suitable for the task.</p></li>\n<li><p><strong>Backend (if applicable):</strong> Set up a backend service to host the model and handle API requests.</p></li>\n<li><p><strong>Frontend Integration:</strong></p>\n<ul>\n<li>Install necessary JavaScript libraries (e.g., <code>axios</code> for API calls, TensorFlow.js, etc.).</li>\n<li>Make API requests to the backend or load and run the client-side model.</li>\n<li>Handle the model's response and update the React component's state.</li>\n<li>Display the results to the user using React's rendering capabilities.</li></ul></li>\n<li><p><strong>Error Handling and Loading States:</strong> Implement robust error handling to manage API failures or model loading issues. Display appropriate loading indicators while the model is processing.</p></li>\n</ol>\n<p>The choice between backend and client-side AI depends on the trade-off between performance, complexity, and infrastructure requirements.  For most real-world applications involving substantial AI processing, a backend-based approach is preferable.</p>",
+  //           youtube: "",
+  //           image:
+  //             "https://stream-blog-v2.imgix.net/blog/wp-content/uploads/03071c0b102eb9b4d5a43a6a11995014/Chat-AI-React.png?auto\\u003dformat\\u0026auto\\u003dcompress",
+  //           done: true,
+  //         },
+  //         {
+  //           title: "Building AI-powered APIs with Node.js and Express",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //         {
+  //           title: "Deploying MERN stack AI applications to cloud platforms",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: "AI-powered features in MERN applications",
+  //       subtopics: [
+  //         {
+  //           title: "Implementing AI-driven search functionality",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //         {
+  //           title: "Using AI for image recognition and processing",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //         {
+  //           title: "Building a chatbot with AI using Dialogflow or similar",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: "AI Model Training and Deployment within a MERN Stack",
+  //       subtopics: [
+  //         {
+  //           title:
+  //             "Setting up a machine learning pipeline using Python and MongoDB",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //         {
+  //           title:
+  //             "Training and deploying custom AI models using TensorFlow.js",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //         {
+  //           title:
+  //             "Model optimization and performance tuning for MERN applications",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       title: "Data Management and AI in MERN",
+  //       subtopics: [
+  //         {
+  //           title:
+  //             "Designing efficient database schemas for AI-related data in MongoDB",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //         {
+  //           title: "Data preprocessing and cleaning for AI model training",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //         {
+  //           title:
+  //             "Implementing data security and privacy measures for AI applications",
+  //           theory: "",
+  //           youtube: "",
+  //           image: "",
+  //           done: false,
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // };
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [selected, setSelected] = useState("");

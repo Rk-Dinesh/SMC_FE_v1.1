@@ -25,6 +25,7 @@ import EmailOtp from "./pages/auth/EmailOtp";
 import { ToastContainer } from "react-toastify";
 import Profile from "./pages/profile/Profile";
 import SignInOtp from "./pages/auth/SignInOtp";
+// import Exam from "./pages/courses/Exam";
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/generate_courses" element={<GenerateCourse />} />
             <Route path="/topics" element={<ListTopics />} />
+            {/* <Route path="/exam" element={<Exam />} /> */}
             <Route path="/study_group" element={<StudyGroups />} />
             <Route path="/view_group" element={<ViewGroup />} />
             <Route path="/refer_dashboard" element={<ReferralDashboard />} />
