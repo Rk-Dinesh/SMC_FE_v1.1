@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate,  } from "react-router-dom";
 import { API } from "../../Host";
 import { toast } from "react-toastify";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -8,6 +8,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 
 const ListTopics = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
 //   const {global,setGlobal} = useContext(ThemeContext);
   const [processing, setProcessing] = useState(false);
 //   const { jsonData, mainTopic, type,lang } = state || {};
@@ -22,7 +23,7 @@ const cleanedJsonString = generatedText.generatedText
     const jsonData = parsedJson;
     console.log(jsonData);
     
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     if (!jsonData) {
@@ -33,6 +34,11 @@ const cleanedJsonString = generatedText.generatedText
   const redirectform = () => {
     navigate("/create");
   };
+
+  const redircontent = () => {
+    navigate("/content");
+  };
+
 
   function redirectCourse() {
     const mainTopicData = jsonData[mainTopic][0];
@@ -316,7 +322,7 @@ const cleanedJsonString = generatedText.generatedText
         </button>
         <button
           className={` text-base bg-teal-500 w-48 py-2  font-normal `}
-           onClick={navigate('/content')}
+           onClick={redircontent}
         >
           {processing ?  <span className="flex justify-center gap-3"> <AiOutlineLoading className="h-6 w-6 animate-spin" /> <p>Generating ....</p></span> : "Generate Course" }
         </button>

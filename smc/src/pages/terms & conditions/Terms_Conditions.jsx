@@ -1,84 +1,73 @@
-import React, { useState } from "react";
-
-const tabData = {
-  "Terms Of Services": {
-    title: "Terms & Conditions",
-    lastUpdate: "01-Jan-2025",
-    sections: [
-      {
-        heading: "What is Lorem Ipsum?",
-        content:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...",
-      },
-      {
-        heading: "Why do we use it?",
-        content:
-          "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout...",
-      },
-    ],
-  },
-  "Privacy Policy": {
-    title: "Privacy Policy",
-    lastUpdate: "05-Jan-2025",
-    sections: [
-      {
-        heading: "How we handle your data?",
-        content:
-          "We collect minimal user data to provide a better experience. Your data is stored securely and is never shared with third parties.",
-      },
-      {
-        heading: "User Consent",
-        content:
-          "By using our service, you consent to our privacy practices outlined in this policy.",
-      },
-    ],
-  },
-};
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { API } from "../../Host";
 
 const Terms_Conditions = () => {
-  const [activeTab, setActiveTab] = useState("Terms Of Services");
-  const currentTab = tabData[activeTab];
+  const [policies, setPolicies] = useState({});
+  const [activeTab, setActiveTab] = useState("terms");
+  const [noDataFound, setNoDataFound] = useState(false);
+
+  useEffect(() => {
+    const fetchPolicies = async () => {
+      try {
+        const response = await axios.get(`${API}/api/policies`);
+        const info = response.data.data;
+
+        if (!info || Object.keys(info).length === 0) {
+          setNoDataFound(true);
+        } else {
+          setPolicies(info);
+          setNoDataFound(false);
+        }
+      } catch (error) {
+        console.log(error);
+        setNoDataFound(true);
+      }
+    };
+    fetchPolicies();
+  }, []);
+
+  const tabOptions = {
+    terms: "Terms of Service",
+    privacy: "Privacy Policy",
+  };
 
   return (
-    <div>
-      <div className="h-screen text-white">
-        <div className="flex bg-darkgray py-4 px-2 rounded-2xl gap-4 mb-3">
+    <div className="text-white">
+      <div className="flex bg-darkgray py-4 px-2 rounded-2xl gap-4 mb-3 flex-wrap">
+        {Object.keys(tabOptions).map((key) => (
           <button
+            key={key}
             className={`px-4 py-2 rounded-md ${
-              activeTab === "Terms Of Services"
+              activeTab === key
                 ? "bg-teal-400 text-black"
-                : " border-white border text-white"
+                : "border-white border text-white"
             }`}
-            onClick={() => setActiveTab("Terms Of Services")}
+            onClick={() => setActiveTab(key)}
           >
-            Terms Of Service
+            {tabOptions[key]}
           </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              activeTab === "Privacy Policy"
-                ? "bg-teal-400 text-black"
-                : " border-white border text-white"
-            }`}
-            onClick={() => setActiveTab("Privacy Policy")}
-          >
-            Privacy Policy
-          </button>
+        ))}
+      </div>
+
+      <div className="bg-darkgray px-3 py-5 rounded-2xl">
+        <div className="pt-1.5 pb-5">
+          <p className="text-xl font-light">{tabOptions[activeTab]}</p>
         </div>
 
-        <div className="bg-darkgray px-3 py-5  rounded-2xl">
-          <div className="pt-1.5 pb-5">
-            <p className="text-xl font-light">{currentTab.title}</p>
-            <p>
-              Last Update on : <span>{currentTab.lastUpdate}</span>
-            </p>
-          </div>
-          {currentTab.sections.map((section, index) => (
-            <div className="py-3" key={index}>
-              <p className="text-2xl font-semibold py-1">{section.heading}</p>
-              <p>{section.content}</p>
-            </div>
-          ))}
-        </div>
+        {noDataFound ? (
+          <p className="text-red-400">No data found.</p>
+        ) : (
+          <div
+            className="prose prose-invert max-w-none"
+            dangerouslySetInnerHTML={{
+              __html:
+                policies[activeTab] && policies[activeTab].trim()
+                  ? policies[activeTab]
+                  : "<p>No content found.</p>",
+            }}
+          />
+        )}
       </div>
     </div>
   );

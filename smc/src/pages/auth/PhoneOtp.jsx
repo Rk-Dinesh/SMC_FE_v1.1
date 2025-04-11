@@ -11,8 +11,7 @@ const PhoneOtp = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userData = location?.state?.userData;
-  const phoneNumber = `+${userData?.phone}`;
-
+  const phoneNumber = `+${userData.countryCode}${userData?.phone}`;
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(30);
   const [isResendDisabled, setIsResendDisabled] = useState(true);

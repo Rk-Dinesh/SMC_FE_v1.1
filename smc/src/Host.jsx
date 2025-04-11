@@ -1,4 +1,4 @@
-export const API = "http://localhost:5000";
+export const API = "http://localhost:3000";
 
 export function formatDate(dateString) {
     const date = new Date(dateString);

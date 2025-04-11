@@ -3,11 +3,16 @@ import { NavLink, Outlet, useLocation } from "react-router";
 import { LayoutDashboard } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import { BsChevronDown } from "react-icons/bs";
+import logo from "../../assets/images/logo.png";
+import LogOut from "../auth/LogOut";
+import DeleteAccount from "../auth/DeleteAccount";
 
-const Layout = () => {
+const Layout = ({setIsLoggedIn}) => {
   const location = useLocation();
   const [open, setOpen] = useState(true);
   const [submenuopen, Setsubmenuopen] = useState(false);
+  const [isLogOutModalOpen, setLogOutModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const Menus = [
     { title: "Dashboard", icon: <LayoutDashboard />, to: "/dashboard" },
     { title: "My Courses", icon: <LayoutDashboard />, to: "/my_courses" },
@@ -57,24 +62,37 @@ const Layout = () => {
     {
       title: "Delete Account",
       icon: <LayoutDashboard />,
-      to: "/delete_account",
+      to: "#",
+      onClick: () => setDeleteModalOpen(true),
     },
-    { title: "Logout", icon: <LayoutDashboard />, to: "#" },
+    {
+      title: "Logout",
+      icon: <LayoutDashboard />,
+      to: "#",
+      onClick: () => setLogOutModalOpen(true),
+    },
     {
       title: "Terms & Conditions",
       icon: <LayoutDashboard />,
       to: "/terms_conditions",
     },
   ].filter(Boolean);
+  const handleCloseModal = () => {
+    setLogOutModalOpen(false);
+  };
+
+  const handleDeleteCloseModal = () => {
+    setDeleteModalOpen(false);
+  };
 
   return (
     <div className="flex font-poppins bg-popup-gray pl-6 pt-6 pb-2 w-full h-screen  ">
       <div className="  bg-darkgray text-gray-200 rounded-3xl  lg:w-96 md:w-80 overflow-y-auto no-scrollbar lg:block md:block hidden ">
-        <div className="flex justify-center my-4">
-          <p className="text-xl font-bold">Seek My Course</p>
+        <div className="flex justify-center ">
+          <img src={logo} alt="" className="" />
         </div>
 
-        <div className="my-2 ">
+        <div className=" ">
           <ul className="pt-3">
             {Menus.map((menu, index) => (
               <React.Fragment key={index}>
@@ -86,7 +104,7 @@ const Layout = () => {
                         : ""
                     }`}
                   >
-                    <div  onClick={() => Setsubmenuopen(!submenuopen)} className="flex items-center gap-x-3 px-6">
+                    <div className="flex items-center gap-x-3 px-6">
                       <span className="bg-popup-gray px-1 py-1 rounded-lg text-white">
                         {menu.icon}
                       </span>
@@ -152,6 +170,18 @@ const Layout = () => {
           <Outlet />
         </div>
       </div>
+      {isLogOutModalOpen && (
+        <LogOut
+          handleCloseModal={handleCloseModal}
+          setIsLoggedIn={setIsLoggedIn}
+        />
+      )}
+      {isDeleteModalOpen && (
+        <DeleteAccount
+          handleDeleteCloseModal={handleDeleteCloseModal}
+          setIsLoggedIn={setIsLoggedIn}
+        />
+      )}
     </div>
   );
 };

@@ -20,6 +20,7 @@ const UserSchema = yup.object().shape({
 const SignUp = () => {
   const navigate = useNavigate();
   const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState("");
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [processing, setProcessing] = useState(false);
 
@@ -28,8 +29,9 @@ const SignUp = () => {
     return urlParams.get("ref");
   };
 
-  const handlePhoneChange = (value) => {
+  const handlePhoneChange = (value,data) => {
     setPhone(value);
+    setCountryCode(data.dialCode);
   };
 
   const {
@@ -42,7 +44,7 @@ const SignUp = () => {
 
   const onSubmit = (data) => {
     if (!isCheckboxChecked) {
-      toast.error("You must agree to the Terms and Privacy Policy");
+      toast.error("Please accept the terms and privacy policies to continue.");
       return;
     }
 
@@ -50,13 +52,14 @@ const SignUp = () => {
       toast.error("Please enter a valid phone number");
       return;
     }
-
+    const localPhone = phone.slice(countryCode.length);
     const userData = {
       ...data,
-      phone,
+      phone:localPhone,
+      countryCode: countryCode,
+      type: "free",
       referralCode: getReferralCode(),
     };
-
     navigate("/phone_otp", { state: { userData } });
   };
 

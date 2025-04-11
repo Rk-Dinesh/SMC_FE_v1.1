@@ -10,25 +10,146 @@ import axios from "axios";
 import { IoChatbubbleEllipses, IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 import { API } from "../../Host";
+import { AiFillHome } from "react-icons/ai";
+import { HiDownload } from "react-icons/hi";
+import { RiShareFill } from "react-icons/ri";
 
 // import robot from "../../assets/robot.png";
 import { motion } from "framer-motion";
+import ChatWidget from "../../components/chatWidget";
+import NotesWidget from "../../components/notesWidget";
 // import { ThemeContext } from "../../App";
 
 const Content = () => {
-//   const { global, setGlobal } = useContext(ThemeContext);
+  //   const { global, setGlobal } = useContext(ThemeContext);
   const [isOpen, setIsOpen] = useState(false);
   const [key, setkey] = useState("");
   const { state } = useLocation();
-//   const { mainTopic, type, courseId, end } = state || {};
+  //   const { mainTopic, type, courseId, end } = state || {};
   const mainTopic = "ai";
   const type = "text & image course";
   const courseId = "67f7a5a2ab84caf1262f1f29";
-  const end = '2023-10-01';
+  const end = "2023-10-01";
+  const pass = false;
+  const lang = "English";
   //const jsonData = JSON.parse(localStorage.getItem("jsonData"));
-  const jsonData = {"ai":[{"title":"MERN Stack Development with AI Integration","subtopics":[{"title":"Integrating AI models into React frontend","theory":"<p>Integrating AI models into a React frontend involves using JavaScript libraries to interact with a backend AI service or directly running lightweight AI models within the browser.  The approach depends on the complexity of the model and performance requirements.</p>\n<p><strong>Method 1: Backend AI Service & API</strong></p>\n<p>This is the most common approach for complex models.  A backend service (e.g., using Python with frameworks like Flask or FastAPI, or Node.js with Express.js) hosts the AI model.  The React frontend communicates with this backend via API calls (typically REST or GraphQL).  The frontend sends data to the API, receives the model's predictions, and displays the results.</p>\n<ul>\n<li><p><strong>Example:</strong> A React app for image classification. The frontend takes an image uploaded by the user, sends it to a backend service running a pre-trained image classification model (like a ResNet), receives the predicted class labels and probabilities, and displays them to the user.</p></li>\n<li><p><strong>Advantages:</strong>  Handles computationally intensive models efficiently, keeps the frontend lightweight, and improves security by preventing direct access to the model.</p></li>\n<li><p><strong>Disadvantages:</strong> Requires a separate backend infrastructure, introduces network latency.</p></li>\n</ul>\n<p><strong>Method 2: Client-Side AI with TensorFlow.js or similar</strong></p>\n<p>For less complex models, it's possible to run inference directly in the browser using libraries like TensorFlow.js, ONNX.js, or WebAssembly-based solutions.  This allows for faster response times as it avoids backend communication.</p>\n<ul>\n<li><p><strong>Example:</strong> A React app performing simple sentiment analysis on user input. A lightweight sentiment analysis model (possibly a smaller version of a pre-trained model or a custom-trained one) is loaded using TensorFlow.js. The user's text is passed to the model, the sentiment score is calculated, and the result is displayed on the screen.</p></li>\n<li><p><strong>Advantages:</strong> Faster response times, no backend needed.</p></li>\n<li><p><strong>Disadvantages:</strong>  Limits the size and complexity of models due to browser limitations, increased frontend load time and potentially higher resource consumption on the client-side, security concerns if sensitive models are loaded directly into the browser.</p></li>\n</ul>\n<p><strong>General Steps for Integration (for both methods):</strong></p>\n<ol>\n<li><p><strong>Model Selection/Training:</strong> Choose or train an AI model suitable for the task.</p></li>\n<li><p><strong>Backend (if applicable):</strong> Set up a backend service to host the model and handle API requests.</p></li>\n<li><p><strong>Frontend Integration:</strong></p>\n<ul>\n<li>Install necessary JavaScript libraries (e.g., <code>axios</code> for API calls, TensorFlow.js, etc.).</li>\n<li>Make API requests to the backend or load and run the client-side model.</li>\n<li>Handle the model's response and update the React component's state.</li>\n<li>Display the results to the user using React's rendering capabilities.</li></ul></li>\n<li><p><strong>Error Handling and Loading States:</strong> Implement robust error handling to manage API failures or model loading issues. Display appropriate loading indicators while the model is processing.</p></li>\n</ol>\n<p>The choice between backend and client-side AI depends on the trade-off between performance, complexity, and infrastructure requirements.  For most real-world applications involving substantial AI processing, a backend-based approach is preferable.</p>","youtube":"","image":"https://stream-blog-v2.imgix.net/blog/wp-content/uploads/03071c0b102eb9b4d5a43a6a11995014/Chat-AI-React.png?auto\\u003dformat\\u0026auto\\u003dcompress","done":true},{"title":"Building AI-powered APIs with Node.js and Express","theory":"","youtube":"","image":"","done":false},{"title":"Deploying MERN stack AI applications to cloud platforms","theory":"","youtube":"","image":"","done":false}]},{"title":"AI-powered features in MERN applications","subtopics":[{"title":"Implementing AI-driven search functionality","theory":"","youtube":"","image":"","done":false},{"title":"Using AI for image recognition and processing","theory":"","youtube":"","image":"","done":false},{"title":"Building a chatbot with AI using Dialogflow or similar","theory":"","youtube":"","image":"","done":false}]},{"title":"AI Model Training and Deployment within a MERN Stack","subtopics":[{"title":"Setting up a machine learning pipeline using Python and MongoDB","theory":"","youtube":"","image":"","done":false},{"title":"Training and deploying custom AI models using TensorFlow.js","theory":"","youtube":"","image":"","done":false},{"title":"Model optimization and performance tuning for MERN applications","theory":"","youtube":"","image":"","done":false}]},{"title":"Data Management and AI in MERN","subtopics":[{"title":"Designing efficient database schemas for AI-related data in MongoDB","theory":"","youtube":"","image":"","done":false},{"title":"Data preprocessing and cleaning for AI model training","theory":"","youtube":"","image":"","done":false},{"title":"Implementing data security and privacy measures for AI applications","theory":"","youtube":"","image":"","done":false}]}]}
+  const jsonData = {
+    ai: [
+      {
+        title: "MERN Stack Development with AI Integration",
+        subtopics: [
+          {
+            title: "Integrating AI models into React frontend",
+            theory:
+              "<p>Integrating AI models into a React frontend involves using JavaScript libraries to interact with a backend AI service or directly running lightweight AI models within the browser.  The approach depends on the complexity of the model and performance requirements.</p>\n<p><strong>Method 1: Backend AI Service & API</strong></p>\n<p>This is the most common approach for complex models.  A backend service (e.g., using Python with frameworks like Flask or FastAPI, or Node.js with Express.js) hosts the AI model.  The React frontend communicates with this backend via API calls (typically REST or GraphQL).  The frontend sends data to the API, receives the model's predictions, and displays the results.</p>\n<ul>\n<li><p><strong>Example:</strong> A React app for image classification. The frontend takes an image uploaded by the user, sends it to a backend service running a pre-trained image classification model (like a ResNet), receives the predicted class labels and probabilities, and displays them to the user.</p></li>\n<li><p><strong>Advantages:</strong>  Handles computationally intensive models efficiently, keeps the frontend lightweight, and improves security by preventing direct access to the model.</p></li>\n<li><p><strong>Disadvantages:</strong> Requires a separate backend infrastructure, introduces network latency.</p></li>\n</ul>\n<p><strong>Method 2: Client-Side AI with TensorFlow.js or similar</strong></p>\n<p>For less complex models, it's possible to run inference directly in the browser using libraries like TensorFlow.js, ONNX.js, or WebAssembly-based solutions.  This allows for faster response times as it avoids backend communication.</p>\n<ul>\n<li><p><strong>Example:</strong> A React app performing simple sentiment analysis on user input. A lightweight sentiment analysis model (possibly a smaller version of a pre-trained model or a custom-trained one) is loaded using TensorFlow.js. The user's text is passed to the model, the sentiment score is calculated, and the result is displayed on the screen.</p></li>\n<li><p><strong>Advantages:</strong> Faster response times, no backend needed.</p></li>\n<li><p><strong>Disadvantages:</strong>  Limits the size and complexity of models due to browser limitations, increased frontend load time and potentially higher resource consumption on the client-side, security concerns if sensitive models are loaded directly into the browser.</p></li>\n</ul>\n<p><strong>General Steps for Integration (for both methods):</strong></p>\n<ol>\n<li><p><strong>Model Selection/Training:</strong> Choose or train an AI model suitable for the task.</p></li>\n<li><p><strong>Backend (if applicable):</strong> Set up a backend service to host the model and handle API requests.</p></li>\n<li><p><strong>Frontend Integration:</strong></p>\n<ul>\n<li>Install necessary JavaScript libraries (e.g., <code>axios</code> for API calls, TensorFlow.js, etc.).</li>\n<li>Make API requests to the backend or load and run the client-side model.</li>\n<li>Handle the model's response and update the React component's state.</li>\n<li>Display the results to the user using React's rendering capabilities.</li></ul></li>\n<li><p><strong>Error Handling and Loading States:</strong> Implement robust error handling to manage API failures or model loading issues. Display appropriate loading indicators while the model is processing.</p></li>\n</ol>\n<p>The choice between backend and client-side AI depends on the trade-off between performance, complexity, and infrastructure requirements.  For most real-world applications involving substantial AI processing, a backend-based approach is preferable.</p>",
+            youtube: "",
+            image:
+              "https://stream-blog-v2.imgix.net/blog/wp-content/uploads/03071c0b102eb9b4d5a43a6a11995014/Chat-AI-React.png?auto\\u003dformat\\u0026auto\\u003dcompress",
+            done: true,
+          },
+          {
+            title: "Building AI-powered APIs with Node.js and Express",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+          {
+            title: "Deploying MERN stack AI applications to cloud platforms",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+        ],
+      },
+      {
+        title: "AI-powered features in MERN applications",
+        subtopics: [
+          {
+            title: "Implementing AI-driven search functionality",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+          {
+            title: "Using AI for image recognition and processing",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+          {
+            title: "Building a chatbot with AI using Dialogflow or similar",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+        ],
+      },
+      {
+        title: "AI Model Training and Deployment within a MERN Stack",
+        subtopics: [
+          {
+            title:
+              "Setting up a machine learning pipeline using Python and MongoDB",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+          {
+            title:
+              "Training and deploying custom AI models using TensorFlow.js",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+          {
+            title:
+              "Model optimization and performance tuning for MERN applications",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+        ],
+      },
+      {
+        title: "Data Management and AI in MERN",
+        subtopics: [
+          {
+            title:
+              "Designing efficient database schemas for AI-related data in MongoDB",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+          {
+            title: "Data preprocessing and cleaning for AI model training",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+          {
+            title:
+              "Implementing data security and privacy measures for AI applications",
+            theory: "",
+            youtube: "",
+            image: "",
+            done: false,
+          },
+        ],
+      },
+    ],
+  };
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
   const [selected, setSelected] = useState("");
   const [theory, setTheory] = useState("");
   const [media, setMedia] = useState("");
@@ -80,6 +201,224 @@ const Content = () => {
     height: "250px",
     width: "100%",
   };
+
+  async function redirectExam() {
+    const id = toast.loading("Please wait...");
+    const mainTopicExam = jsonData[mainTopic.toLowerCase()];
+    let subtopicsString = "";
+    mainTopicExam.map((topicTemp) => {
+      let titleOfSubTopic = topicTemp.title;
+      subtopicsString = subtopicsString + " , " + titleOfSubTopic;
+    });
+
+    const postURL = API + "/api/aiexam";
+    const response = await axios.post(postURL, {
+      courseId,
+      mainTopic,
+      subtopicsString,
+      lang,
+    });
+    if (response.data.success) {
+      const element = document.documentElement; // or you can use a specific container if you want
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.mozRequestFullScreen) {
+        // Firefox
+        element.mozRequestFullScreen();
+      } else if (element.webkitRequestFullscreen) {
+        // Chrome, Safari and Opera
+        element.webkitRequestFullscreen();
+      } else if (element.msRequestFullscreen) {
+        // IE/Edge
+        element.msRequestFullscreen();
+      } else {
+        console.error("Full-screen mode is not supported by this browser.");
+      }
+      let questions = JSON.parse(response.data.message);
+      navigate("/exam", {
+        state: { topic: mainTopic, courseId: courseId, questions: questions },
+      });
+      toast.update(id, {
+        render: "Starting Quiz",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+      });
+    } else {
+      toast.update(id, {
+        render: "Internal Server Error",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+      });
+    }
+  }
+
+  async function htmlDownload() {
+    const id = toast.loading("Please wait exporting...");
+    // Generate the combined HTML content
+    const combinedHtml = await getCombinedHtml(
+      mainTopic,
+      jsonData[mainTopic.toLowerCase()]
+    );
+
+    // Create a temporary div element
+    const tempDiv = document.createElement("div");
+    tempDiv.style.width = "100%"; // Ensure div is 100% width
+    tempDiv.style.height = "100%"; // Ensure div is 100% height
+    tempDiv.innerHTML = combinedHtml;
+    document.body.appendChild(tempDiv);
+
+    // Create the PDF options
+    const options = {
+      filename: `${mainTopic}.pdf`,
+      image: { type: "jpeg", quality: 1 },
+      margin: [15, 15, 15, 15],
+      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+      html2canvas: {
+        scale: 2,
+        logging: false,
+        scrollX: 0,
+        scrollY: 0,
+        useCORS: true,
+      },
+      jsPDF: { unit: "pt", format: "a4", orientation: "portrait" },
+    };
+
+    // Generate the PDF
+    html2pdf()
+      .from(tempDiv)
+      .set(options)
+      .save()
+      .then(() => {
+        // Save the PDF
+        document.body.removeChild(tempDiv);
+        toast.update(id, {
+          render: "Done!",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+        });
+      });
+  }
+
+  async function getCombinedHtml(mainTopic, topics) {
+    async function toDataUrl(url) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = function () {
+          const reader = new FileReader();
+          reader.onloadend = function () {
+            resolve(reader.result);
+          };
+          reader.readAsDataURL(xhr.response);
+        };
+
+        xhr.onerror = function () {
+          reject({
+            status: xhr.status,
+            statusText: xhr.statusText,
+          });
+        };
+
+        xhr.open("GET", url);
+        xhr.responseType = "blob";
+        xhr.send();
+      }).catch((error) => {
+        console.error(`Failed to fetch image at ${url}:`, error);
+        return ""; // Fallback or placeholder
+      });
+    }
+
+    const topicsHtml = topics
+      .map(
+        (topic) => `
+      <h3 style="font-size: 18pt; font-weight: bold; margin: 0; margin-top: 15px;">${
+        topic.title
+      }</h3>
+      ${topic.subtopics
+        .map(
+          (subtopic) => `
+          <p style="font-size: 16pt; margin-top: 10px;">${subtopic.title}</p>
+      `
+        )
+        .join("")}
+  `
+      )
+      .join("");
+
+    const theoryPromises = topics.map(async (topic) => {
+      const subtopicPromises = topic.subtopics.map(
+        async (subtopic, index, array) => {
+          const imageUrl =
+            type === "text & image course"
+              ? await toDataUrl(subtopic.image)
+              : ``;
+          console.log(imageUrl);
+          return `
+          <div>
+              <p style="font-size: 16pt; margin-top: 20px; font-weight: bold;">
+                  ${subtopic.title}
+              </p>
+              <div style="font-size: 12pt; margin-top: 15px;">
+                  ${
+                    subtopic.done
+                      ? `
+                          ${
+                            type === "text & image course"
+                              ? imageUrl
+                                ? `<img style="margin-top: 10px;" src="${imageUrl}" alt="${subtopic.title} image">`
+                                : `<a style="color: #0000FF;" href="${subtopic.image}" target="_blank">View example image</a>`
+                              : `<a style="color: #0000FF;" href="https://www.youtube.com/watch?v=${subtopic.youtube}" target="_blank" rel="noopener noreferrer">Watch the YouTube video on ${subtopic.title}</a>`
+                          }
+                          <div style="margin-top: 10px;">${
+                            subtopic.theory
+                          }</div>
+                      `
+                      : `<div style="margin-top: 10px;">Please visit ${subtopic.title} topic to export as PDF. Only topics that are completed will be added to the PDF.</div>`
+                  }
+              </div>
+          </div>
+      `;
+        }
+      );
+      const subtopicHtml = await Promise.all(subtopicPromises);
+      return `
+          <div style="margin-top: 30px;">
+              <h3 style="font-size: 18pt; text-align: center; font-weight: bold; margin: 0;">
+                  ${topic.title}
+              </h3>
+              ${subtopicHtml.join("")}
+          </div>
+      `;
+    });
+    const theoryHtml = await Promise.all(theoryPromises);
+
+    return `
+  <div class="html2pdf__page-break" 
+       style="display: flex; align-items: center; justify-content: center; text-align: center; margin: 0 auto; max-width: 100%; height: 11in;">
+      <h1 style="font-size: 30pt; font-weight: bold; margin: 0;">
+          ${mainTopic}
+      </h1>
+  </div>
+  <div class="html2pdf__page-break" style="text-align: start; margin-top: 30px; margin-right: 16px; margin-left: 16px;">
+      <h2 style="font-size: 24pt; font-weight: bold; margin: 0;">Index</h2>
+      <br>
+      <hr>
+      ${topicsHtml}
+  </div>
+  <div style="text-align: start; margin-right: 16px; margin-left: 16px;">
+      ${theoryHtml.join("")}
+  </div>
+  `;
+  }
 
   async function finish() {
     if (localStorage.getItem("first") === "true") {
@@ -242,7 +581,7 @@ const Content = () => {
         const id = toast.loading("Please wait...");
         sendVideo(query, topics, sub, id, mSubTopic.title);
       } else {
-        const prompt = `Explain me about this subtopic of ${mainTopic} with examples :- ${mSubTopic.title}. Please Strictly Don't Give Additional Resources And Images.`;
+        const prompt = `Strictly in ${lang}, Explain me about this subtopic of ${mainTopic} with examples :- ${mSubTopic.title}. Please Strictly Don't Give Additional Resources And Images.`;
         const promptImage = `Example of ${mSubTopic.title} in ${mainTopic}`;
         const id = toast.loading("Please wait...");
         sendPrompt(prompt, promptImage, topics, sub, id);
@@ -402,14 +741,14 @@ const Content = () => {
         const generatedText = res.data.url;
         const allText = generatedText.map((item) => item.text);
         const concatenatedText = allText.join(" ");
-        const prompt = `Summarize this theory in a teaching way :- ${concatenatedText}.`;
+        const prompt = `Strictly in ${lang}, Summarize this theory in a teaching way :- ${concatenatedText}.`;
         sendSummery(prompt, url, mTopic, mSubTopic, id);
       } catch (error) {
-        const prompt = `Explain me about this subtopic of ${mainTopic} with examples :- ${subtop}. Please Strictly Don't Give Additional Resources And Images.`;
+        const prompt = `Strictly in ${lang}, Explain me about this subtopic of ${mainTopic} with examples :- ${subtop}. Please Strictly Don't Give Additional Resources And Images.`;
         sendSummery(prompt, url, mTopic, mSubTopic, id);
       }
     } catch (error) {
-      const prompt = `Explain me about this subtopic of ${mainTopic} with examples :- ${subtop}.  Please Strictly Don't Give Additional Resources And Images.`;
+      const prompt = `Strictly in ${lang}, Explain me about this subtopic of ${mainTopic} with examples :- ${subtop}.  Please Strictly Don't Give Additional Resources And Images.`;
       sendSummery(prompt, url, mTopic, mSubTopic, id);
     }
   }
@@ -539,20 +878,20 @@ const Content = () => {
                     >
                       {topic.subtopics.map((subtopic) => (
                         <>
-                        <p
-                          key={subtopic.title}
-                          onClick={() =>
-                            handleSelect(topic.title, subtopic.title)
-                          }
-                          className="flex py-1.5 px-2 justify-start gap-5 text-sm items-center font-extralight text-white cursor-pointer "
-                          role="menuitem"
-                        >
-                          {subtopic.title}
-                          {subtopic.done && (
-                            <FaCheck className="ml-2" size={12} />
-                          )}
-                        </p>
-                        <div className="h-0.5 w-full -translate-y-2/4 bg-gray-500 mt-1"></div>
+                          <p
+                            key={subtopic.title}
+                            onClick={() =>
+                              handleSelect(topic.title, subtopic.title)
+                            }
+                            className="flex py-1.5 px-2 justify-start gap-5 text-sm items-center font-extralight text-white cursor-pointer "
+                            role="menuitem"
+                          >
+                            {subtopic.title}
+                            {subtopic.done && (
+                              <FaCheck className="ml-2" size={12} />
+                            )}
+                          </p>
+                          <div className="h-0.5 w-full -translate-y-2/4 bg-gray-500 mt-1"></div>
                         </>
                       ))}
                     </div>
@@ -562,44 +901,22 @@ const Content = () => {
             </div>
           ))}
         </div>
+        <p
+          className="text-center mt-3 mx-4 flex flex-row items-center text-base font-bold  text-black dark:text-white cursor-pointer"
+          onClick={redirectExam}
+        >
+          {" "}
+          {mainTopic} Quiz
+          {pass === true ? <FaCheck className="ml-2" size={12} /> : <></>}
+        </p>
       </>
     );
   };
 
   return (
     <>
-     
       {!mainTopic ? null : (
         <div className="flex flex-col h-screen  text-white">
-          
-          {isAnimationVisible && (
-            <motion.div
-              initial={{ opacity: 0, y: 100 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 100 }}
-              transition={{
-                duration: 1,
-                ease: [0.6, -0.05, 0.01, 0.99],
-              }}
-              className="fixed bottom-36 right-10 z-50"
-            >
-              <div className="relative bg-gradient-to-r from-purple-500 to-blue-500 text-white p-3 rounded-xl shadow-lg w-56 font-poppins border-2">
-                <p className="text-center text-sm font-light leading-relaxed">
-                  Hi, I am your AI teacher. <br />
-                  You can ask me any doubts you have on this course.
-                </p>
-
-                <div className="absolute -bottom-2 right-6 h-5 w-5 rotate-45 bg-gradient-to-r from-blue-500 to-blue-500"></div>
-              </div>
-            </motion.div>
-          )}
-          <div
-            onClick={() => setIsOpenDrawer(true)}
-            className="m-5 fixed bottom-8 right-6 z-40  lg:w-32  md:w-32  w-24 h-16  text-white  flex justify-center items-center shadow-md "
-          >
-            {/* <img src={robot} alt="Image" /> */}
-            Heloo
-          </div>
           <div className="flex flex-row overflow-y-auto  ">
             <div
               className={`${
@@ -622,10 +939,10 @@ const Content = () => {
               >
                 ☰ Open Sub Topics
               </button>
-              <nav className="py-5 bg-gray-900 border-b border-gray-500 flex items-center">
+              <nav className="py-5 bg-gray-900 border-b border-gray-500 flex justify-between items-center">
                 <div className="ml-1  flex flex-col w-1/2">
                   <TruncatedText text={mainTopic} len={10} />
-                  {/* {isComplete ? (
+                  {isComplete ? (
                     <p
                       onClick={finish}
                       className="mr-3 underline text-white font-normal mx-8"
@@ -637,13 +954,29 @@ const Content = () => {
                       <p className="w-3/4 text-end mx-4 text-lg font-extralight">{`${percentage}%`}</p>
                       <div className="w-3/4 bg-gray-200 rounded-full h-4 dark:bg-gray-700 mx-5">
                         <div
-                          className="bg-gradient-to-r from-[#3D03FA] to-[#A71CD2] h-4 rounded-full"
+                          className="bg-teal-500 h-4 rounded-full"
                           style={{ width: `${percentage}%` }}
                         ></div>
                       </div>
                       <p className="mx-6 mt-0.5 text-sm">Completion status</p>
                     </span>
-                  )} */}
+                  )}
+                </div>
+                <div className="flex gap-5 mr-5 mt-5">
+                  <div className="">
+                    <AiFillHome
+                      onClick={redirectcourse}
+                      size={30}
+                      color={"#31C48D"}
+                    />
+                  </div>
+                  <div className="">
+                    <HiDownload
+                      onClick={htmlDownload}
+                      size={30}
+                      color={"#31C48D"}
+                    />
+                  </div>
                 </div>
               </nav>
               <div className="px-5 text-white bg-gray-900 pt-5 font-poppins font-extralight">
@@ -729,6 +1062,14 @@ const Content = () => {
                 </button>
               </div>
             </div>
+          </div>
+          <div className="flex flex-col">
+            <ChatWidget
+              defaultMessage={defaultMessage}
+              defaultPrompt={defaultPrompt}
+              mainTopic={mainTopic}
+            />
+            <NotesWidget courseId={courseId} mainTopic={mainTopic} />
           </div>
         </div>
       )}
