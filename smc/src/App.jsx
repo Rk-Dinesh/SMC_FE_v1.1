@@ -25,6 +25,7 @@ import EmailOtp from "./pages/auth/EmailOtp";
 import { ToastContainer } from "react-toastify";
 import Profile from "./pages/profile/Profile";
 import SignInOtp from "./pages/auth/SignInOtp";
+import SubscriptionPlans from "./pages/auth/SubscriptionPlan";
 // import Exam from "./pages/courses/Exam";
 
 export const ThemeContext = createContext()
@@ -46,6 +47,7 @@ const App = () => {
           <Route path="/signin_otp" element={<SignInOtp setIsLoggedIn={setIsLoggedIn}/>} />
           <Route path="/phone_otp" element={<PhoneOtp />} />
           <Route path="/email_otp" element={<EmailOtp setIsLoggedIn={setIsLoggedIn}/>} />
+          <Route path="/subscribe" element={<SubscriptionPlans />} />
           <Route
             path="/"
             element={

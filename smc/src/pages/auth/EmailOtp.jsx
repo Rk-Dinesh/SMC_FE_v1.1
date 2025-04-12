@@ -64,7 +64,7 @@ const EmailOtp = ({setIsLoggedIn}) => {
         localStorage.setItem("user", response.data.userId);
         localStorage.setItem("type", response.data.type);
         toast.success("Account created successfully!");
-        navigate("/dashboard"); 
+        navigate("/subscribe"); 
       } else {
         toast.error("Failed to register user. Try again later.");
       }

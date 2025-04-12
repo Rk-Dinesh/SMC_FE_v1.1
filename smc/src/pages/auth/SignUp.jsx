@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { AiOutlineLoading } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 import { PiEnvelope } from "react-icons/pi";
+import Logo from "../../assets/images/logo.png";
 
 const UserSchema = yup.object().shape({
   fname: yup.string().required("First name is required"),
@@ -66,9 +67,9 @@ const SignUp = () => {
   return (
     <div className="bg-popup-gray h-screen flex justify-center items-center font-poppins text-white">
       <div className="lg:w-[430px] md:w-[430px] min-w-[300px] mx-1 bg-darkgray px-4 py-1 flex flex-col justify-center shadow-black shadow-md rounded-lg">
-        <p className="text-5xl font-medium text-center py-2">
-          <span className="text-teal-400">Seek</span>MyCourse
-        </p>
+       
+        <img src={Logo} alt="" className="w-5/6 mx-auto" />
+       
         <form className="z-0" onSubmit={handleSubmit(onSubmit)}>
           <p className="text-center text-2xl my-2">Signup!</p>
           <div className="flex flex-col gap-2 mx-4 my-2 font-extralight">

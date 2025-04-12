@@ -17,46 +17,60 @@ const Courses = () => {
   const itemsPerPage = 8;
 
   useEffect(() => {
-  const fetchCourses = async () => {
-    try {
-      const response = await axios.get(`${API}/api/courses?userId=${userId}`);
-    
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(`${API}/api/courses?userId=${userId}`);
 
-      setCourses(response.data);
-    } catch (error) {}
-  };
+        setCourses(response.data);
+      } catch (error) {}
+    };
     fetchCourses();
   }, []);
   const handleCourse = (content, mainTopic, type, courseId, completed, end) => {
     const jsonData = JSON.parse(content);
-    localStorage.setItem('courseId', courseId);
-    localStorage.setItem('first', completed);
-    localStorage.setItem('jsonData', JSON.stringify(jsonData));
-    let ending = '';
+    localStorage.setItem("courseId", courseId);
+    localStorage.setItem("first", completed);
+    localStorage.setItem("jsonData", JSON.stringify(jsonData));
+    let ending = "";
     if (completed) {
       ending = end;
     }
-    navigate('/content', { state: { jsonData: jsonData, mainTopic: mainTopic.toUpperCase(), type: type.toLowerCase(), courseId: courseId, end: ending } });
-  }
+    navigate("/content", {
+      state: {
+        jsonData: jsonData,
+        mainTopic: mainTopic.toUpperCase(),
+        type: type.toLowerCase(),
+        courseId: courseId,
+        end: ending,
+      },
+    });
+  };
+
+  const handleCertificate = (mainTopic, end) => {
+    const ending = new Date(end).toLocaleDateString();
+    navigate("/viewcertificate", {
+      state: { courseTitle: mainTopic, end: ending },
+    });
+  };
 
   const filteredCourses = courses
-  .filter((course) =>
-    course.mainTopic.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-  .filter((course) => {
-    if (filterStatus === "active") return !course.completed;
-    if (filterStatus === "completed") return course.completed;
-    return true;
-  });
+    .filter((course) =>
+      course.mainTopic.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .filter((course) => {
+      if (filterStatus === "active") return !course.completed;
+      if (filterStatus === "completed") return course.completed;
+      return true;
+    });
 
-const paginatedCourses = filteredCourses.slice(
-  (currentPage - 1) * itemsPerPage,
-  currentPage * itemsPerPage
-);
+  const paginatedCourses = filteredCourses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
-    <div>
-      <div className="text-white flex justify-between border-b pb-2 pl-7 border-white">
+    <div className="pb-8">
+      <div className="text-white flex justify-between border-b pb-2 pl-7  border-white">
         <p>My Courses</p>
         <div className="relative">
           <button
@@ -132,7 +146,7 @@ const paginatedCourses = filteredCourses.slice(
           >
             <img src={IMG} alt="Course" className="rounded-4xl w-full p-2" />
             <div className="text-sm px-6 leading-relaxed">
-            <p className="font-semibold text-lg">{course.mainTopic}</p>
+              <p className="font-semibold text-lg">{course.mainTopic}</p>
               <p>
                 <span>Type:</span> {course.type}
               </p>
@@ -150,22 +164,36 @@ const paginatedCourses = filteredCourses.slice(
                     month: "short",
                     year: "numeric",
                   })
-                  .toUpperCase().replace(/\s/g, '-')}
+                  .toUpperCase()
+                  .replace(/\s/g, "-")}
               </p>
             </div>
             <div className="flex gap-2 mt-4 justify-center">
-             
-                <p onClick={() => handleCourse(course.content, course.mainTopic, course.type, course._id, course.completed, course.end)} className=" cursor-pointer bg-teal-400 text-black px-4 py-1 rounded-md text-sm">
-                  Continue
-                </p>
-                {course.completed === true && (
+              <p
+                onClick={() =>
+                  handleCourse(
+                    course.content,
+                    course.mainTopic,
+                    course.type,
+                    course._id,
+                    course.completed,
+                    course.end
+                  )
+                }
+                className=" cursor-pointer bg-teal-400 text-black px-4 py-1 rounded-md text-sm"
+              >
+                Continue
+              </p>
+              {course.completed === true && (
                 <p
-                  onClick={() => navigate("/viewcertificate")}
+                  onClick={() =>
+                    handleCertificate(course.mainTopic, course.end)
+                  }
                   className="cursor-pointer bg-white text-black px-4 py-1 rounded-md text-sm"
                 >
                   Certificate
                 </p>
-              )}         
+              )}
             </div>
           </div>
         ))}

@@ -84,12 +84,12 @@ const SignIn = () => {
               }}
             />
             <div className="flex justify-center gap-6 py-6 my-8">
-              <button
-                className="text-lg border-2 border-white rounded-lg px-4 py-1 text-white font-normal w-1/3"
+              <p
+                className="text-lg text-center border-2 border-white rounded-lg px-4 py-1 text-white font-normal w-1/3"
                 onClick={() => navigate("/signup")}
               >
                 SignUp
-              </button>
+              </p>
               <button
                 className="text-lg bg-teal-400 rounded-lg px-4 py-1 text-black font-normal w-1/3"
                 type="submit"
