@@ -32,16 +32,12 @@ const SignIn = () => {
     try {
       setProcessing(true);
       const res = await axios.post(`${API}/api/usersignin`, { phone: localPhone });
-      
-      
       if (!res.data.success) {
         toast.error(res.data.message || "Phone number not found.");
         return;
       }
-    
       localStorage.setItem("user", res.data.userId._id);
-      
-    
+      localStorage.setItem("type", res.data.userId.type);
       navigate("/signin_otp", { state: { userData} });
     } catch (error) {
       console.error("Error:", error);

@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { API } from "../../Host";
 
-const EmailOtp = () => {
+const EmailOtp = ({setIsLoggedIn}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const userData = location?.state?.userData;
@@ -59,8 +59,12 @@ const EmailOtp = () => {
       const response = await axios.post(apiEndpoint, userData);
 
       if (response.status===200) {
+        setIsLoggedIn(true);
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("user", response.data.userId);
+        localStorage.setItem("type", response.data.type);
         toast.success("Account created successfully!");
-        navigate("/dashboard"); // navigate to success page
+        navigate("/dashboard"); 
       } else {
         toast.error("Failed to register user. Try again later.");
       }

@@ -1,26 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { API } from "../../Host";
+import { ThemeContext } from "../../App";
 
 const Notifications = () => {
-  const userId = localStorage.getItem("userId");
-  console.log(userId);
+  const {global,setGlobal} = useContext(ThemeContext);
+  const user= localStorage.getItem("user");
+
 
   const [notifications, setNotifications] = useState([]);
   useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get(
+          `${API}/api/getnotifybyid?user=${user}`
+        );
+        setNotifications(response.data.notify);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+   
+    const fetchNotificationUpdate = async () => {
+      try {
+        const response = await axios.put(
+          `${API}/api/updatenotify?user=${user}`
+        );
+        setGlobal(!global)
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchNotifications();
+    fetchNotificationUpdate();
   }, []);
 
-  const fetchNotifications = async () => {
-    try {
-      const response = await axios.get(
-        `${API}/api/getnotifybyid?user=${userId}`
-      );
-      setNotifications(response.data.notify);
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
-    }
-  };
+
 
   return (
     <>

@@ -1,20 +1,69 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Bell } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Localisation from "../assets/language.png";
+import { ThemeContext } from "../App";
+import { API } from "../Host";
+import axios from "axios";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const user = localStorage.getItem("user");
   const isDashboard = location.pathname === "/dashboard"; // adjust if needed
   const handleLanguageChange = (e) => {
     const selectedLang = e.target.value;
   };
+  const { global, setGlobal } = useContext(ThemeContext);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [notify, setNotify] = useState(false);
+  const [count, setCount] = useState(0);
+  const [refresh, setRefresh] = useState(false);
+  const [notification, setNotification] = useState([]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchNotification();
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [refresh, global]);
+
+  const fetchNotification = async () => {
+    try {
+      const response = await axios.get(`${API}/api/getnotifybyid?user=${user}`);
+      const responseData = response.data.notify;
+      const reverseData = responseData.reverse();
+      const filteredCount = responseData.filter(
+        (count) => count.read === "no"
+      ).length;
+      setNotification(reverseData);
+      setCount(filteredCount);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const togglenotify = () => {
+    setNotify(!notify);
+  };
+
+  const redirectnotify = () => {
+    setNotify(!notify);
+    setRefresh(!refresh);
+    navigate("/notifications");
+  };
 
   return (
     <div>
-      <div className={`font-poppins flex  items-center text-sm mb-3 text-white overflow-auto no-scrollbar ${
-       isDashboard ? "justify-between ":"justify-end"
-      }`}>
+      <div
+        className={`font-poppins flex  items-center text-sm mb-3 text-white overflow-auto no-scrollbar ${
+          isDashboard ? "justify-between " : "justify-end"
+        }`}
+      >
         {/* LEFT SIDE: Dashboard-only items */}
 
         {isDashboard && (
@@ -42,11 +91,19 @@ const Navbar = () => {
               <option value="de">Deutsch</option>
               {/* Add more as needed */}
             </select>
-            <img src={Localisation} alt="Language icon" className="size-10 rounded-full mx-2" />
+            <img
+              src={Localisation}
+              alt="Language icon"
+              className="size-10 rounded-full mx-2"
+            />
             <div className="flex items-center gap-2 text-nowrap">
-              <span className="bg-popup-gray lg:p-2 md:p-2 p-1.5 rounded-full">
-                <Bell className="size-5" />
-              </span>
+              <div className="relative mr-5" onClick={togglenotify}>
+                <Bell className="lg:w-7 lg:h-7 md:w-6 md:h-6 w-5 h-5 text-white cursor-pointer" />
+                <p className="absolute text-black bg-teal-500 rounded-full px-2 -top-2 -right-3 cursor-pointer">
+                  {" "}
+                  {count}
+                </p>
+              </div>
               Vishnu Nair
               <span>
                 <div>
@@ -56,6 +113,34 @@ const Navbar = () => {
                 </div>
               </span>
             </div>
+            {notify && (
+        <div
+          className="absolute text-black right-2 top-10 bg-white w-80 h-fit pt-3 font-poppins font-extralight"
+          onClick={() => redirectnotify()}
+        >
+          <p className="px-2">Notifications</p>
+          {notification &&
+            notification.slice(0, 3).map((data, index) => (
+              <div key={index}>
+                <hr />
+                <span className=" flex gap-1 justify-between px-3 py-2">
+                  <p className="text-normal text-slate-600">
+                    <strong>Subject:</strong> {data.subject}
+                  </p>
+                  <button className="text-sm text-black font-normal ">
+                    View
+                  </button>
+                </span>
+              </div>
+            ))}
+          <button
+            className="w-full bg-slate-400 text-lg py-1"
+            onClick={redirectnotify}
+          >
+            See all
+          </button>
+        </div>
+      )}
           </div>
         </div>
       </div>

@@ -4,12 +4,12 @@ import { useLocation, useNavigate,  } from "react-router-dom";
 import { API } from "../../Host";
 import { toast } from "react-toastify";
 import { AiOutlineLoading } from "react-icons/ai";
-// import { ThemeContext } from "../../App";
+import { ThemeContext } from "../../App";
 
 const ListTopics = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-//   const {global,setGlobal} = useContext(ThemeContext);
+  const {global,setGlobal} = useContext(ThemeContext);
   const [processing, setProcessing] = useState(false);
   const { jsonData, mainTopic, type,lang } = state || {};
 // const mainTopic = "ai"

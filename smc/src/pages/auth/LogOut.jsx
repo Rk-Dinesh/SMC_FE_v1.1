@@ -2,9 +2,10 @@ import React from "react";
 import Modal from "../../components/Modal";
 import { useNavigate } from "react-router-dom";
 
-const LogOut = ({ handleCloseModal}) => {
+const LogOut = ({ handleCloseModal,setIsLoggedIn}) => {
   const navigate = useNavigate();
   const redirect = () => {
+    setIsLoggedIn(false);
     localStorage.clear()
     navigate("");
   };

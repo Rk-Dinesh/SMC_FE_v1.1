@@ -6,7 +6,7 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { toast } from "react-toastify";
 import Logo from "../../assets/images/logo.png";
 
-const SignInOtp = () => {
+const SignInOtp = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const userData = location?.state?.userData;
@@ -71,12 +71,19 @@ const SignInOtp = () => {
     try {
       const result = await confirmationResult.confirm(otp);
       toast.success("Phone OTP verified successfully!");
+      setIsLoggedIn(true);
+      localStorage.setItem("isLoggedIn", true);
+
       setTimeout(() => {
         navigate("/dashboard");
         toast.success("Login Successfully!");
       }, 1200);
     } catch (error) {
       console.error("OTP verification failed:", error.message);
+      setIsLoggedIn(false);
+      localStorage.removeItem("user");
+      localStorage.removeItem("type");
+      localStorage.setItem("isLoggedIn", false);
       toast.error("Invalid phone OTP. Please try again.");
     }
   };
@@ -85,7 +92,7 @@ const SignInOtp = () => {
     <div className="font-poppins h-screen bg-popup-gray flex justify-center items-center">
       <div className="bg-darkgray lg:w-[460px] md:w-[430px] min-w-[300px] mx-1 px-4 py-8 shadow-black shadow-md rounded-lg text-white text-center">
         <p className="flex justify-center">
-           <img src={Logo} alt="Logo Image" />
+          <img src={Logo} alt="Logo Image" />
         </p>
         <h1 className="text-2xl font-medium my-4">Verify Phone Number</h1>
         <p className="text-base font-extralight text-gray-100 mb-6">

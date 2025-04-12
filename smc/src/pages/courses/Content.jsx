@@ -19,10 +19,10 @@ import html2pdf from 'html2pdf.js';
 import { motion } from "framer-motion";
 import ChatWidget from "../../components/chatWidget";
 import NotesWidget from "../../components/notesWidget";
-// import { ThemeContext } from "../../App";
+import { ThemeContext } from "../../App";
 
 const Content = () => {
-  //   const { global, setGlobal } = useContext(ThemeContext);
+    const { global, setGlobal } = useContext(ThemeContext);
   const [isOpen, setIsOpen] = useState(false);
   const [key, setkey] = useState("");
   const { state } = useLocation();
@@ -169,20 +169,25 @@ const Content = () => {
     let totalTopics = 0;
 
     jsonData[mainTopic.toLowerCase()].forEach((topic) => {
-      topic.subtopics.forEach((subtopic) => {
-        if (subtopic.done) {
-          doneCount++;
-        }
-        totalTopics++;
-      });
+
+        topic.subtopics.forEach((subtopic) => {
+
+            if (subtopic.done) {
+                doneCount++;
+            }
+            totalTopics++;
+        });
     });
+    totalTopics = totalTopics + 1;
+    if(pass){
+        totalTopics = totalTopics - 1;
+    }
     const completionPercentage = Math.round((doneCount / totalTopics) * 100);
     setPercentage(completionPercentage);
-    if (completionPercentage >= "100") {
-      setIsCompleted(true);
-      finish();
+    if (completionPercentage >= '100') {
+        setIsCompleted(true);
     }
-  };
+}
 
   const [openTopics, setOpenTopics] = useState({});
 
@@ -422,45 +427,35 @@ const Content = () => {
   }
 
   async function finish() {
-    if (localStorage.getItem("first") === "true") {
-      if (!end) {
-        const today = new Date();
-        const formattedDate = today.toLocaleDateString("en-GB");
-        navigate("/viewcertificate", {
-          state: { courseTitle: mainTopic, end: formattedDate },
-        });
-      } else {
-        navigate("/viewcertificate", {
-          state: { courseTitle: mainTopic, end: end },
-        });
-      }
-    } else {
-      const dataToSend = {
-        courseId: courseId,
-      };
-      try {
-        const postURL = API + "/api/finish";
-        const response = await axios.post(postURL, dataToSend);
-        if (response.data.success) {
-          const today = new Date();
-          const formattedDate = today.toLocaleDateString("en-GB");
-          localStorage.setItem("first", "true");
-          sendEmail(formattedDate);
-          const formData = {
-            user: user,
-            subject: `Course Completion Confirmation`,
-            description: `Congratulations! You've completed the course ${mainTopic}`,
-          };
-          await axios.post(`${API}/api/notify`, formData);
-          setGlobal(!global);
+    if (sessionStorage.getItem('first') === 'true') {
+        if (!end) {
+            const today = new Date();
+            const formattedDate = today.toLocaleDateString('en-GB');
+            navigate('/certificate', { state: { courseTitle: mainTopic, end: formattedDate } });
         } else {
-          finish();
+            navigate('/certificate', { state: { courseTitle: mainTopic, end: end } });
         }
-      } catch (error) {
-        finish();
-      }
+
+    } else {
+        const dataToSend = {
+            courseId: courseId
+        };
+        try {
+            const postURL = API + '/api/finish';
+            const response = await axios.post(postURL, dataToSend);
+            if (response.data.success) {
+                const today = new Date();
+                const formattedDate = today.toLocaleDateString('en-GB');
+                sessionStorage.setItem('first', 'true');
+                sendEmail(formattedDate);
+            } else {
+                finish()
+            }
+        } catch (error) {
+            finish()
+        }
     }
-  }
+}
 
   async function sendEmail(formattedDate) {
     const userName = localStorage.getItem("fname");
@@ -699,6 +694,8 @@ const Content = () => {
   async function updateCourse() {
     CountDoneTopics();
     localStorage.setItem("jsonData", JSON.stringify(jsonData));
+    console.log(jsonData);
+    
     const dataToSend = {
       content: JSON.stringify(jsonData),
       courseId: courseId,
@@ -835,7 +832,7 @@ const Content = () => {
   }
 
   const redirectcourse = () => {
-    navigate("/course");
+    navigate("/my_courses");
   };
 
   const renderTopicsAndSubtopics = (topics) => {

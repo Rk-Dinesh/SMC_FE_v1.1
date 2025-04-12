@@ -63,11 +63,13 @@ const GenerateCourse = () => {
 
 
   let type = localStorage.getItem("type");
-  const user = localStorage.getItem("userId");
+  const user = localStorage.getItem("user");
 
   useEffect(() => {
     const fetchData = async () => {
       const userType = localStorage.getItem("type");
+      console.log(userType);
+      
       if (userType !== "free") {
         setPaidMember(true);
         await getCount();
@@ -86,6 +88,8 @@ const GenerateCourse = () => {
       const response = await axios.get(postURL);
       const responseData = response.data;
       setCount(responseData[0].count);
+      console.log("count", responseData[0].count);
+      
     } catch (error) {}
   }
 
