@@ -25,8 +25,9 @@ import EmailOtp from "./pages/auth/EmailOtp";
 import { ToastContainer } from "react-toastify";
 import Profile from "./pages/profile/Profile";
 import SignInOtp from "./pages/auth/SignInOtp";
-import SubscriptionPlans from "./pages/auth/SubscriptionPlan";
+import SubscriptionPlans from "./pages/subscribtion/SubscriptionPlan";
 import ViewCertificate from "./pages/certificate/ViewCertificate";
+import Payment from "./pages/subscribtion/Payment";
 // import Exam from "./pages/courses/Exam";
 
 export const ThemeContext = createContext()
@@ -49,6 +50,7 @@ const App = () => {
           <Route path="/phone_otp" element={<PhoneOtp />} />
           <Route path="/email_otp" element={<EmailOtp setIsLoggedIn={setIsLoggedIn}/>} />
           <Route path="/subscribe" element={<SubscriptionPlans />} />
+          <Route path="/payment" element={<Payment />} />
           <Route
             path="/"
             element={
@@ -78,6 +80,7 @@ const App = () => {
           <Route path="/my_earnings" element={<EarningTable/>}/>
           <Route path="/notifications" element={<Notifications/>}/>
           <Route path="/profile" element={<Profile />} />
+         
           </Route>
         </Routes>
       </BrowserRouter>

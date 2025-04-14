@@ -54,7 +54,7 @@ const Certificate = () => {
       <span className="flex  justify-end py-3  items-center">
         <input
           type="text"
-          placeholder="Search by topic name"
+          placeholder="Search by topicName"
           className="text-white placeholder:text-white rounded-l-full px-4 py-2 bg-darkgray outline-none"
           value={searchQuery}
           onChange={(e) => {

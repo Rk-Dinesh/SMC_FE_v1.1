@@ -82,6 +82,7 @@ const ViewCertificate = () => {
           </div>
           <p className="mt-2 text-lg">This is to certify that</p>
           <h1 className="text-3xl font-bold mt-3">{localStorage.getItem("userName")}</h1>
+          <div className="h-0.5 w-5/6 -translate-y-2/4 bg-slate-700 mt-2"></div>
           <p className="mt-4 text-lg">
             has successfully completed the course on
           </p>

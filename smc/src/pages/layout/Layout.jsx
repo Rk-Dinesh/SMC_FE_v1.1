@@ -87,7 +87,7 @@ const Layout = ({setIsLoggedIn}) => {
 
   return (
     <div className="flex font-poppins bg-popup-gray pl-6 pt-6 pb-2 w-full h-screen  ">
-      <div className="  bg-darkgray text-gray-200 rounded-3xl  lg:w-96 md:w-80 overflow-y-auto no-scrollbar lg:block md:block hidden ">
+      <div className="  bg-darkgray text-gray-200 rounded-3xl  lg:w-[420px] md:w-[460px] overflow-y-auto no-scrollbar lg:block md:block hidden ">
         <div className="flex justify-center ">
           <img src={logo} alt="" className="" />
         </div>

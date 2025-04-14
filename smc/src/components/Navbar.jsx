@@ -20,6 +20,8 @@ const Navbar = () => {
   const [count, setCount] = useState(0);
   const [refresh, setRefresh] = useState(false);
   const [notification, setNotification] = useState([]);
+  const userName = localStorage.getItem("userName");
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -56,6 +58,11 @@ const Navbar = () => {
     setRefresh(!refresh);
     navigate("/notifications");
   };
+
+  const getInitials = (name) => {
+    const names = name.split(' ');
+    return names.map(n => n.charAt(0).toUpperCase()).join('');
+};
 
   return (
     <div>
@@ -104,18 +111,22 @@ const Navbar = () => {
                   {count}
                 </p>
               </div>
-              Vishnu Nair
+             {localStorage.getItem('userName') && (
+              <span className="text-white font-semibold text-sm cursor-pointer truncate w-32">
+                {userName}
+              </span>
+            )}
               <span>
                 <div>
-                  <button className="bg-popup-gray w-9 h-9 rounded-full flex items-center justify-center">
-                    VN
+                  <button className="bg-popup-gray w-9 h-9 rounded-full flex items-center justify-center mr-2">
+                  {getInitials(userName)}
                   </button>
                 </div>
               </span>
             </div>
             {notify && (
         <div
-          className="absolute text-black right-2 top-10 bg-white w-80 h-fit pt-3 font-poppins font-extralight"
+          className="absolute text-black right-2 top-10 bg-white w-80 h-fit pt-3 font-poppins font-extralight z-50 my-8"
           onClick={() => redirectnotify()}
         >
           <p className="px-2">Notifications</p>
