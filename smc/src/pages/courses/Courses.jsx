@@ -70,7 +70,7 @@ const Courses = () => {
 
   return (
     <div className="pb-8">
-      <div className="text-white flex justify-between border-b pb-2 pl-7  border-white">
+      <div className="text-white items-center flex justify-between gap-1 border-b pb-2 pl-4  border-white">
         <p>My Courses</p>
         <div className="relative">
           <button

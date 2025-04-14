@@ -13,6 +13,7 @@ import { API } from "../../Host";
 import { AiFillHome } from "react-icons/ai";
 import { HiDownload } from "react-icons/hi";
 import { RiShareFill } from "react-icons/ri";
+import { BiSolidFilePdf } from "react-icons/bi";
 import html2pdf from 'html2pdf.js';
 
 // import robot from "../../assets/robot.png";
@@ -839,7 +840,7 @@ const Content = () => {
     return (
       <>
         <span
-          className=" flex gap-2 mx-4 items-center text-white font-poppins font-extralight "
+          className=" flex gap-2 mx-4  items-center text-white font-poppins font-extralight "
           onClick={redirectcourse}
           // onClick={() => setIsSidebarOpen(false)}
         >
@@ -901,7 +902,7 @@ const Content = () => {
         </div>
         <p
           className="text-center mt-3 mx-4 flex flex-row items-center text-base font-bold  text-black dark:text-white cursor-pointer"
-          onClick={redirectExam}
+          //onClick={redirectExam}
         >
           {" "}
           {mainTopic} Quiz
@@ -914,7 +915,7 @@ const Content = () => {
   return (
     <>
       {!mainTopic ? null : (
-        <div className="flex flex-col h-screen  text-white">
+        <div className={`flex flex-col h-screen  text-white lg:mt-0 md:mt-0  bg-black ${isSidebarOpen ? "mt-0" : "mt-8"}`}>
           <div className="flex flex-row overflow-y-auto  ">
             <div
               className={`${
@@ -937,30 +938,30 @@ const Content = () => {
               >
                 ☰ Open Sub Topics
               </button>
-              <nav className="py-5 bg-gray-900 border-b border-gray-500 flex justify-between items-center">
-                <div className="ml-1  flex flex-col w-1/2">
+              <nav className="py-5 bg-gray-900 border-b border-gray-500 flex justify-between items-center flex-wrap">
+                <div className="ml-1  flex flex-col lg:w-1/2 md:w-1/2 w-4/5">
                   <TruncatedText text={mainTopic} len={10} />
                   {isComplete ? (
                     <p
                       onClick={finish}
-                      className="mr-3 underline text-white font-normal mx-8"
+                      className="mr-3 underline text-white font-normal mx-8 whit"
                     >
                       Download Certificate
                     </p>
                   ) : (
                     <span className="text-white">
-                      <p className="w-3/4 text-end mx-4 text-lg font-extralight">{`${percentage}%`}</p>
-                      <div className="w-3/4 bg-gray-200 rounded-full h-4 dark:bg-gray-700 mx-5">
+                      <p className="lg:w-3/4 md:w-3/4 w-full text-end mx-4 text-lg font-extralight">{`${percentage}%`}</p>
+                      <div className="lg:w-3/4 md:w-3/4 w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700 mx-5">
                         <div
                           className="bg-teal-500 h-4 rounded-full"
                           style={{ width: `${percentage}%` }}
                         ></div>
                       </div>
-                      <p className="mx-6 mt-0.5 text-sm">Completion status</p>
+                      <p className="mx-6 mt-0.5 text-sm whitespace-nowrap">Completion status</p>
                     </span>
                   )}
                 </div>
-                <div className="flex gap-5 mr-5 mt-5">
+                <div className="flex flex-wrap gap-5 mr-5 mt-5 lg:ml-0 md:ml-0 ml-8">
                   <div className="">
                     <AiFillHome
                       onClick={redirectcourse}
@@ -968,12 +969,13 @@ const Content = () => {
                       color={"#31C48D"}
                     />
                   </div>
-                  <div className="">
-                    <HiDownload
-                      onClick={htmlDownload}
+               
+                  <div className="flex gap-2 items-center" onClick={htmlDownload}>
+                    <BiSolidFilePdf
                       size={30}
                       color={"#31C48D"}
                     />
+                    <span className="lg:block md:block hidden"> Export Course as PDF</span>
                   </div>
                 </div>
               </nav>

@@ -168,7 +168,7 @@ const SubscriptionPlans = () => {
                 Select
               </button>
 
-              <ul className="space-y-1.5 text-base font-light mt-2 ">
+              <ul className="space-y-2 text-base font-light mt-2 ">
                 <li>Generate 1 Free Course</li>
                 <li>Theory & Image Course</li>
                 <li>Up to 05 Subtopics</li>
@@ -186,11 +186,11 @@ const SubscriptionPlans = () => {
               <p className="text-lg text-center my-2">Billed Annually</p>
               <p
                 onClick={handlebasicPayment}
-                className="bg-darkgray text-center cursor-pointer text-white font-semibold py-1.5 w-36 mx-auto rounded-md "
+                className="bg-darkgray text-center cursor-pointer text-white font-medium py-1.5 w-36 mx-auto rounded-md "
               >
                 Select
               </p>
-              <ul className="space-y-1.5 text-base font-medium mt-7">
+              <ul className="space-y-2 text-base font-medium mt-7">
                 <li>Generate 10 Course / Year</li>
                 <li>Theory & Image Course</li>
                 <li>Theory & Video Course</li>
@@ -210,11 +210,11 @@ const SubscriptionPlans = () => {
               <p className="text-lg text-center my-2 ">Billed Annually</p>
               <p
                 onClick={handleProPayment}
-                className="bg-teal-400 text-center cursor-pointer text-black font-semibold py-1.5 w-36 mx-auto rounded-md mb-6"
+                className="bg-teal-400 text-center cursor-pointer text-black font-medium py-1.5 w-36 mx-auto rounded-md mb-6"
               >
                 Select
               </p>
-              <ul className="space-y-1.5 text-base font-light mt-2">
+              <ul className="space-y-2 text-base font-light mt-2">
                 <li>Generate 25 Course / Year</li>
                 <li>Theory & Image Course</li>
                 <li>Theory & Video Course</li>

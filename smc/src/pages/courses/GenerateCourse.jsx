@@ -68,7 +68,7 @@ const GenerateCourse = () => {
   useEffect(() => {
     const fetchData = async () => {
       const userType = localStorage.getItem("type");
-      console.log(userType);
+    
       
       if (userType !== "free") {
         setPaidMember(true);
@@ -88,8 +88,6 @@ const GenerateCourse = () => {
       const response = await axios.get(postURL);
       const responseData = response.data;
       setCount(responseData[0].count);
-      console.log("count", responseData[0].count);
-      
     } catch (error) {}
   }
 
@@ -275,7 +273,7 @@ const GenerateCourse = () => {
       id: 1,
       title: "Course Topic",
       content: (
-        <div className="w-4/6 mx-auto mt-14">
+        <div className="lg:w-4/6 md:w-4/6 w-full mx-auto mt-12">
           <p className="text-lg text-center font-semibold">
             Ignite Your Curiosity: What Do You Want to Learn?
           </p>
@@ -283,7 +281,7 @@ const GenerateCourse = () => {
             Define your learning focus. Input the topic you wish to study, and
             we will generate a course that is customized to your needs.
           </p>
-          <div className="flex flex-col w-5/6 mx-auto mt-4">
+          <div className="flex flex-col lg:w-5/6 md:w-5/6 w-full mx-auto mt-4">
             <label htmlFor="fname">Enter Your Topic Name</label>
             <input
               type="text"
@@ -305,7 +303,7 @@ const GenerateCourse = () => {
       id: 2,
       title: "No Of Subtopic",
       content: (
-        <div className="w-4/6 mx-auto mt-14">
+        <div className="lg:w-4/6 md:w-4/6 w-full mx-auto mt-12">
           <h2 className="text-lg text-center font-semibold mb-2">
             Tailor Your Focus: Number of Subtopics?
           </h2>
@@ -427,7 +425,7 @@ const GenerateCourse = () => {
       id: 3,
       title: "Course Language",
       content: (
-        <div className="w-4/6 mx-auto">
+        <div className="lg:w-4/6 md:w-4/6 w-full mx-auto">
           <p className="text-lg text-center font-semibold">
             Speak Your Language: Select Your Course Language.
           </p>
@@ -437,7 +435,7 @@ const GenerateCourse = () => {
             preferences.
           </p>
           <div className="flex flex-col w-5/6 mx-auto mt-4">
-            <label htmlFor="language" className="w-4/5 mx-auto mb-2">
+            <label htmlFor="language" className="lg:w-4/5 md:w-4/5 w-full mx-auto mb-2">
               Course Language{" "}
             </label>
             <select
@@ -467,16 +465,16 @@ const GenerateCourse = () => {
 
   return (
     <div className="text-white w-full">
-      <h1 className="text-xl font-semibold mb-2">Generate Course</h1>
+      <h1 className="lg:text-xl md:text-xl text-base font-semibold mb-2">Generate Course</h1>
       <div className="h-0.5 w-full -translate-y-2/4 bg-white mb-8"></div>
-      <div className="flex justify-around w-4/6 my-3 mx-auto">
+      <div className="flex justify-around lg:w-4/6 md:w-4/6 w-full my-3 mx-auto">
         {steps.map((step) => (
           <React.Fragment key={step.id}>
             <p className="text-xs">{step.title}</p>
           </React.Fragment>
         ))}
       </div>
-      <div className="flex items-center justify-between w-3/6 mb-6 mt-3 mx-auto">
+      <div className="flex items-center justify-between  lg:w-3/6 md:w-3/6 w-full mb-6 mt-3 mx-auto">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
             <div className="flex flex-col items-center">
@@ -499,7 +497,7 @@ const GenerateCourse = () => {
         ))}
       </div>
       <div className="w-5/6 mx-auto">{currentStepData.content}</div>
-      <div className="mt-8 flex justify-center space-x-4">
+      <div className="mt-6 flex justify-center space-x-3">
         <button
           className="px-8 py-1.5 rounded-md border border-white text-white hover:bg-gray-800 transition duration-300"
           type="button"
@@ -514,8 +512,9 @@ const GenerateCourse = () => {
             type="button"
             onClick={handleSubmit}
             //disabled={Object.keys(errors).length > 0}
+            disabled={processing}
           >
-            Submit
+           {processing ? "Submitting" : "Submit"}
           </button>
         ) : (
           <button

@@ -21,6 +21,7 @@ const Navbar = () => {
   const [refresh, setRefresh] = useState(false);
   const [notification, setNotification] = useState([]);
   const userName = localStorage.getItem("userName");
+  const type = localStorage.getItem("type");
 
 
   useEffect(() => {
@@ -65,9 +66,9 @@ const Navbar = () => {
 };
 
   return (
-    <div>
+    <div className=" mb-3">
       <div
-        className={`font-poppins flex  items-center text-sm mb-3 text-white overflow-auto no-scrollbar ${
+        className={`font-poppins flex  items-center text-sm text-white overflow-auto no-scrollbar ${
           isDashboard ? "justify-between " : "justify-end"
         }`}
       >
@@ -75,18 +76,18 @@ const Navbar = () => {
 
         {isDashboard && (
           <>
-            <div className="bg-darkgray flex items-center justify-center lg:px-8 py-3 w-72 gap-2 text-lg rounded-full">
-              <p>Subscription :</p>
-              <p>Basic</p>
+            <div className="bg-darkgray  gap-2 text-base rounded-full whitespace-nowrap py-3 px-3">
+              <p>Subscription : {type}</p>
+           
             </div>
-            <div className="bg-darkgray flex items-center justify-center lg:px-8 py-3 w-72 gap-2 text-lg rounded-full">
-              <p>Courses :</p>
-              <p>10/25</p>
+            <div className="bg-darkgray  gap-2 text-base rounded-full whitespace-nowrap py-3 px-3">
+              <p>Courses : 10/25</p>
+           
             </div>
           </>
         )}
 
-        <div className="flex gap-4  items-center">
+        <div className="flex gap-4  items-center  lg:mx-0 md:mx-0 mx-auto">
           <div className="flex justify-between lg:px-4 py-2 w-full bg-darkgray items-center text-center rounded-full">
             <select
               onChange={handleLanguageChange}
@@ -111,8 +112,8 @@ const Navbar = () => {
                   {count}
                 </p>
               </div>
-             {localStorage.getItem('userName') && (
-              <span className="text-white font-semibold text-sm cursor-pointer truncate w-32">
+             {localStorage.getItem('userName')  && (
+              <span className="text-white font-semibold text-sm cursor-pointer truncate w-32 hidden sm:block">
                 {userName}
               </span>
             )}

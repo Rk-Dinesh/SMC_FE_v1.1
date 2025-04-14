@@ -48,7 +48,7 @@ const Certificate = () => {
 
   return (
     <div>
-      <div className="text-white flex justify-between border-b pb-2 pl-7 border-white">
+      <div className="text-white flex justify-between border-b pb-2 pl-5 border-white">
         <p>My Certificate</p>
       </div>
       <span className="flex  justify-end py-3  items-center">

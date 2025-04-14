@@ -6,6 +6,7 @@ import { BsChevronDown } from "react-icons/bs";
 import logo from "../../assets/images/logo.png";
 import LogOut from "../auth/LogOut";
 import DeleteAccount from "../auth/DeleteAccount";
+import Headers from "./Headers";
 
 const Layout = ({setIsLoggedIn}) => {
   const location = useLocation();
@@ -86,8 +87,8 @@ const Layout = ({setIsLoggedIn}) => {
   };
 
   return (
-    <div className="flex font-poppins bg-popup-gray pl-6 pt-6 pb-2 w-full h-screen  ">
-      <div className="  bg-darkgray text-gray-200 rounded-3xl  lg:w-[420px] md:w-[460px] overflow-y-auto no-scrollbar lg:block md:block hidden ">
+    <div className="flex font-poppins bg-popup-gray lg:px-4 md:px-3 px-0 py-4 pb-2 w-full h-screen  ">
+      <div className="  bg-darkgray text-gray-200 rounded-3xl  lg:w-[420px] md:w-[460px]  overflow-y-auto no-scrollbar lg:block md:block hidden ">
         <div className="flex justify-center ">
           <img src={logo} alt="" className="" />
         </div>
@@ -154,10 +155,11 @@ const Layout = ({setIsLoggedIn}) => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full overflow-x-auto mx-4 no-scrollbar">
+      <div className="w-full overflow-x-auto lg:mx-4 md:mx-4 mx-2 no-scrollbar">
+      <Headers Menus={Menus} Setsubmenuopen={Setsubmenuopen} submenuopen={submenuopen} />
         <Navbar />
         <div className="lg:w-10/12 md:w-full w-full  text-white text-base font-light overflow-auto ">
-          <p className=" absolute bottom-2 right-4    ">
+          <p className=" absolute bottom-0 right-2   ">
             Made With
             <span className="text-red-600 px-1">
               &#x2764;<span className="text-white  pl-1">Morpheus Code</span>
