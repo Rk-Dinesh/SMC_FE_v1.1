@@ -26,6 +26,7 @@ import { ToastContainer } from "react-toastify";
 import Profile from "./pages/profile/Profile";
 import SignInOtp from "./pages/auth/SignInOtp";
 import SubscriptionPlans from "./pages/auth/SubscriptionPlan";
+import ViewCertificate from "./pages/certificate/ViewCertificate";
 // import Exam from "./pages/courses/Exam";
 
 export const ThemeContext = createContext()
@@ -71,7 +72,8 @@ const App = () => {
             <Route path="/payout_details" element={<PayOutDetails />} />
             <Route path="/referral_terms" element={<ReferralTerms />} />
             <Route path="/my_courses" element={<Courses />} />
-            <Route path="/viewcertificate" element={<Certificate />} />
+            <Route path="/certificate" element={<Certificate />} />
+            <Route path="/viewcertificate" element={<ViewCertificate />} />
             <Route path="/terms_conditions" element={<Terms_Conditions />} />
           <Route path="/my_earnings" element={<EarningTable/>}/>
           <Route path="/notifications" element={<Notifications/>}/>

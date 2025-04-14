@@ -4,6 +4,7 @@ import IMG from "../../assets/images/courses.jpeg";
 import PaginationBar from "../../components/PaginationBar";
 import { API } from "../../Host";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Certificate = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -11,6 +12,7 @@ const Certificate = () => {
   const [completedCourses, setCompletedCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const userId = localStorage.getItem("user");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCompletedCourses = async () => {
@@ -35,6 +37,14 @@ const Certificate = () => {
   );
 
   const totalItems = filteredCourses.length;
+
+  const handleCertificate = (mainTopic, end) => {
+    const ending = new Date(end).toLocaleDateString();
+    navigate("/viewcertificate", {
+      state: { courseTitle: mainTopic, end: ending },
+    });
+  };
+
 
   return (
     <div>
@@ -84,7 +94,9 @@ const Certificate = () => {
               </p>
             </div>
             <div className="flex gap-2 mt-4 justify-center">
-              <button className="bg-teal-400 text-black px-4 py-1 rounded-md text-sm ">
+              <button className="bg-teal-400 text-black px-4 py-1 rounded-md text-sm "  onClick={() =>
+                    handleCertificate(course.mainTopic, course.end)
+                  }>
                 View Certificate
               </button>
             </div>

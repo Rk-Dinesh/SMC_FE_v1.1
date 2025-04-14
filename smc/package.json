@@ -15,6 +15,7 @@
     "axios": "^1.8.4",
     "firebase": "^11.6.0",
     "framer-motion": "^12.6.3",
+    "html-to-image": "^1.11.13",
     "html2pdf.js": "^0.10.3",
     "lucide-react": "^0.487.0",
     "otp-input-react": "^0.3.0",

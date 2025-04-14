@@ -19,7 +19,7 @@ const Layout = ({setIsLoggedIn}) => {
     {
       title: "My Certificates",
       icon: <LayoutDashboard />,
-      to: "/viewcertificate",
+      to: "/certificate",
     },
     {
       title: "Generate course",

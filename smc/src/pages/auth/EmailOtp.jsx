@@ -63,6 +63,7 @@ const EmailOtp = ({setIsLoggedIn}) => {
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("user", response.data.userId);
         localStorage.setItem("type", response.data.type);
+        localStorage.setItem("userName", response.data.userName);
         toast.success("Account created successfully!");
         navigate("/subscribe"); 
       } else {
