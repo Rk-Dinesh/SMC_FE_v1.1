@@ -1,6 +1,29 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { API } from "../../../../Host";
 
-const Subscription = () => {
+const Subscription = ({ user }) => {
+  const [subscription, setSubscription] = useState({});
+
+  const userId = localStorage.getItem("user");
+
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get(`${API}/api/getsubsbyid?user=${userId}`);
+
+      const info = response.data.sub[0];
+      console.log(info);
+      
+      setSubscription(info);
+    } catch (err) {
+      console.error("Error fetching user:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, [userId]);
+
   const data = [
     {
       date: "01-Jan-2025",
@@ -9,70 +32,73 @@ const Subscription = () => {
       transactionId: "uyautsiusiusitsatsigsiugis",
     },
   ];
+
   return (
-    <div>
-      <div className="grid grid-cols-12 gap-3">
-        <div className="col-span-3">
-          <p className="col-span-3 px-2 text-base">Active Subscription:</p>
-          <div className="col-span-3 space-y-6 text-sm p-1.5 rounded-lg bg-gray-700">
+    <div className="p-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <div className="md:col-span-4">
+          <p className="text-base mb-2">Active Subscription:</p>
+          <div className="space-y-6 text-sm p-4 rounded-lg bg-popup-gray text-white">
             <div>
               <p>
-                Plan Name : <span>Basic</span>
+                Plan Name: <span className="font-medium">Basic</span>
               </p>
               <p>
-                Courses Generated : <span>12</span>
+                Courses Generated: <span className="font-medium">12</span>
               </p>
               <p>
-                Courses Left : <span>22</span>
+                Courses Left: <span className="font-medium">22</span>
               </p>
               <p>
-                Plan Expiry : <span> 01-Mar-2026</span>
+                Plan Expiry: <span className="font-medium">01-Mar-2026</span>
               </p>
               <p>
-                Purchase Date : <span>01-Mar-2025</span>
+                Purchase Date: <span className="font-medium">01-Mar-2025</span>
               </p>
             </div>
-            <div className="col-span-3 ">
-              <p className="pb-4">Plan Features</p>
-              <span className="col-span-3">
-                <p>Generate 10 Course / Year </p>
-                <p>Theory & Image Course</p>
-                <p>Up to 10 Subtopics</p>
-                <p>Theory & Video Course</p>
-                <p>AI Tutor for doubt solving</p>
-                <p>Create / Join Study Groups</p>
-                <p>Export Course as PDF</p>
-              </span>
+            <div>
+              <p className="pb-2 font-semibold">Plan Features</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Generate 10 Courses / Year</li>
+                <li>Theory & Image Course</li>
+                <li>Up to 10 Subtopics</li>
+                <li>Theory & Video Course</li>
+                <li>AI Tutor for doubt solving</li>
+                <li>Create / Join Study Groups</li>
+                <li>Export Course as PDF</li>
+              </ul>
             </div>
           </div>
         </div>
-        <div className="col-span-9 ">
-          <p className="col-span-9 px-2 text-base"> Subscription Plan:</p>
-          <div className="col-span-8">
-            <table className="w-full bg-gray-700 rounded-2xl">
+        <div className="md:col-span-8">
+          <p className="text-base mb-2">Subscription Plan:</p>
+          <div className="overflow-x-auto">
+            <table className="w-full bg-popup-gray  text-white rounded-2xl">
               <thead>
-                <tr className="border-b border-amber-50">
-                  <th className=" pt-5 border-r">Date</th>
-                  <th className=" pt-5 border-r">Plan</th>
-                  <th className=" pt-5 border-r">Amount</th>
-                  <th className=" pt-5 border-r">Transaction ID</th>
-                  <th className="pt-5">Action</th>
+                <tr className="border-b border-amber-50 text-left">
+                  <th className="p-4 border-r">Date</th>
+                  <th className="p-4 border-r">Plan</th>
+                  <th className="p-4 border-r">Amount</th>
+                  <th className="p-4 border-r">Transaction ID</th>
+                  <th className="p-4">Action</th>
                 </tr>
               </thead>
-              <tbody className="">
-              {data.map((item, idx) => (
-              <tr key={idx} className="border-t border-gray-700">
-                <td className="p-4 border-r">{item.date}</td>
-                <td className="p-4 border-r">{item.plan}</td>
-                <td className="p-4 border-r">{item.amount}</td>
-                <td className="p-4 break-words border-r">{item.transactionId}</td>
-                <td className="p-4">
-                  <button className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-1 px-4 rounded-lg">
-                    View
-                  </button>
-                </td>
-              </tr>
-            ))}
+              <tbody>
+                {data.map((item, idx) => (
+                  <tr key={idx} className="border-t border-gray-600">
+                    <td className="p-4 border-r">{item.date}</td>
+                    <td className="p-4 border-r">{item.plan}</td>
+                    <td className="p-4 border-r">{item.amount}</td>
+                    <td className="p-4 border-r break-all">
+                      {item.transactionId}
+                    </td>
+                    <td className="p-4">
+                      <button className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-1 px-4 rounded-lg">
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

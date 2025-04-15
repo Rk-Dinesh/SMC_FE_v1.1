@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
 import OtpInput from "otp-input-react";
 import { CgSpinner } from "react-icons/cg";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { auth } from "../../../../../Firebase.Config";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { API } from "../../../../../Host";
 
-const Phone_OTP = ({ onClose }) => {
+const Phone_OTP = ({ onClose, user, onSuccess }) => {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [ph, setPh] = useState("");
+  const [newphoneno, setNewphoneno] = useState({});
   const [showOTP, setShowOTP] = useState(false);
   const [resendTimer, setResendTimer] = useState(60);
 
@@ -43,6 +45,7 @@ const Phone_OTP = ({ onClose }) => {
 
     const appVerifier = window.recaptchaVerifier;
     const formatePh = "+" + ph;
+    setNewphoneno(formatePh);
 
     signInWithPhoneNumber(auth, formatePh, appVerifier)
       .then((confirmationResult) => {
@@ -55,6 +58,7 @@ const Phone_OTP = ({ onClose }) => {
       .catch((error) => {
         console.log(error);
         setLoading(false);
+        toast.error("Failed to send OTP");
       });
   }
 
@@ -63,12 +67,32 @@ const Phone_OTP = ({ onClose }) => {
     window.confirmationResult
       .confirm(otp)
       .then(async (res) => {
-        console.log(res);
         toast.success("Phone verified!");
         setLoading(false);
-        console.log("phone number is verified");
 
-        onClose();
+        try {
+          const email = user.email;
+          let cleanPhone = newphoneno;
+          if (newphoneno.startsWith("+91")) {
+            cleanPhone = newphoneno.replace("+91", "");
+          }
+
+          const updateResponse = await axios.post(
+            `${API}/api/phoneupdate?email=${email}`,
+            { phone: cleanPhone }
+          );
+
+          if (updateResponse.status === 200) {
+            toast.success("Phone number updated successfully!");
+            if (onSuccess) onSuccess(); 
+            onClose();
+          } else {
+            toast.error("Failed to update phone number.");
+          }
+        } catch (error) {
+          console.error("Error updating phone number:", error);
+          toast.error("Something went wrong while updating phone number.");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -79,7 +103,7 @@ const Phone_OTP = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-transparent bg-opacity-40 backdrop-blur-sm flex items-center justify-center">
-      <Toaster toastOptions={{ duration: 4000 }} />
+  
       <div id="recaptcha-container" className="absolute top-0"></div>
 
       <div className="bg-darkgray text-white w-full max-w-md p-6 rounded-xl relative">
@@ -92,31 +116,33 @@ const Phone_OTP = ({ onClose }) => {
 
         {showOTP ? (
           <div className="flex flex-col justify-center items-center space-y-3 gap-5">
-            <div className=" flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
               <p className="text-2xl text-center">Verify Phone Number</p>
-              <p className="mb-3">
-                We have sent a one-time password (OTP) to your registered phone
-                number + {ph}
+              <p className="mb-3 text-sm text-center">
+                We have sent a one-time password (OTP) to your phone number +{ph}
               </p>
             </div>
             <OtpInput
-              value={otp}
-              onChange={setOtp}
-              OTPLength={6}
-              otpType="number"
-              autoFocus
-              inputClassName="w-12 h-12 rounded-md border border-gray-300 bg-white text-black text-xl text-center outline-none"
-            />
+  value={otp}
+  onChange={setOtp}
+  OTPLength={6}
+  otpType="number"
+  autoFocus
+  className="flex justify-center " // controls container
+  inputClassName="w-[55px] h-[100px] rounded-xl border-2 border-white bg-[#1e1e1e] text-white text-xl text-center outline-none"
+/>
+
+
             {resendTimer > 0 ? (
               `Resend OTP in ${resendTimer}s`
             ) : (
-              <button onClick={sendOTP} className="text-blue-400 underline">
+              <button onClick={OnSignup} className="text-blue-400 underline">
                 Resend OTP
               </button>
             )}
             <button
               onClick={onVerifyOTP}
-              className=" rounded-lg bg-teal-600 text-white px-4 py-2 flex items-center gap-2"
+              className="rounded-lg bg-teal-600 text-white px-4 py-2 flex items-center gap-2"
             >
               {loading && <CgSpinner className="animate-spin text-xl" />}
               Verify OTP
@@ -125,7 +151,7 @@ const Phone_OTP = ({ onClose }) => {
           </div>
         ) : (
           <div className="flex flex-col text-black space-y-5 py-5 items-center gap-5">
-            <p className="text-2xl text-white    text-center">
+            <p className="text-2xl text-white text-center">
               Update Phone Number
             </p>
             <PhoneInput
