@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { API } from "../../../../Host";
+import { useNavigate } from "react-router-dom";
 
-const Subscription = ({ user }) => {
-  const [subscription, setSubscription] = useState({});
+const Subscription = () => {
+  const navigate = useNavigate();
+  const [subscription, setSubscription] = useState([]);
 
   const userId = localStorage.getItem("user");
 
@@ -11,8 +13,7 @@ const Subscription = ({ user }) => {
     try {
       const response = await axios.get(`${API}/api/getsubsbyid?user=${userId}`);
 
-      const info = response.data.sub[0];
-      console.log(info);
+      const info = response.data.sub;
       
       setSubscription(info);
     } catch (err) {
@@ -22,16 +23,12 @@ const Subscription = ({ user }) => {
 
   useEffect(() => {
     fetchUser();
-  }, [userId]);
+  }, []);
 
-  const data = [
-    {
-      date: "01-Jan-2025",
-      plan: "Free",
-      amount: "INR 999.00",
-      transactionId: "uyautsiusiusitsatsigsiugis",
-    },
-  ];
+  const redirectInvoice = () => {
+    navigate('/invoice')
+  }
+
 
   return (
     <div className="p-4">
@@ -84,16 +81,16 @@ const Subscription = ({ user }) => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item, idx) => (
+                {subscription && subscription.map((item, idx) => (
                   <tr key={idx} className="border-t border-gray-600">
                     <td className="p-4 border-r">{item.date}</td>
                     <td className="p-4 border-r">{item.plan}</td>
                     <td className="p-4 border-r">{item.amount}</td>
                     <td className="p-4 border-r break-all">
-                      {item.transactionId}
+                      {item.subscriberId}
                     </td>
                     <td className="p-4">
-                      <button className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-1 px-4 rounded-lg">
+                      <button className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-1 px-4 rounded-lg" onClick={redirectInvoice} >
                         View
                       </button>
                     </td>

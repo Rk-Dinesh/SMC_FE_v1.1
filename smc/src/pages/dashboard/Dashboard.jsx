@@ -132,37 +132,37 @@ const Dashboard = () => {
         <div className=" lg:col-span-1 md:col-span-2 col-span-2 grid grid-cols-2 justify-between gap-2 my-2">
           <div className="bg-darkgray  col-span-1 rounded-xl flex justify-around items-center p-3">
             <GraduationCap className="size-16 stroke-1 lg:block md:block hidden" />
-            <p className="text-center text-slate-400">
+            <div className="text-center text-slate-400">
               Total Courses
               <p className="lg:text-3xl md:text-3xl text-xl py-3 text-white">
                 {totalCourses}/
                 <span className="text-white">{allCourseData.length}</span>
               </p>
-            </p>
+            </div>
           </div>
 
           <div className="bg-darkgray  col-span-1 rounded-xl flex justify-around items-center p-3">
             <TfiBook className="size-12 lg:block md:block hidden" />
-            <p className="text-center text-slate-400">
+            <div className="text-center text-slate-400">
               Active Courses
               <p className="text-3xl py-3 text-white">{Math.floor(totalCourses * 0.8)}</p>
-            </p>
+            </div>
           </div>
 
           <div className="bg-darkgray  col-span-1 rounded-xl flex justify-around items-center p-3">
             <BookOpenCheck className="size-14 stroke-1 lg:block md:block hidden" />
-            <p className="text-center text-slate-400">
+            <div className="text-center text-slate-400">
               Completed Courses
               <p className="text-3xl py-3 text-white">{Math.floor(totalCourses * 0.5)}</p>
-            </p>
+            </div>
           </div>
 
           <div className="bg-darkgray  col-span-1 rounded-xl flex justify-around items-center p-3">
             <TbFileExport className="size-14 lg:block md:block hidden" />
-            <p className="text-center text-slate-400">
+            <div className="text-center text-slate-400">
               Export Courses
               <p className="text-3xl py-3 text-white">{Math.floor(totalCourses * 0.3)}</p>
-            </p>
+            </div>
           </div>
         </div>
 
@@ -206,14 +206,14 @@ const Dashboard = () => {
       <div>
         <div className="flex justify-between items-center my-2">
           <h2 className="text-lg font-medium">Referral Revenue</h2>
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <span>{timeRange}</span>
             <SlidersHorizontal className="cursor-pointer" />
-          </div>
+          </div> */}
         </div>
         <hr />
 
-        <div className="bg-darkgray my-4 p-4 rounded-xl">
+        <div className="bg-darkgray hover: my-4 p-4 rounded-xl">
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={filteredReferrals}>
               <XAxis dataKey="month" stroke="#ffffff" />

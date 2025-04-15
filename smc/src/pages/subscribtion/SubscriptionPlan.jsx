@@ -85,6 +85,7 @@ const SubscriptionPlans = () => {
               subscription: jsonRes.paymentId,
               user: localStorage.getItem("user"),
               plan: plan,
+              amount: amount,
               method: "razorpay",
               course: course,
               tax: 0,

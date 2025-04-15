@@ -7,6 +7,7 @@ import { API } from "../../../../Host";
 const LearnersProfile = () => {
   const [editMode, setEditMode] = useState(false);
   const [profile, setProfile] = useState(null);
+  const [user, setUser] = useState(null);
   const userId = localStorage.getItem("user");
 
   const goalsRef = useRef();
@@ -68,10 +69,10 @@ const LearnersProfile = () => {
       profile.areaOfInterest);
 
   return (
-    <div className="px-4 sm:px-6 md:px-8">
+    <div className="px-2 ">
       <div className="flex justify-end sm:justify-end mb-2">
         <button
-          className="flex items-center gap-1 text-base sm:text-lg text-gray-300 hover:text-white"
+          className="flex items-center gap-1 mt-1 text-base sm:text-lg text-gray-300 hover:text-white"
           onClick={() => setEditMode(!editMode)}
         >
           <RiPencilFill size={20} className="sm:size-6" />
@@ -88,8 +89,8 @@ const LearnersProfile = () => {
                 <textarea
                   defaultValue={profile.goals || ""}
                   ref={goalsRef}
-                  className="bg-gray-700 rounded-md p-2 w-full text-sm sm:text-base"
-                  rows={6}
+                  className="bg-popup-gray rounded-md p-2 w-full text-sm sm:text-base"
+                  rows={5}
                 />
               ) : (
                 <ExpandableText text={profile.goals} />
@@ -102,8 +103,8 @@ const LearnersProfile = () => {
                 <textarea
                   defaultValue={profile.experience || ""}
                   ref={experienceRef}
-                  className="bg-gray-700 rounded-md p-2 w-full text-sm sm:text-base"
-                  rows={6}
+                  className="bg-popup-gray rounded-md p-2 w-full text-sm sm:text-base"
+                  rows={5}
                 />
               ) : (
                 <ExpandableText text={profile.experience} />
@@ -118,8 +119,8 @@ const LearnersProfile = () => {
                 <textarea
                   defaultValue={profile.resource || ""}
                   ref={resourceRef}
-                  className="bg-gray-700 rounded-md p-2 w-full text-sm sm:text-base"
-                  rows={6}
+                  className="bg-popup-gray rounded-md p-2 w-full text-sm sm:text-base"
+                  rows={5}
                 />
               ) : (
                 <ExpandableText text={profile.resource} />
@@ -132,8 +133,8 @@ const LearnersProfile = () => {
                 <textarea
                   defaultValue={profile.skills || ""}
                   ref={skillsRef}
-                  className="bg-gray-700 rounded-md p-2 w-full text-sm sm:text-base"
-                  rows={6}
+                  className="bg-popup-gray rounded-md p-2 w-full text-sm sm:text-base"
+                  rows={5}
                 />
               ) : (
                 <ExpandableText text={profile.skills} />
@@ -148,7 +149,7 @@ const LearnersProfile = () => {
                 <textarea
                   defaultValue={profile.areaOfInterest || ""}
                   ref={interestRef}
-                  className="bg-gray-700 rounded-md p-2 w-full text-sm sm:text-base"
+                  className="bg-popup-gray rounded-md p-2 w-full text-sm sm:text-base"
                   rows={4}
                 />
               ) : (

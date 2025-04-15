@@ -106,10 +106,10 @@ const Bio = ({ user, setUser }) => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 sm:gap-10 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 sm:gap-10 ">
         {["facebook", "instagram", "twitter", "linkedIn"].map((key) => (
           <div
-            className="flex-col col lg:col-span-6 col-span-12 gap-2 py-2 flex"
+            className="flex-col lg:col-span-6 col-span-12 gap-2 py-2 flex"
             key={key}
           >
             <label
@@ -126,10 +126,10 @@ const Bio = ({ user, setUser }) => {
                 onChange={(e) =>
                   setSocialLinks({ ...socialLinks, [key]: e.target.value })
                 }
-                className="bg-white text-black rounded-md h-10 w-full sm:w-96 px-2"
+                className="bg-white text-black rounded-md h-10 w-full  px-2"
               />
             ) : (
-              <p className="bg-transparent border-b border-white text-gray-300 w-full sm:w-96 py-1">
+              <p className="bg-transparent border-b border-white text-gray-300 w-full  py-1">
                 {socialLinks[key] || "Not Provided"}
               </p>
             )}

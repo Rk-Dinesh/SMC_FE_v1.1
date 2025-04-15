@@ -5,7 +5,7 @@ const ExpandableText = ({ text, minLength = 300 }) => {
 
   if (text.length <= minLength) {
     return (
-      <p className="bg-gray-800 rounded-md p-4 w-full text-justify leading-relaxed">
+      <p rows={4} disabled className="bg-popup-gray rounded-md p-4 w-full text-justify leading-relaxed">
         {text}
       </p>
     );

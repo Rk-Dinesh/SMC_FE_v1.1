@@ -23,31 +23,44 @@ const Phone_OTP = ({ onClose, user, onSuccess }) => {
     return () => clearInterval(timer);
   }, [resendTimer]);
 
-  function onCaptchVerify() {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        auth,
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: (response) => {
-            OnSignup();
-          },
-          "expired-callback": () => {},
-        }
-      );
+  const onCaptchVerify = async () => {
+    if (window.recaptchaVerifier) {
+      window.recaptchaVerifier.clear(); // Clear previous reCAPTCHA
+      window.recaptchaVerifier = null;
     }
-  }
-
-  function OnSignup() {
+  
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      auth,
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: () => {
+          // reCAPTCHA solved, allow signup
+        },
+        "expired-callback": () => {
+          toast.warning("reCAPTCHA expired. Please try again.");
+        },
+      }
+    );
+  
+    try {
+      await window.recaptchaVerifier.render();
+    } catch (err) {
+      console.error("reCAPTCHA render error:", err);
+    }
+  };
+  
+  const OnSignup = async () => {
+    if (loading) return;
     setLoading(true);
-    onCaptchVerify();
-
+  
+    await onCaptchVerify(); // Ensure it's refreshed
+  
     const appVerifier = window.recaptchaVerifier;
-    const formatePh = "+" + ph;
-    setNewphoneno(formatePh);
-
-    signInWithPhoneNumber(auth, formatePh, appVerifier)
+    const formattedPh = "+" + ph;
+    setNewphoneno(formattedPh);
+  
+    signInWithPhoneNumber(auth, formattedPh, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         setLoading(false);
@@ -56,11 +69,12 @@ const Phone_OTP = ({ onClose, user, onSuccess }) => {
         toast.success("OTP Sent Successfully");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         setLoading(false);
         toast.error("Failed to send OTP");
       });
-  }
+  };
+  
 
   function onVerifyOTP() {
     setLoading(true);

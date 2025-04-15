@@ -6,12 +6,13 @@ import LearnersProfile from "./tabs/leaners_profile/LearnersProfile";
 import Subscription from "./tabs/subscription/Subscription";
 import axios from "axios";
 import { API } from "../../Host";
+import UpdateImage from "./UpdateImage";
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("Personal Info");
   const [user, setUser] = useState({});
-  const [img, setImg] = useState({});
-  const [newimg, setNewimg] = useState({});
+  const [isProfileModal, setIsProfileModal] = useState(false);
+  const [userImage, setUserImage] = useState({});
   const [coursesGenerated, setCoursesGenerated] = useState(0);
   const [coursesCompleted, setCoursesCompleted] = useState(0);
   const [videoCourses, setVideoCourses] = useState(0);
@@ -22,27 +23,20 @@ const Profile = () => {
   const tabLabels = ["Personal Info", "Bio", "Learns Profile", "Subscription"];
   const tabComponents = {
     "Personal Info": <Personal_Info user={user} setUser={setUser} />,
-    "Bio": <Bio user={user} setUser={setUser} />,
+    Bio: <Bio user={user} setUser={setUser} />,
     "Learns Profile": <LearnersProfile user={user} setUser={setUser} />,
-    "Subscription": <Subscription user={user} />,
+    Subscription: <Subscription  />,
   };
 
   useEffect(() => {
     const fetchuser = async () => {
       try {
-        const response = await axios.get(`${API}/api/getusersbyid?id=${userId}`);
+        const response = await axios.get(
+          `${API}/api/getusersbyid?id=${userId}`
+        );
         setUser(response.data.user);
       } catch (err) {
         console.error("Error fetching user:", err);
-      }
-    };
-
-    const fetchProfileImg = async () => {
-      try {
-        const response1 = await axios.get(`${API}/api/getimagebyid?user=${userId}`);
-        setImg(response1.data.user);
-      } catch (err) {
-        console.error("Error fetching image:", err);
       }
     };
 
@@ -51,20 +45,48 @@ const Profile = () => {
         const response = await axios.get(`${API}/api/getcourses`);
         const allCourses = response.data;
 
-        const userCourses = allCourses.filter((course) => course.user === userId);
+        const userCourses = allCourses.filter(
+          (course) => course.user === userId
+        );
         setCoursesGenerated(userCourses.length);
         setCoursesCompleted(userCourses.filter((c) => c.completed).length);
-        setImageCourses(userCourses.filter((c) => c.photo?.trim() !== "").length);
-        setVideoCourses(userCourses.filter((c) => c.type?.toLowerCase().includes("video")).length);
+        setImageCourses(
+          userCourses.filter((c) => c.photo?.trim() !== "").length
+        );
+        setVideoCourses(
+          userCourses.filter((c) => c.type?.toLowerCase().includes("video"))
+            .length
+        );
       } catch (err) {
         console.error("Error fetching courses:", err);
       }
     };
 
-    fetchProfileImg();
     fetchuser();
     fetchCourses();
-  }, [userId]);
+  }, []);
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const response = await axios.get(
+          `${API}/api/getimagebyid?user=${userId}`
+        );
+        const responseData = response.data.user;
+
+        setUserImage(responseData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchImage();
+  }, [userImage]);
+
+  
+
+  const CloseProfileModal = () => {
+    setIsProfileModal(!isProfileModal);
+  };
 
   const calculateProfileCompletion = () => {
     let totalFields = 0;
@@ -101,22 +123,31 @@ const Profile = () => {
   const profileCompletion = calculateProfileCompletion();
 
   return (
-    <div className="text-white p-6">
+    <div className="text-white p-1">
       <div className="grid grid-cols-1 bg-darkgray md:grid-cols-12 gap-6 px-3 py-4 rounded-2xl items-start">
         <div className="col-span-1 md:col-span-4 sm:col-span-12 lg:col-span-3 flex flex-col items-center gap-4">
           <img
-            src={IMG}
+            src={userImage?.image ? userImage.image : IMG}
             alt="Profile"
-            className="w-32 h-32 sm:w-40 sm:h-40 md:w-20 md:h-20 lg:w-25 lg:h-25 object-cover rounded-full border-4 border-teal-400 cursor-pointer hover:opacity-80 transition"
+            className={`w-40 h-40 border-teal-500 border-4 p-0.5 ${
+              userImage?.image
+                ? " rounded-full object-cover"
+                : "rounded-full object-cover"
+            }`}
           />
-          <button className="bg-teal-400 text-black py-1.5 px-5 rounded-md hover:bg-teal-300 transition">
-            Change
+          <button
+            className={` text-base  bg-teal-400 rounded-md text-black lg:w-40 md:w-40 w-40 py-2.5 my-5 `}
+            onClick={() => setIsProfileModal(true)}
+          >
+            Change Image
           </button>
         </div>
         {user && (
           <>
             <div className="col-span-1 md:col-span-8 sm:col-span-12 lg:col-span-4 flex space-y-2 h-full flex-col">
-              <h2 className="text-3xl font-extralight">{user.fname}</h2>
+              <h2 className="lg:text-2xl md:text-2xl text-xl font-medium">
+                {user.fname}
+              </h2>
               <p className="text-gray-300 mt-2">Profile Completion</p>
               <div className="flex items-center mt-2">
                 <div className="w-full h-2 bg-gray-600 rounded">
@@ -168,9 +199,10 @@ const Profile = () => {
         ))}
       </div>
 
-      <div className="bg-darkgray p-4 mt-2 rounded-4xl">
+      <div className="bg-darkgray p-2 mt-2 rounded-4xl">
         {tabComponents[activeTab] || <div>Coming Soon...</div>}
       </div>
+      {isProfileModal && <UpdateImage CloseProfileModal={CloseProfileModal} />}
     </div>
   );
 };
