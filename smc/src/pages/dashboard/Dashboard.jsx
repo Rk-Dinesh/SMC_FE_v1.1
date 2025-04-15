@@ -23,11 +23,20 @@ const allCourseData = [
 ];
 
 const allReferralData = [
-  { month: "Jan", value: 20, date: "2025-01-01" },
-  { month: "Feb", value: 40, date: "2025-02-01" },
-  { month: "Mar", value: 25, date: "2025-03-01" },
-  { month: "Apr", value: 30, date: "2025-04-01" },
+  { month: "Jan", value: Math.floor(Math.random() * 100), date: "2025-01-01" },
+  { month: "Feb", value: Math.floor(Math.random() * 100), date: "2025-02-01" },
+  { month: "Mar", value: Math.floor(Math.random() * 100), date: "2025-03-01" },
+  { month: "Apr", value: Math.floor(Math.random() * 100), date: "2025-04-01" },
+  { month: "May", value: Math.floor(Math.random() * 100), date: "2025-05-01" },
+  { month: "Jun", value: Math.floor(Math.random() * 100), date: "2025-06-01" },
+  { month: "Jul", value: Math.floor(Math.random() * 100), date: "2025-07-01" },
+  { month: "Aug", value: Math.floor(Math.random() * 100), date: "2025-08-01" },
+  { month: "Sep", value: Math.floor(Math.random() * 100), date: "2025-09-01" },
+  { month: "Oct", value: Math.floor(Math.random() * 100), date: "2025-10-01" },
+  { month: "Nov", value: Math.floor(Math.random() * 100), date: "2025-11-01" },
+  { month: "Dec", value: Math.floor(Math.random() * 100), date: "2025-12-01" },
 ];
+
 
 const filterDataByRange = (data, range) => {
   const now = new Date();

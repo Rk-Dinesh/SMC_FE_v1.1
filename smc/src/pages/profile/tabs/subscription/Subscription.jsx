@@ -26,7 +26,8 @@ const Subscription = () => {
   }, []);
 
   const redirectInvoice = () => {
-    navigate('/invoice')
+    navigate('/invoice');
+    
   }
 
 
@@ -90,7 +91,9 @@ const Subscription = () => {
                       {item.subscriberId}
                     </td>
                     <td className="p-4">
-                      <button className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-1 px-4 rounded-lg" onClick={redirectInvoice} >
+                      <button className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-1 px-4 rounded-lg" onClick={()=>navigate('/invoice',{state:{
+                  subId : item._id
+                }})} >
                         View
                       </button>
                     </td>
