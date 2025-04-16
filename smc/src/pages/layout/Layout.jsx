@@ -7,6 +7,25 @@ import logo from "../../assets/images/logo.png";
 import LogOut from "../auth/LogOut";
 import DeleteAccount from "../auth/DeleteAccount";
 import Headers from "./Headers";
+import { MdDashboard } from "react-icons/md";
+import {
+  FaGraduationCap,
+  FaAward,
+  FaUsers,
+  FaUserCircle,
+  FaTrashAlt,
+} from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
+import { MdOutlineWeb } from "react-icons/md";
+import { RiTeamLine } from "react-icons/ri";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { IoIosNotificationsOutline } from "react-icons/io";
+import { HiOutlineDocumentCheck } from "react-icons/hi2";
+import { HiOutlineViewGrid } from "react-icons/hi";
+import { FaRupeeSign } from "react-icons/fa";
+import { BiBarChartAlt2 } from "react-icons/bi";
+import { FiLink } from "react-icons/fi";
+import { TbUnlink } from "react-icons/tb";
 
 const Layout = ({setIsLoggedIn}) => {
   const location = useLocation();
@@ -16,65 +35,65 @@ const Layout = ({setIsLoggedIn}) => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const Menus = [
     { title: "Dashboard", icon: <LayoutDashboard />, to: "/dashboard" },
-    { title: "My Courses", icon: <LayoutDashboard />, to: "/my_courses" },
+    { title: "My Courses", icon: <FaGraduationCap size={24}/>, to: "/my_courses" },
     {
       title: "My Certificates",
-      icon: <LayoutDashboard />,
+      icon: <FaAward size={24}/>,
       to: "/certificate",
     },
     {
       title: "Generate course",
-      icon: <LayoutDashboard />,
+      icon: <MdOutlineWeb size={24} />,
       to: "/generate_courses",
     },
     {
       title: "My Study Groups",
-      icon: <LayoutDashboard />,
+      icon: <FaUsers size={24}/>,
       to: "/study_group",
     },
     {
       title: "Refer & Earn",
-      icon: <LayoutDashboard />,
+      icon: <RiTeamLine size={24}/>,
       submenu: true,
       submenuItems: [
         {
           title: "Dashboard",
-          icon: <LayoutDashboard />,
+          icon: <LayoutDashboard size={24}/>,
           to: "/refer_dashboard",
         },
-        { title: "My Earnings", icon: <LayoutDashboard />, to: "/my_earnings" },
-        { title: "My Links", icon: <LayoutDashboard />, to: "/my_links" },
+        { title: "My Earnings", icon: <BiBarChartAlt2 size={24}/>, to: "/my_earnings" },
+        { title: "My Links", icon: <FiLink size={24}/>, to: "/my_links" },
         {
           title: "Bank Details",
-          icon: <LayoutDashboard />,
+          icon: <TbUnlink size={24}/>,
           to: "/bank_details",
         },
-        { title: "Payout", icon: <LayoutDashboard />, to: "/payout_details" },
+        { title: "Payout", icon: <LayoutDashboard size={24}/>, to: "/payout_details" },
         {
           title: "Referral Program Terms",
-          icon: <LayoutDashboard />,
+          icon: <LayoutDashboard size={24}/>,
           to: "/referral_terms",
         },
       ].filter(Boolean),
     },
-    { title: "Help & Support", icon: <LayoutDashboard />, to: "/notifications" },
-    { title: "Notifications", icon: <LayoutDashboard />, to: "/notifications" },
-    { title: "Profile", icon: <LayoutDashboard />, to: "/profile" },
+    { title: "Help & Support", icon: <AiOutlineQuestionCircle size={24}/>, to: "/notifications" },
+    { title: "Notifications", icon: <IoIosNotificationsOutline size={24}/>, to: "/notifications" },
+    { title: "Profile", icon: <FaUserCircle size={24}/>, to: "/profile" },
     {
       title: "Delete Account",
-      icon: <LayoutDashboard />,
+      icon: <FaTrashAlt size={24}/>,
       to: "#",
       onClick: () => setDeleteModalOpen(true),
     },
     {
       title: "Logout",
-      icon: <LayoutDashboard />,
+      icon: <MdLogout size={24}/>,
       to: "#",
       onClick: () => setLogOutModalOpen(true),
     },
     {
       title: "Terms & Conditions",
-      icon: <LayoutDashboard />,
+      icon: <HiOutlineDocumentCheck size={24}/>,
       to: "/terms_conditions",
     },
   ].filter(Boolean);

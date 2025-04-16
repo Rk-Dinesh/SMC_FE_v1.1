@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   PieChart,
   Pie,
@@ -13,6 +13,9 @@ import {
 import { SlidersHorizontal, GraduationCap, BookOpenCheck } from "lucide-react";
 import { TfiBook } from "react-icons/tfi";
 import { TbFileExport } from "react-icons/tb";
+import axios from "axios";
+import { API } from "../../Host";
+import { useNavigate } from "react-router-dom";
 
 // Sample data with dates for filtering
 const allCourseData = [
@@ -36,7 +39,6 @@ const allReferralData = [
   { month: "Nov", value: Math.floor(Math.random() * 100), date: "2025-11-01" },
   { month: "Dec", value: Math.floor(Math.random() * 100), date: "2025-12-01" },
 ];
-
 
 const filterDataByRange = (data, range) => {
   const now = new Date();
@@ -77,8 +79,13 @@ const timeOptions = [
   "Last 12 Months",
 ];
 const Dashboard = () => {
+  const [revenueRange, setRevenueRange] = useState("This Year");
+  const [recentcourses, setRecentcourses] = useState({});
   const [timeRange, setTimeRange] = useState("This Month");
   const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate()
+
+  const userId = localStorage.getItem("user");
 
   // Filtered data
   const filteredCourses = filterDataByRange(allCourseData, timeRange);
@@ -101,6 +108,59 @@ const Dashboard = () => {
       color: "#00f2e4",
     },
   ];
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(`${API}/api/courses?userId=${userId}`);
+        console.log(response.data);
+
+        setRecentcourses(response.data);
+      } catch (error) {}
+    };
+    fetchCourses();
+  }, []);
+
+  const recentGroups = [
+    {
+      id: 1,
+      name: "Frontend Wizards",
+      learners: 12,
+      img: "https://images.unsplash.com/photo-1524321956859-97d9031fa723?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxtZXJuJTIwc3RhY2t8ZW58MHwwfHx8MTc0NDYzMTQ5OHww&ixlib=rb-4.0.3&q=80&w=1080",
+    },
+    {
+      id: 2,
+      name: "Backend Masters",
+      learners: 8,
+      img: "https://images.unsplash.com/photo-1524321956859-97d9031fa723?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxtZXJuJTIwc3RhY2t8ZW58MHwwfHx8MTc0NDYzMTQ5OHww&ixlib=rb-4.0.3&q=80&w=1080",
+    },
+    {
+      id: 3,
+      name: "React Champs",
+      learners: 15,
+      img: "https://images.unsplash.com/photo-1524321956859-97d9031fa723?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxtZXJuJTIwc3RhY2t8ZW58MHwwfHx8MTc0NDYzMTQ5OHww&ixlib=rb-4.0.3&q=80&w=1080",
+    },
+  ];
+
+  const handleCourse = (content, mainTopic, type, courseId, completed, end) => {
+    const jsonData = JSON.parse(content);
+    localStorage.setItem("courseId", courseId);
+    localStorage.setItem("first", completed);
+    localStorage.setItem("jsonData", JSON.stringify(jsonData));
+    let ending = "";
+    if (completed) {
+      ending = end;
+    }
+    navigate("/content", {
+      state: {
+        jsonData: jsonData,
+        mainTopic: mainTopic.toUpperCase(),
+        type: type.toLowerCase(),
+        courseId: courseId,
+        end: ending,
+      },
+    });
+  };
 
   const totalCourses = courseTypeData.reduce((a, b) => a + b.value, 0);
 
@@ -135,7 +195,7 @@ const Dashboard = () => {
           )}
         </div>
       </div>
-      <hr className="mb-3"/>
+      <hr className="mb-3" />
 
       <div className="grid grid-cols-2 items-center gap-6 ">
         <div className=" lg:col-span-1 md:col-span-2 col-span-2 grid grid-cols-2 justify-between gap-2 my-2">
@@ -154,7 +214,9 @@ const Dashboard = () => {
             <TfiBook className="size-12 lg:block md:block hidden" />
             <div className="text-center text-slate-400">
               Active Courses
-              <p className="text-3xl py-3 text-white">{Math.floor(totalCourses * 0.8)}</p>
+              <p className="text-3xl py-3 text-white">
+                {Math.floor(totalCourses * 0.8)}
+              </p>
             </div>
           </div>
 
@@ -162,7 +224,9 @@ const Dashboard = () => {
             <BookOpenCheck className="size-14 stroke-1 lg:block md:block hidden" />
             <div className="text-center text-slate-400">
               Completed Courses
-              <p className="text-3xl py-3 text-white">{Math.floor(totalCourses * 0.5)}</p>
+              <p className="text-3xl py-3 text-white">
+                {Math.floor(totalCourses * 0.5)}
+              </p>
             </div>
           </div>
 
@@ -170,7 +234,9 @@ const Dashboard = () => {
             <TbFileExport className="size-14 lg:block md:block hidden" />
             <div className="text-center text-slate-400">
               Export Courses
-              <p className="text-3xl py-3 text-white">{Math.floor(totalCourses * 0.3)}</p>
+              <p className="text-3xl py-3 text-white">
+                {Math.floor(totalCourses * 0.3)}
+              </p>
             </div>
           </div>
         </div>
@@ -233,6 +299,78 @@ const Dashboard = () => {
               <Bar dataKey="value" fill="#00f2e4" barSize={30} />
             </BarChart>
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="mt-6 grid grid-cols-12  gap-3">
+        <div className="col-span-12 md:col-span-8">
+          <p className="text-xl mb-4">Recent Courses</p>
+          <div className="bg-darkgray p-4 rounded-xl h-[400px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {recentcourses && recentcourses.length > 0 ? (
+              recentcourses.map((course, index) => (
+                <div
+                  key={index}
+                  className="flex items-center flex-nowrap mb-4 p-2 bg-popup-gray rounded-xl"
+                >
+                  <img
+                    src={course.photo}
+                    alt="Course"
+                    className="w-24 h-24 object-cover rounded-lg mr-4"
+                  />
+                  <div className="flex flex-col justify-between text-sm">
+                    <p>Date: {course.date}</p>
+                    <p className="font-semibold">{course.title}</p>
+                    <p>Type: {course.type}</p>
+                    <p>No of Subtopics: {course.subtopics}</p>
+                    <p>Language: {course.language}</p>
+                    <button
+                      onClick={() =>
+                        handleCourse(
+                          course.content,
+                          course.mainTopic,
+                          course.type,
+                          course._id,
+                          course.completed,
+                          course.end
+                        )
+                      }
+                      className="mt-2 bg-teal-400 text-black px-3 py-1 rounded-md text-sm w-fit"
+                    >
+                      Continue
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No recent courses available.</p>
+            )}
+          </div>
+        </div>
+
+        <div className="col-span-12 md:col-span-4">
+          <p className="text-xl mb-4">Recent Active Study Groups</p>
+          <div className="bg-darkgray p-4 rounded-xl h-[400px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {recentGroups && recentGroups.length > 0 ? (
+              recentGroups.map((group) => (
+                <div
+                  key={group.id}
+                  className="flex items-center justify-start gap-4 mb-4 border-b border-white/20 pb-2"
+                >
+                  <img
+                    src={group.img}
+                    alt={group.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="font-medium">{group.name}</p>
+                    <p className="text-sm">No of Learners: {group.learners}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No active study groups found.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
