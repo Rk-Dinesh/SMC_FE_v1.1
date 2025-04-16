@@ -42,12 +42,9 @@ const Profile = () => {
 
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(`${API}/api/getcourses`);
-        const allCourses = response.data;
+        const response = await axios.get(`${API}/api/courses?userId=${userId}`);
+        const userCourses = response.data;
 
-        const userCourses = allCourses.filter(
-          (course) => course.user === userId
-        );
         setCoursesGenerated(userCourses.length);
         setCoursesCompleted(userCourses.filter((c) => c.completed).length);
         setImageCourses(

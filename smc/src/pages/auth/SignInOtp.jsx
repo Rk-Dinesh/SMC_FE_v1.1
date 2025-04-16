@@ -83,6 +83,7 @@ const SignInOtp = ({ setIsLoggedIn }) => {
       setIsLoggedIn(false);
       localStorage.removeItem("user");
       localStorage.removeItem("type");
+      localStorage.removeItem("totalCourse");
       localStorage.setItem("isLoggedIn", false);
       toast.error("Invalid phone OTP. Please try again.");
     }

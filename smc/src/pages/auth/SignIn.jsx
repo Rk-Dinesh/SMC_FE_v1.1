@@ -39,6 +39,7 @@ const SignIn = () => {
       localStorage.setItem("user", res.data.userId._id);
       localStorage.setItem("type", res.data.userId.type);
       localStorage.setItem("userName", res.data.userName);
+      localStorage.setItem("totalCourse", res.data.totalCourse);
       navigate("/signin_otp", { state: { userData} });
     } catch (error) {
       console.error("Error:", error);

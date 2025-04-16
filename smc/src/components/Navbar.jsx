@@ -22,6 +22,7 @@ const Navbar = () => {
   const [notification, setNotification] = useState([]);
   const userName = localStorage.getItem("userName");
   const type = localStorage.getItem("type");
+  const course = localStorage.getItem("totalCourse");
 
 
   useEffect(() => {
@@ -81,7 +82,7 @@ const Navbar = () => {
            
             </div>
             <div className="bg-darkgray  gap-2 text-base rounded-full whitespace-nowrap py-3 px-3">
-              <p>Courses : 10/25</p>
+              <p>Courses : 10/{course}</p>
            
             </div>
           </>

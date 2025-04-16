@@ -57,7 +57,7 @@ const Layout = ({setIsLoggedIn}) => {
         },
       ].filter(Boolean),
     },
-    { title: "Help & Support", icon: <LayoutDashboard />, to: "/help_support" },
+    { title: "Help & Support", icon: <LayoutDashboard />, to: "/notifications" },
     { title: "Notifications", icon: <LayoutDashboard />, to: "/notifications" },
     { title: "Profile", icon: <LayoutDashboard />, to: "/profile" },
     {
