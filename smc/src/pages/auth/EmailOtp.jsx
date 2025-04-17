@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { API } from "../../Host";
 import Logo from "../../assets/images/logo.png";
+import { AiOutlineLoading } from "react-icons/ai";
 
 const EmailOtp = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const EmailOtp = ({ setIsLoggedIn }) => {
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(30);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
+   const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,8 +41,7 @@ const EmailOtp = ({ setIsLoggedIn }) => {
     }
 
     try {
-      // Step 1: Verify email OTP
-
+      setProcessing(true);
       const verifyRes = await axios.post(`${API}/api/validate-otp`, {
         email: EMAILID,
         otp,
@@ -53,7 +54,6 @@ const EmailOtp = ({ setIsLoggedIn }) => {
 
       toast.success("Email verified successfully!");
 
-      // Step 2: Register user
       const apiEndpoint = referralCode
         ? `${API}/api/usersignup?ref=${referralCode}`
         : `${API}/api/usersignup`;
@@ -68,12 +68,15 @@ const EmailOtp = ({ setIsLoggedIn }) => {
         localStorage.setItem("totalCourse", response.data.totalCourse);
         toast.success("Account created successfully!");
         navigate("/subscribe");
+        setProcessing(false);
+
       } else {
         toast.error("Failed to register user. Try again later.");
       }
     } catch (error) {
       console.error("Error verifying email OTP:", error.message);
       toast.error("Something went wrong. Please try again.");
+      setProcessing(false);
     }
   };
 
@@ -145,7 +148,14 @@ const EmailOtp = ({ setIsLoggedIn }) => {
             className="bg-teal-400 text-black px-8 py-1.5 rounded-md text-lg"
             onClick={verifyEmailOtp}
           >
-            Next
+           {processing ? (
+                         <span className="flex justify-center gap-3">
+                           <AiOutlineLoading className="h-6 w-6 animate-spin" />
+                           <p>Verifying...</p>
+                         </span>
+                       ) : (
+                         "Verify"
+                       )}
           </button>
         </div>
       </div>

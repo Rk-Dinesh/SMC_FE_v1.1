@@ -28,9 +28,8 @@ const PhoneOtp = () => {
 
     try {
       setProcessing(true);
+      const { fname, lname, email } = userData;
       const confirmationResult = window.confirmationResult;
-
-      // Check if confirmationResult exists
       if (!confirmationResult) {
         toast.error("Please request a new OTP.");
         return;
@@ -46,39 +45,22 @@ const PhoneOtp = () => {
           lname,
           email,
         });
-
-        if (response.data.success) {
-          toast.success("Email OTP sent successfully!");
-          navigate("/email_otp", { state: { userData } });
-          setProcessing(false);
-        } else {
-          toast.error("Failed to send email OTP. Please try again.");
-          setProcessing(false);
-        }
+        toast.success("Email OTP sent successfully!");
+        navigate("/email_otp", { state: { userData } });
         return;
       }
 
       const result = await confirmationResult.confirm(otp);
       toast.success("Phone OTP verified successfully!");
 
-      // Extract the required user data for email OTP
-      const { fname, lname, email } = userData;
-
-      // Call API to send email OTP
-      const response = await axios.post(`${API}/api/otp`, {
+      await axios.post(`${API}/api/otp`, {
         fname,
         lname,
         email,
       });
-
-      if (response.data.success) {
-        toast.success("Email OTP sent successfully!");
-        navigate("/email_otp", { state: { userData } });
-        setProcessing(false);
-      } else {
-        toast.error("Failed to send email OTP. Please try again.");
-        setProcessing(false);
-      }
+      toast.success("Email OTP sent successfully!");
+      navigate("/email_otp", { state: { userData } });
+      setProcessing(false);
     } catch (error) {
       console.error("OTP verification failed:", error.message);
       toast.error("Invalid phone OTP. Please try again.");
@@ -139,7 +121,7 @@ const PhoneOtp = () => {
             {processing ? (
               <span className="flex justify-center gap-3">
                 <AiOutlineLoading className="h-6 w-6 animate-spin" />
-                <p>Sending OTP...</p>
+                <p>Sending Email OTP...</p>
               </span>
             ) : (
               "Next"
