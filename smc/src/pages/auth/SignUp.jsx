@@ -41,7 +41,6 @@ const SignUp = () => {
     return urlParams.get("ref");
   };
 
-
   const {
     register,
     handleSubmit,
@@ -54,7 +53,6 @@ const SignUp = () => {
     setPhone(value);
     setCountryCode(data.dialCode);
   };
-
 
   const setUpRecaptcha = () => {
     if (window.recaptchaVerifier) {
@@ -83,6 +81,7 @@ const SignUp = () => {
       return;
     }
     try {
+      setProcessing(true);
       const localPhone = phone.slice(countryCode.length);
       const userData = {
         ...data,
@@ -104,6 +103,7 @@ const SignUp = () => {
 
       toast.success("OTP sent successfully!");
       navigate("/phone_otp", { state: { userData } });
+      setProcessing(false);
     } catch (error) {
       console.error("Invalid sign-in process", error);
 

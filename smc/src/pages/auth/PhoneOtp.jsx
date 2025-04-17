@@ -7,6 +7,7 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { API } from "../../Host";
+import { AiOutlineLoading } from "react-icons/ai";
 
 const PhoneOtp = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const PhoneOtp = () => {
   const [timer, setTimer] = useState(30);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [confirmationResult, setConfirmationResult] = useState(null);
-
+  const [processing, setProcessing] = useState(false);
 
   const verifyOtp = async () => {
     if (!otp || otp.length < 6) {
@@ -26,7 +27,7 @@ const PhoneOtp = () => {
     }
 
     try {
-
+      setProcessing(true);
       const confirmationResult = window.confirmationResult;
 
       // Check if confirmationResult exists
@@ -36,32 +37,32 @@ const PhoneOtp = () => {
       } else if (otp === "770820") {
         toast.success(" OTP Verified & LoggedIn.");
         setProcessing(false);
-              // Extract the required user data for email OTP
-      const { fname, lname, email } = userData;
-    
+        // Extract the required user data for email OTP
+        const { fname, lname, email } = userData;
 
-      // Call API to send email OTP
-      const response = await axios.post(`${API}/api/otp`, {
-        fname,
-        lname,
-        email,
-      });
+        // Call API to send email OTP
+        const response = await axios.post(`${API}/api/otp`, {
+          fname,
+          lname,
+          email,
+        });
 
-      if (response.data.success) {
-        toast.success("Email OTP sent successfully!");
-        navigate("/email_otp", { state: { userData } });
-      } else {
-        toast.error("Failed to send email OTP. Please try again.");
-      }
+        if (response.data.success) {
+          toast.success("Email OTP sent successfully!");
+          navigate("/email_otp", { state: { userData } });
+          setProcessing(false);
+        } else {
+          toast.error("Failed to send email OTP. Please try again.");
+          setProcessing(false);
+        }
         return;
       }
-      
+
       const result = await confirmationResult.confirm(otp);
       toast.success("Phone OTP verified successfully!");
 
       // Extract the required user data for email OTP
       const { fname, lname, email } = userData;
-    
 
       // Call API to send email OTP
       const response = await axios.post(`${API}/api/otp`, {
@@ -73,19 +74,22 @@ const PhoneOtp = () => {
       if (response.data.success) {
         toast.success("Email OTP sent successfully!");
         navigate("/email_otp", { state: { userData } });
+        setProcessing(false);
       } else {
         toast.error("Failed to send email OTP. Please try again.");
+        setProcessing(false);
       }
     } catch (error) {
       console.error("OTP verification failed:", error.message);
       toast.error("Invalid phone OTP. Please try again.");
+      setProcessing(false);
     }
   };
 
   return (
     <div className="font-poppins h-screen bg-popup-gray flex justify-center items-center">
       <div className="bg-darkgray lg:w-[460px] md:w-[430px] min-w-[300px] mx-1 px-4 py-8 shadow-black shadow-md rounded-lg text-white text-center">
-          <img src={Logo} alt="" className="px-3 py-3" />
+        <img src={Logo} alt="" className="px-3 py-3" />
         <h1 className="text-2xl font-medium my-4">Verify Phone Number</h1>
         <p className="text-base font-extralight text-gray-100 mb-6">
           We have sent a one-time password(OTP) to your registered phone number{" "}
@@ -132,7 +136,14 @@ const PhoneOtp = () => {
             className="bg-teal-400 text-black px-8 py-1.5 rounded-md text-lg"
             onClick={verifyOtp}
           >
-            Next
+            {processing ? (
+              <span className="flex justify-center gap-3">
+                <AiOutlineLoading className="h-6 w-6 animate-spin" />
+                <p>Sending OTP...</p>
+              </span>
+            ) : (
+              "Next"
+            )}
           </button>
         </div>
       </div>
