@@ -44,7 +44,6 @@ const SubscriptionPlans = () => {
 
   const onSubmit = async (data) => {
     const { amount, currency, plan, course, subtopics ,duration} = data;
-    console.log(data, "data");
     
     if (!data.paymentMethod) {
       toast.error("Please select a payment method.");
@@ -150,7 +149,7 @@ const SubscriptionPlans = () => {
     <>
       <div className="h-screen font-poppins bg-darkgray py-4 overflow-auto">
         <p className="flex  justify-center  py-4 mb-3">
-          <img src={Logo} alt="logo Image" />
+          <img src={Logo} alt="logo Image" className="w-1/4"  />
         </p>
 
         <div className="flex lg:flex-row md:flex-row flex-col justify-center  gap-6 text-white lg:h-9/12 md:h-9/12 lg:mx-0 md:mx-0 mx-6 ">

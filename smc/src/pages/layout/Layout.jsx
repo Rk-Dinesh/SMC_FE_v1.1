@@ -27,18 +27,24 @@ import { BiBarChartAlt2 } from "react-icons/bi";
 import { FiLink } from "react-icons/fi";
 import { TbUnlink } from "react-icons/tb";
 
-const Layout = ({setIsLoggedIn}) => {
+const Layout = ({ setIsLoggedIn }) => {
   const location = useLocation();
   const [open, setOpen] = useState(true);
   const [submenuopen, Setsubmenuopen] = useState(false);
+  const [open1, setOpen1] = useState(true);
+  const [submenuopen1, Setsubmenuopen1] = useState(false);
   const [isLogOutModalOpen, setLogOutModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const Menus = [
     { title: "Dashboard", icon: <LayoutDashboard />, to: "/dashboard" },
-    { title: "My Courses", icon: <FaGraduationCap size={24}/>, to: "/my_courses" },
+    {
+      title: "My Courses",
+      icon: <FaGraduationCap size={24} />,
+      to: "/my_courses",
+    },
     {
       title: "My Certificates",
-      icon: <FaAward size={24}/>,
+      icon: <FaAward size={24} />,
       to: "/certificate",
     },
     {
@@ -48,52 +54,90 @@ const Layout = ({setIsLoggedIn}) => {
     },
     {
       title: "My Study Groups",
-      icon: <FaUsers size={24}/>,
-      to: "/study_group",
+      icon: <FaUsers size={24} />,
+      submenu1: true,
+      submenuItems1: [
+        {
+          title: "My Study Groups",
+          icon: <LayoutDashboard size={24} />,
+          to: "/study_group",
+        },
+        // {
+        //   title: "All Study Groups",
+        //   icon: <BiBarChartAlt2 size={24} />,
+        //   to: "/all_studygroup",
+        // },
+        // {
+        //   title: "Create Study Groups",
+        //   icon: <FiLink size={24} />,
+        //   to: "/create_studygroup",
+        // },
+        {
+          title: "Chats",
+          icon: <TbUnlink size={24} />,
+          to: "/chats",
+        },
+      ].filter(Boolean),
     },
     {
       title: "Refer & Earn",
-      icon: <RiTeamLine size={24}/>,
+      icon: <RiTeamLine size={24} />,
       submenu: true,
       submenuItems: [
         {
           title: "Dashboard",
-          icon: <LayoutDashboard size={24}/>,
+          icon: <LayoutDashboard size={24} />,
           to: "/refer_dashboard",
         },
-        { title: "My Earnings", icon: <BiBarChartAlt2 size={24}/>, to: "/my_earnings" },
-        { title: "My Links", icon: <FiLink size={24}/>, to: "/my_links" },
+        {
+          title: "My Earnings",
+          icon: <BiBarChartAlt2 size={24} />,
+          to: "/my_earnings",
+        },
+        { title: "My Links", icon: <FiLink size={24} />, to: "/my_links" },
         {
           title: "Bank Details",
-          icon: <TbUnlink size={24}/>,
+          icon: <TbUnlink size={24} />,
           to: "/bank_details",
         },
-        { title: "Payout", icon: <LayoutDashboard size={24}/>, to: "/payout_details" },
+        {
+          title: "Payout",
+          icon: <LayoutDashboard size={24} />,
+          to: "/payout_details",
+        },
         {
           title: "Referral Program Terms",
-          icon: <LayoutDashboard size={24}/>,
+          icon: <LayoutDashboard size={24} />,
           to: "/referral_terms",
         },
       ].filter(Boolean),
     },
-    { title: "Help & Support", icon: <AiOutlineQuestionCircle size={24}/>, to: "/notifications" },
-    { title: "Notifications", icon: <IoIosNotificationsOutline size={24}/>, to: "/notifications" },
-    { title: "Profile", icon: <FaUserCircle size={24}/>, to: "/profile" },
+    {
+      title: "Help & Support",
+      icon: <AiOutlineQuestionCircle size={24} />,
+      to: "/notifications",
+    },
+    {
+      title: "Notifications",
+      icon: <IoIosNotificationsOutline size={24} />,
+      to: "/notifications",
+    },
+    { title: "Profile", icon: <FaUserCircle size={24} />, to: "/profile" },
     {
       title: "Delete Account",
-      icon: <FaTrashAlt size={24}/>,
+      icon: <FaTrashAlt size={24} />,
       to: "#",
       onClick: () => setDeleteModalOpen(true),
     },
     {
       title: "Logout",
-      icon: <MdLogout size={24}/>,
+      icon: <MdLogout size={24} />,
       to: "#",
       onClick: () => setLogOutModalOpen(true),
     },
     {
       title: "Terms & Conditions",
-      icon: <HiOutlineDocumentCheck size={24}/>,
+      icon: <HiOutlineDocumentCheck size={24} />,
       to: "/terms_conditions",
     },
   ].filter(Boolean);
@@ -109,7 +153,7 @@ const Layout = ({setIsLoggedIn}) => {
     <div className="flex font-poppins bg-popup-gray lg:px-4 md:px-3 px-0 py-4 pb-2 w-full h-screen  ">
       <div className="  bg-darkgray text-gray-200 rounded-3xl  lg:w-[420px] md:w-[460px]  overflow-y-auto no-scrollbar lg:block md:block hidden ">
         <div className="flex justify-center ">
-          <img src={logo} alt="" className="" />
+          <img src={logo} alt="Image" className="px-3 py-3" />
         </div>
 
         <div className=" ">
@@ -140,11 +184,44 @@ const Layout = ({setIsLoggedIn}) => {
                         onClick={() => Setsubmenuopen(!submenuopen)}
                       />
                     )}
+                        {menu.submenu1 && open1 && (
+                      <BsChevronDown
+                        className={`cursor-pointer transition-transform delay-100  ${
+                          submenuopen1 && "rotate-180"
+                        }`}
+                        onClick={() => Setsubmenuopen1(!submenuopen1)}
+                      />
+                    )}
                   </li>
                 </NavLink>
                 {menu.submenu && submenuopen && open && (
                   <ul>
                     {menu.submenuItems.map((submenuitem, subIndex) => (
+                      <NavLink
+                        to={submenuitem.to}
+                        onClick={submenuitem.onClick}
+                        key={subIndex}
+                      >
+                        <li
+                          className={` cursor-pointer font-poppins flex items-center gap-x-2 p-2 pl-14  hover:bg-teal-400  ${
+                            location.pathname === submenuitem.to
+                              ? "bg-teal-400 text-black font-medium"
+                              : "text-gray-200 font-extralight"
+                          }`}
+                        >
+                          <span className="bg-popup-gray px-1 py-1 rounded-lg text-white">
+                            {" "}
+                            {submenuitem.icon}
+                          </span>{" "}
+                          <span>{submenuitem.title}</span>
+                        </li>
+                      </NavLink>
+                    ))}
+                  </ul>
+                )}
+                   {menu.submenu1 && submenuopen1 && open1 && (
+                  <ul>
+                    {menu.submenuItems1.map((submenuitem, subIndex) => (
                       <NavLink
                         to={submenuitem.to}
                         onClick={submenuitem.onClick}
@@ -175,7 +252,13 @@ const Layout = ({setIsLoggedIn}) => {
 
       {/* Main Content */}
       <div className="w-full overflow-x-auto lg:mx-4 md:mx-4 mx-2 no-scrollbar">
-      <Headers Menus={Menus} Setsubmenuopen={Setsubmenuopen} submenuopen={submenuopen} />
+        <Headers
+          Menus={Menus}
+          Setsubmenuopen={Setsubmenuopen}
+          submenuopen={submenuopen}
+          Setsubmenuopen1={Setsubmenuopen1}
+          submenuopen1={submenuopen1}
+        />
         <Navbar />
         <div className="lg:w-10/12 md:w-full w-full  text-white text-base font-light overflow-auto ">
           <p className=" absolute bottom-0 right-2   ">

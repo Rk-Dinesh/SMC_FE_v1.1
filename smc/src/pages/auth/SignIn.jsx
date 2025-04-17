@@ -14,6 +14,15 @@ const SignIn = () => {
   const [countryCode, setCountryCode] = useState("");
   const [processing, setProcessing] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear();
+        delete window.recaptchaVerifier;
+      }
+    };
+  }, []);
+
   const handlePhoneChange = (value,data) => {
     setPhone(value);
     setCountryCode(data.dialCode);
@@ -52,8 +61,8 @@ const SignIn = () => {
 
   return (
     <div className="bg-popup-gray h-screen flex justify-center items-center font-poppins text-white">
-      <div className="lg:w-[430px] md:w-[430px] min-w-[300px] h-[550px] mx-1 bg-darkgray px-4 py-1 flex flex-col shadow-black shadow-md rounded-lg">
-        <img src={Logo} alt="Logo Image" />
+      <div className="lg:w-[430px] md:w-[430px] min-w-[300px] h-[550px] mx-1  bg-darkgray px-4 py-1 flex flex-col shadow-black shadow-md rounded-lg">
+        <img src={Logo} alt="Logo Image" className="my-6 px-4" />
 
         <form
           onSubmit={(e) => {
@@ -61,7 +70,7 @@ const SignIn = () => {
             handleLogin();
           }}
         >
-          <p className="text-center text-2xl my-4">Welcome!</p>
+          <p className="text-center text-3xl font-bold mt-4">Welcome!</p>
           <div className="flex flex-col gap-2 mx-4 my-6 py-6 font-extralight">
             <label htmlFor="phone">
               Phone Number <span className="text-red-600">*</span>
@@ -85,7 +94,7 @@ const SignIn = () => {
                 background: "white",
               }}
             />
-            <div className="flex justify-center gap-6 py-6 my-8">
+            <div className=" cursor-pointer flex justify-center gap-6 py-6 my-8">
               <p
                 className="text-lg text-center border-2 border-white rounded-lg px-4 py-1 text-white font-normal w-1/3"
                 onClick={() => navigate("/signup")}
@@ -93,7 +102,7 @@ const SignIn = () => {
                 SignUp
               </p>
               <button
-                className="text-lg bg-teal-400 rounded-lg px-4 py-1 text-black font-normal w-1/3"
+                className=" cursor-pointer text-lg bg-teal-400 rounded-lg px-4 py-1 text-black font-normal w-1/3"
                 type="submit"
               >
                 {processing ? (

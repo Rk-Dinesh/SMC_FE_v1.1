@@ -116,7 +116,6 @@ const UpdateEmail = ({ user, onClose, onSuccess }) => {
 
       if (validateResponse.status === 200 && validateResponse.data.success) {
         const phone = user.phone
-console.log(phone);
 
         const updateResponse = await axios.post(
           `${API}/api/emailupdate?phone=${phone}`,
@@ -162,9 +161,9 @@ console.log(phone);
 
   return (
     <Modal>
-      <div className="w-[480px] min-h-[280px] bg-[#1a1a1a] rounded-xl shadow-lg text-white font-poppins mx-auto my-8 p-6 relative">
+      <div className="w-[480px] min-h-[280px]  text-white font-poppins mx-auto  p-6 relative">
         <p
-          className="text-end text-2xl font-medium cursor-pointer"
+          className="text-end text-2xl -mx-6 -mt-6   font-medium cursor-pointer"
           onClick={onClose}
         >
           ×
@@ -218,11 +217,11 @@ console.log(phone);
 
         {step === 2 && (
           <>
-            <h1 className="text-2xl font-medium my-4">Verify Email</h1>
-            <p className="text-base font-extralight text-gray-100 mb-6">
+            <h1 className="text-2xl font-medium my-4 text-center">Verify Email</h1>
+            <p className="text-base font-extralight text-gray-100 text-center mb-6">
               We have sent a one-time password (OTP) to your new email {newEmail}
             </p>
-            <p className="py-2">Enter OTP</p>
+            <p className="py-2 text-center my-2">Enter OTP</p>
            <div className="flex w-full justify-center items-center">
            <OTPInput
               value={otp}

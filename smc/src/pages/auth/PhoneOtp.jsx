@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import OtpInput from "react-otp-input";
+import Logo from "../../assets/images/logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../../Firebase.Config";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
@@ -103,9 +104,7 @@ const PhoneOtp = () => {
   return (
     <div className="font-poppins h-screen bg-popup-gray flex justify-center items-center">
       <div className="bg-darkgray lg:w-[460px] md:w-[430px] min-w-[300px] mx-1 px-4 py-8 shadow-black shadow-md rounded-lg text-white text-center">
-        <p className="text-5xl font-medium text-center py-4">
-          <span className="text-teal-400">Seek</span>MyCourse
-        </p>
+          <img src={Logo} alt="" className="px-3 py-3" />
         <h1 className="text-2xl font-medium my-4">Verify Phone Number</h1>
         <p className="text-base font-extralight text-gray-100 mb-6">
           We have sent a one-time password(OTP) to your registered phone number{" "}

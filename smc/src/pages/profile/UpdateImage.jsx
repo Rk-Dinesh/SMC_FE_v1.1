@@ -57,7 +57,6 @@ const UpdateImage = ({ CloseProfileModal }) => {
         setGlobal(!global)
         CloseProfileModal();
       } else {
-        console.log("Failed to Upload");
         setProcessing(false)
       }
     } catch (error) {

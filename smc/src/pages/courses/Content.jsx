@@ -123,7 +123,7 @@ const Content = () => {
         console.error("Full-screen mode is not supported by this browser.");
       }
       let questions = JSON.parse(response.data.message);
-      console.log(questions);
+
       
       navigate("/exam", {
         state: { topic: mainTopic, courseId: courseId, questions: questions },
@@ -251,7 +251,6 @@ const Content = () => {
             type === "text & image course"
               ? await toDataUrl(subtopic.image)
               : ``;
-          console.log(imageUrl);
           return `
           <div>
               <p style="font-size: 16pt; margin-top: 20px; font-weight: bold;">
@@ -578,7 +577,7 @@ const Content = () => {
   async function updateCourse() {
     CountDoneTopics();
     localStorage.setItem("jsonData", JSON.stringify(jsonData));
-    console.log(jsonData);
+
     
     const dataToSend = {
       content: JSON.stringify(jsonData),

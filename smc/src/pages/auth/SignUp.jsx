@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -24,6 +24,15 @@ const SignUp = () => {
   const [countryCode, setCountryCode] = useState("");
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [processing, setProcessing] = useState(false);
+
+    useEffect(() => {
+      return () => {
+        if (window.recaptchaVerifier) {
+          window.recaptchaVerifier.clear();
+          delete window.recaptchaVerifier;
+        }
+      };
+    }, []);
 
   const getReferralCode = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -68,7 +77,7 @@ const SignUp = () => {
     <div className="bg-popup-gray h-screen flex justify-center items-center font-poppins text-white">
       <div className="lg:w-[430px] md:w-[430px] min-w-[300px] mx-1 bg-darkgray px-4 py-1 flex flex-col justify-center shadow-black shadow-md rounded-lg">
        
-        <img src={Logo} alt="" className="w-5/6 mx-auto" />
+        <img src={Logo} alt="" className="px-3 py-3" />
        
         <form className="z-0" onSubmit={handleSubmit(onSubmit)}>
           <p className="text-center text-2xl my-2">Signup!</p>

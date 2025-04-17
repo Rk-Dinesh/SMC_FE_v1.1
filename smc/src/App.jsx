@@ -29,6 +29,8 @@ import SubscriptionPlans from "./pages/subscribtion/SubscriptionPlan";
 import ViewCertificate from "./pages/certificate/ViewCertificate";
 import Subscription_Invoice from "./pages/profile/tabs/subscription/Subscription_Invoice";
 import Exam from "./pages/courses/Exam";
+import Chats from "./pages/study groups/Chats";
+import ViewProfile from "./pages/study groups/ViewProfile";
 
 export const ThemeContext = createContext();
 
@@ -71,6 +73,8 @@ const App = () => {
               <Route path="/topics" element={<ListTopics />} />
               <Route path="/exam" element={<Exam />} />
               <Route path="/study_group" element={<StudyGroups />} />
+              <Route path="/chats" element={<Chats/>} />
+              <Route path="/view_profile" element={<ViewProfile />} />
               <Route path="/view_group" element={<ViewGroup />} />
               <Route path="/refer_dashboard" element={<ReferralDashboard />} />
               <Route path="/view_earning" element={<EarningView />} />

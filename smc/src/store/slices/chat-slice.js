@@ -50,7 +50,7 @@ export const createChatSlice = (set, get) => ({
     set({ channels: [channel, ...channels] });
   },
   addContactInDMContacts: (message) => {
-    console.log({ message });
+    // console.log({ message });
     const userId = get().userInfo.id;
     const fromId =
       message.sender._id === userId
@@ -61,13 +61,13 @@ export const createChatSlice = (set, get) => ({
     const dmContacts = get().directMessagesContacts;
     const data = dmContacts.find((contact) => contact._id === fromId);
     const index = dmContacts.findIndex((contact) => contact._id === fromId);
-    console.log({ data, index, dmContacts, userId, message, fromData });
+    // console.log({ data, index, dmContacts, userId, message, fromData });
     if (index !== -1 && index !== undefined) {
-      console.log("in if condition");
+      // console.log("in if condition");
       dmContacts.splice(index, 1);
       dmContacts.unshift(data);
     } else {
-      console.log("in else condition");
+      // console.log("in else condition");
       dmContacts.unshift(fromData);
     }
     set({ directMessagesContacts: dmContacts });

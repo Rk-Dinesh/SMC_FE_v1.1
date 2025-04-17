@@ -77,13 +77,11 @@ const Exam = () => {
     const marks = correctAnswersCount * 10;
     const marksString = marks.toString();
 
-    console.log(marksString);
-
     const response = await axios.post(API + "/api/updateresult", {
       courseId,
       marksString,
     });
-    console.log(response);
+
   }
 
   const exitFullScreen = async () => {

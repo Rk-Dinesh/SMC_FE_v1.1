@@ -83,7 +83,7 @@ const Dashboard = () => {
   const [recentcourses, setRecentcourses] = useState({});
   const [timeRange, setTimeRange] = useState("This Month");
   const [showDropdown, setShowDropdown] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const userId = localStorage.getItem("user");
 
@@ -113,7 +113,6 @@ const Dashboard = () => {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(`${API}/api/courses?userId=${userId}`);
-        console.log(response.data);
 
         setRecentcourses(response.data);
       } catch (error) {}
@@ -318,11 +317,21 @@ const Dashboard = () => {
                     className="w-24 h-24 object-cover rounded-lg mr-4"
                   />
                   <div className="flex flex-col justify-between text-sm">
-                    <p>Date: {course.date}</p>
+                    <p>
+                      Date:{" "}
+                      {new Date(course.date)
+                        .toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })
+                        .toUpperCase()
+                        .replace(/\s/g, "-")}
+                    </p>
                     <p className="font-semibold">{course.title}</p>
                     <p>Type: {course.type}</p>
                     <p>No of Subtopics: {course.subtopics}</p>
-                    <p>Language: {course.language}</p>
+                    <p>Language: {course.lang}</p>
                     <button
                       onClick={() =>
                         handleCourse(

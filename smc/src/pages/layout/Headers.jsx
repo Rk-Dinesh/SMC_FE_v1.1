@@ -4,7 +4,13 @@ import { AlignJustify } from "lucide-react";
 import Logo from "../../assets/images/logo.png";
 import { BsChevronDown } from "react-icons/bs";
 
-const Headers = ({ Menus, submenuopen, Setsubmenuopen }) => {
+const Headers = ({
+  Menus,
+  submenuopen,
+  Setsubmenuopen,
+  Setsubmenuopen1,
+  submenuopen1,
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const location = useLocation();
@@ -34,13 +40,12 @@ const Headers = ({ Menus, submenuopen, Setsubmenuopen }) => {
     <div className="">
       <div
         className="flex justify-center items-center md:hidden lg:hidden -mt-3"
-        onClick={()=>toggleDropdown()}
+        onClick={() => toggleDropdown()}
       >
-         <span>
+        <span>
           <AlignJustify className="text-teal-400 my-1 size-8" />
         </span>
         <img src={Logo} alt="Logo Image" className="w-52" />
-       
       </div>
 
       {isDropdownOpen && (
@@ -76,6 +81,14 @@ const Headers = ({ Menus, submenuopen, Setsubmenuopen }) => {
                         onClick={() => Setsubmenuopen(!submenuopen)}
                       />
                     )}
+                    {menu.submenu1 && open1 && (
+                      <BsChevronDown
+                        className={`cursor-pointer transition-transform delay-100  ${
+                          submenuopen1 && "rotate-180"
+                        }`}
+                        onClick={() => Setsubmenuopen1(!submenuopen1)}
+                      />
+                    )}
                   </li>
                 </NavLink>
                 {menu.submenu && submenuopen && open && (
@@ -93,6 +106,31 @@ const Headers = ({ Menus, submenuopen, Setsubmenuopen }) => {
                               : "text-gray-200 font-extralight"
                           }`}
                           onClick={toggleDropdown}
+                        >
+                          <span className="bg-popup-gray px-1 py-1 rounded-lg text-white">
+                            {" "}
+                            {submenuitem.icon}
+                          </span>{" "}
+                          <span>{submenuitem.title}</span>
+                        </li>
+                      </NavLink>
+                    ))}
+                  </ul>
+                )}
+                {menu.submenu1 && submenuopen1 && open1 && (
+                  <ul>
+                    {menu.submenuItems1.map((submenuitem, subIndex) => (
+                      <NavLink
+                        to={submenuitem.to}
+                        onClick={submenuitem.onClick}
+                        key={subIndex}
+                      >
+                        <li
+                          className={` cursor-pointer font-poppins flex items-center gap-x-2 p-2 pl-14  hover:bg-teal-400  ${
+                            location.pathname === submenuitem.to
+                              ? "bg-teal-400 text-black font-medium"
+                              : "text-gray-200 font-extralight"
+                          }`}
                         >
                           <span className="bg-popup-gray px-1 py-1 rounded-lg text-white">
                             {" "}

@@ -12,16 +12,6 @@ const ListTopics = () => {
   const { global, setGlobal } = useContext(ThemeContext);
   const [processing, setProcessing] = useState(false);
   const { jsonData, mainTopic, type, lang } = state || {};
-  // const mainTopic = "ai"
-  //   const generatedText = {
-  //     "generatedText": "```json\n{\n  \"ai\": [\n    {\n      \"title\": \"MERN Stack Development with AI Integration\",\n      \"subtopics\": [\n        {\"title\": \"Integrating AI models into React frontend\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Building AI-powered APIs with Node.js and Express\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Deploying MERN stack AI applications to cloud platforms\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    },\n    {\n      \"title\": \"AI-powered features in MERN applications\",\n      \"subtopics\": [\n        {\"title\": \"Implementing AI-driven search functionality\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Using AI for image recognition and processing\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Building a chatbot with AI using Dialogflow or similar\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    },\n    {\n      \"title\": \"AI Model Training and Deployment within a MERN Stack\",\n      \"subtopics\": [\n        {\"title\": \"Setting up a machine learning pipeline using Python and MongoDB\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Training and deploying custom AI models using TensorFlow.js\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Model optimization and performance tuning for MERN applications\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    },\n    {\n      \"title\": \"Data Management and AI in MERN\",\n      \"subtopics\": [\n        {\"title\": \"Designing efficient database schemas for AI-related data in MongoDB\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Data preprocessing and cleaning for AI model training\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false},\n        {\"title\": \"Implementing data security and privacy measures for AI applications\", \"theory\": \"\", \"youtube\": \"\", \"image\": \"\", \"done\": false}\n      ]\n    }\n  ]\n}\n```\n"
-  // }
-  // const cleanedJsonString = generatedText.generatedText
-  //         .replace(/```json/g, "")
-  //         .replace(/```/g, "");
-  //         const parsedJson = JSON.parse(cleanedJsonString);
-  //     const jsonData = parsedJson;
-  //     console.log(jsonData);
 
   useEffect(() => {
     if (!jsonData) {

@@ -54,7 +54,7 @@ const LearnersProfile = () => {
       await fetchProfile();
     await fetchuser();
       setEditMode(false);
-      console.log("Profile updated and refreshed");
+ 
     } catch (err) {
       console.error("Error saving profile:", err.response?.data || err.message);
     }

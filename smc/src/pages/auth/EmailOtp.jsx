@@ -4,8 +4,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { API } from "../../Host";
+import Logo from "../../assets/images/logo.png";
 
-const EmailOtp = ({setIsLoggedIn}) => {
+const EmailOtp = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const userData = location?.state?.userData;
@@ -39,7 +40,7 @@ const EmailOtp = ({setIsLoggedIn}) => {
 
     try {
       // Step 1: Verify email OTP
-      
+
       const verifyRes = await axios.post(`${API}/api/validate-otp`, {
         email: EMAILID,
         otp,
@@ -54,11 +55,11 @@ const EmailOtp = ({setIsLoggedIn}) => {
 
       // Step 2: Register user
       const apiEndpoint = referralCode
-      ? `${API}/api/usersignup?ref=${referralCode}`
-      : `${API}/api/usersignup`;
+        ? `${API}/api/usersignup?ref=${referralCode}`
+        : `${API}/api/usersignup`;
       const response = await axios.post(apiEndpoint, userData);
 
-      if (response.status===200) {
+      if (response.status === 200) {
         setIsLoggedIn(true);
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("user", response.data.userId);
@@ -66,7 +67,7 @@ const EmailOtp = ({setIsLoggedIn}) => {
         localStorage.setItem("userName", response.data.userName);
         localStorage.setItem("totalCourse", response.data.totalCourse);
         toast.success("Account created successfully!");
-        navigate("/subscribe"); 
+        navigate("/subscribe");
       } else {
         toast.error("Failed to register user. Try again later.");
       }
@@ -97,9 +98,7 @@ const EmailOtp = ({setIsLoggedIn}) => {
   return (
     <div className="font-poppins h-screen bg-popup-gray flex justify-center items-center">
       <div className="bg-darkgray lg:w-[460px] md:w-[430px] min-w-[300px] mx-1 px-4 py-8 shadow-black shadow-md rounded-lg text-white text-center">
-        <p className="text-5xl font-medium text-center py-4">
-          <span className="text-teal-400">Seek</span>MyCourse
-        </p>
+        <img src={Logo} alt="" className="px-3 py-3" />
         <h1 className="text-2xl font-medium my-4">Verify Email</h1>
         <p className="text-base font-extralight text-gray-100 mb-6">
           We have sent a one-time password (OTP) to your registered email{" "}
