@@ -115,7 +115,7 @@ const Layout = ({ setIsLoggedIn }) => {
     {
       title: "Help & Support",
       icon: <AiOutlineQuestionCircle size={24} />,
-      to: "/notifications",
+      target: "https://seekmycourse.support/",
     },
     {
       title: "Notifications",
@@ -160,40 +160,59 @@ const Layout = ({ setIsLoggedIn }) => {
           <ul className="pt-3">
             {Menus.map((menu, index) => (
               <React.Fragment key={index}>
-                <NavLink to={menu.to} onClick={menu.onClick}>
-                  <li
-                    className={`cursor-pointer text-md flex items-center  p-2 mt-1 pl-3 transition-all duration-700 hover:bg-teal-400 hover:font-medium font-extralight ${
-                      location.pathname && location.pathname.startsWith(menu.to)
-                        ? "bg-teal-400 font-medium text-black transition-all duration-500"
-                        : ""
-                    }`}
+                {menu.target ? (
+                  <a
+                  className={`cursor-pointer `}
+                    href={menu.target}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    <div className="flex items-center gap-x-3 px-6">
+                    <div className="flex items-center gap-x-3 px-5 pl-9 py-2 ">
                       <span className="bg-popup-gray px-1 py-1 rounded-lg text-white">
                         {menu.icon}
                       </span>
-                      <span className={`font-poppins text-lg duration-3 `}>
+                      <span className={`font-poppins text-lg duration-3 text-gray-300`}>
                         {menu.title}
                       </span>
                     </div>
-                    {menu.submenu && open && (
-                      <BsChevronDown
-                        className={`cursor-pointer transition-transform delay-100  ${
-                          submenuopen && "rotate-180"
-                        }`}
-                        onClick={() => Setsubmenuopen(!submenuopen)}
-                      />
-                    )}
-                        {menu.submenu1 && open1 && (
-                      <BsChevronDown
-                        className={`cursor-pointer transition-transform delay-100  ${
-                          submenuopen1 && "rotate-180"
-                        }`}
-                        onClick={() => Setsubmenuopen1(!submenuopen1)}
-                      />
-                    )}
-                  </li>
-                </NavLink>
+                  </a>
+                ) : (
+                  <NavLink to={menu.to} onClick={menu.onClick}>
+                    <li
+                      className={`cursor-pointer text-md flex items-center  p-2 mt-1 pl-3 transition-all duration-700 hover:bg-teal-400 hover:font-medium font-extralight ${
+                        location.pathname &&
+                        location.pathname.startsWith(menu.to)
+                          ? "bg-teal-400 font-medium text-black transition-all duration-500"
+                          : ""
+                      }`}
+                    >
+                      <div className="flex items-center gap-x-3 px-6">
+                        <span className="bg-popup-gray px-1 py-1 rounded-lg text-white">
+                          {menu.icon}
+                        </span>
+                        <span className={`font-poppins text-lg duration-3 `}>
+                          {menu.title}
+                        </span>
+                      </div>
+                      {menu.submenu && open && (
+                        <BsChevronDown
+                          className={`cursor-pointer transition-transform delay-100  ${
+                            submenuopen && "rotate-180"
+                          }`}
+                          onClick={() => Setsubmenuopen(!submenuopen)}
+                        />
+                      )}
+                      {menu.submenu1 && open1 && (
+                        <BsChevronDown
+                          className={`cursor-pointer transition-transform delay-100  ${
+                            submenuopen1 && "rotate-180"
+                          }`}
+                          onClick={() => Setsubmenuopen1(!submenuopen1)}
+                        />
+                      )}
+                    </li>
+                  </NavLink>
+                )}
                 {menu.submenu && submenuopen && open && (
                   <ul>
                     {menu.submenuItems.map((submenuitem, subIndex) => (
@@ -219,7 +238,7 @@ const Layout = ({ setIsLoggedIn }) => {
                     ))}
                   </ul>
                 )}
-                   {menu.submenu1 && submenuopen1 && open1 && (
+                {menu.submenu1 && submenuopen1 && open1 && (
                   <ul>
                     {menu.submenuItems1.map((submenuitem, subIndex) => (
                       <NavLink
@@ -258,6 +277,7 @@ const Layout = ({ setIsLoggedIn }) => {
           submenuopen={submenuopen}
           Setsubmenuopen1={Setsubmenuopen1}
           submenuopen1={submenuopen1}
+          open1 = {open1}
         />
         <Navbar />
         <div className="lg:w-10/12 md:w-full w-full  text-white text-base font-light overflow-auto ">

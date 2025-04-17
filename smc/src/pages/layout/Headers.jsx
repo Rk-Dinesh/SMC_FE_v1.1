@@ -10,6 +10,7 @@ const Headers = ({
   Setsubmenuopen,
   Setsubmenuopen1,
   submenuopen1,
+  open1
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
