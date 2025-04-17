@@ -14,6 +14,7 @@ const Exam = () => {
     const [quizData, setQuizData] = useState({});
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         init();
@@ -35,13 +36,17 @@ const Exam = () => {
     const handleAnswer = (answer) => {
         setSelectedAnswer(answer);
         setShowCorrectAnswer(true);
+        setErrorMessage(''); // Clear any previous error message
     };
 
     const handleNext = () => {
-        if (selectedAnswer) {
-            // Add the selected answer to userAnswers
-            setUserAnswers([...userAnswers, selectedAnswer]);
+        if (!selectedAnswer) {
+            setErrorMessage('Please select an answer before proceeding.');
+            return; // Prevent moving to the next question if no answer is selected
         }
+
+        // Add the selected answer to userAnswers
+        setUserAnswers([...userAnswers, selectedAnswer]);
 
         // Check if we are at the last question
         if (currentQuestionIndex < quizData.questions.length - 1) {
@@ -77,15 +82,12 @@ const Exam = () => {
 
         console.log(marksString);
         
-    
-       const respone = await axios.post(API + '/api/updateresult', { courseId, marksString });
-       console.log(respone);
-       
-
+        const response = await axios.post(API + '/api/updateresult', { courseId, marksString });
+        console.log(response);
     }
 
-    const exitFullScreen = async() => {
-        await updateResult()
+    const exitFullScreen = async () => {
+        await updateResult();
         if (document.exitFullscreen) {
             document.exitFullscreen();
         }
@@ -122,7 +124,7 @@ const Exam = () => {
             <div className='flex flex-1 justify-center items-center -mt-24'>
                 {Object.keys(quizData).length === 0 ? (
                     <div className="text-center h-screen w-screen flex items-center justify-center">
-                        <AiOutlineLoading size="xl" className='fill-white' />
+                        < AiOutlineLoading size={12} className='fill-white' />
                     </div>
                 ) : (
                     <div className='flex-1 flex justify-center items-center flex-col content-center text-center'>
@@ -167,6 +169,9 @@ const Exam = () => {
                                         {selectedAnswer !== quizData.questions[currentQuestionIndex].correctAnswer && 
                                         `Correct Answer: ${quizData.questions[currentQuestionIndex].correctAnswer}`}
                                     </p>
+                                )}
+                                {errorMessage && (
+                                    <p className='text-red-500 mt-2'>{errorMessage}</p>
                                 )}
                                 <button
                                     onClick={handleNext}
