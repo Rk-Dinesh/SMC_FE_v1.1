@@ -25,8 +25,8 @@ const Subscription = () => {
     fetchUser();
   }, []);
 
-  const redirectInvoice = () => {
-    navigate('/invoice');
+  const redirectSubscribe = () => {
+    navigate('/subscribe');
     
   }
 
@@ -35,8 +35,14 @@ const Subscription = () => {
     <div className="p-4">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         <div className="md:col-span-4">
+         
           <p className="text-base mb-2">Active Subscription:</p>
-          <div className="space-y-6 text-sm p-4 rounded-lg bg-popup-gray text-white">
+          
+          <div className="space-y-3 text-sm p-4 rounded-lg bg-popup-gray text-white">
+           <p className="font-semibold text-lg">Subscribe :</p> 
+          <button className="bg-teal-500 m px-6 py-2 justify-center rounded-md text-black font-medium" onClick={redirectSubscribe}>
+            Upgrade New Plan!
+          </button>
             <div>
               <p>
                 Plan Name: <span className="font-medium">Basic</span>

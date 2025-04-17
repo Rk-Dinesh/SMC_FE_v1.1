@@ -11,6 +11,8 @@ import { TbFileExport } from "react-icons/tb";
 import axios from "axios";
 import { API } from "../../Host";
 import { useNavigate } from "react-router-dom";
+import Logo from '../../assets/images/Courses.jpeg'
+
 const allReferralData = [
   { month: "Jan", value: Math.floor(Math.random() * 100), date: "2025-01-01" },
   { month: "Feb", value: Math.floor(Math.random() * 100), date: "2025-02-01" },
@@ -353,7 +355,7 @@ const Dashboard = () => {
                   className="flex items-center flex-nowrap mb-4 p-2 bg-popup-gray rounded-xl"
                 >
                   <img
-                    src={course.photo}
+                    src={Logo}
                     alt="Course"
                     className="w-24 h-24 object-cover rounded-lg mr-4"
                   />
