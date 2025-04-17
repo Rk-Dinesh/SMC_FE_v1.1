@@ -28,7 +28,7 @@ import SignInOtp from "./pages/auth/SignInOtp";
 import SubscriptionPlans from "./pages/subscribtion/SubscriptionPlan";
 import ViewCertificate from "./pages/certificate/ViewCertificate";
 import Subscription_Invoice from "./pages/profile/tabs/subscription/Subscription_Invoice";
-// import Exam from "./pages/courses/Exam";
+import Exam from "./pages/courses/Exam";
 
 export const ThemeContext = createContext();
 
@@ -69,7 +69,7 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/generate_courses" element={<GenerateCourse />} />
               <Route path="/topics" element={<ListTopics />} />
-              {/* <Route path="/exam" element={<Exam />} /> */}
+              <Route path="/exam" element={<Exam />} />
               <Route path="/study_group" element={<StudyGroups />} />
               <Route path="/view_group" element={<ViewGroup />} />
               <Route path="/refer_dashboard" element={<ReferralDashboard />} />
