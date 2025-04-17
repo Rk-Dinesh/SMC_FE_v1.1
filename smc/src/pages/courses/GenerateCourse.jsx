@@ -4,6 +4,7 @@ import { API } from "../../Host";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineLoading } from "react-icons/ai";
 
 const GenerateCourse = () => {
   const languages = [
@@ -479,7 +480,11 @@ const GenerateCourse = () => {
             //disabled={Object.keys(errors).length > 0}
             disabled={processing}
           >
-           {processing ? "Submitting" : "Submit"}
+           {processing ? <span className="flex justify-center gap-3">
+                         {" "}
+                         <AiOutlineLoading className="h-6 w-6 animate-spin" />{" "}
+                         <p>Generating ....</p>
+                       </span> : "Submit"}
           </button>
         ) : (
           <button
