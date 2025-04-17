@@ -23,6 +23,7 @@ const Navbar = () => {
   const userName = localStorage.getItem("userName");
   const type = localStorage.getItem("type");
   const course = localStorage.getItem("totalCourse");
+  const [recentcourses, setRecentcourses] = useState([]);
 
 
   useEffect(() => {
@@ -46,6 +47,20 @@ const Navbar = () => {
       console.log(error);
     }
   };
+
+  useEffect(()=>{
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(`${API}/api/courses?userId=${user}`);
+
+        setRecentcourses(response.data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchCourses();
+  },[])
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -82,7 +97,7 @@ const Navbar = () => {
            
             </div>
             <div className="bg-darkgray  gap-2 text-base rounded-full whitespace-nowrap py-3 px-3">
-              <p>Courses : 10/{course}</p>
+              <p>Courses : {recentcourses.length}/{course}</p>
            
             </div>
           </>

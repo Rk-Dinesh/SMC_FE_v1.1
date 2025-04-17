@@ -1,30 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {
-  PieChart,
-  Pie,
-  Cell,
+import { PieChart, Pie, Cell, ResponsiveContainer,
   BarChart,
   Bar,
   XAxis,
   YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+  Tooltip, } from "recharts";
 import { SlidersHorizontal, GraduationCap, BookOpenCheck } from "lucide-react";
 import { TfiBook } from "react-icons/tfi";
 import { TbFileExport } from "react-icons/tb";
 import axios from "axios";
 import { API } from "../../Host";
 import { useNavigate } from "react-router-dom";
-
-// Sample data with dates for filtering
-const allCourseData = [
-  { type: "Video Course", value: 5, date: "2025-04-01" },
-  { type: "Image Courses", value: 5, date: "2025-04-05" },
-  { type: "Video Course", value: 3, date: "2025-03-02" },
-  { type: "Image Courses", value: 2, date: "2025-01-15" },
-];
-
 const allReferralData = [
   { month: "Jan", value: Math.floor(Math.random() * 100), date: "2025-01-01" },
   { month: "Feb", value: Math.floor(Math.random() * 100), date: "2025-02-01" },
@@ -69,7 +55,6 @@ const filterDataByRange = (data, range) => {
 
   return data.filter((item) => new Date(item.date) >= startDate);
 };
-
 const timeOptions = [
   "This Month",
   "Last Month",
@@ -78,36 +63,19 @@ const timeOptions = [
   "Last 9 Months",
   "Last 12 Months",
 ];
+
+
+
 const Dashboard = () => {
   const [revenueRange, setRevenueRange] = useState("This Year");
-  const [recentcourses, setRecentcourses] = useState({});
+  const [recentcourses, setRecentcourses] = useState([]);
   const [timeRange, setTimeRange] = useState("This Month");
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("user");
 
-  // Filtered data
-  const filteredCourses = filterDataByRange(allCourseData, timeRange);
   const filteredReferrals = filterDataByRange(allReferralData, timeRange);
-
-  // Pie data
-  const courseTypeData = [
-    {
-      name: "Video Course",
-      value: filteredCourses
-        .filter((c) => c.type === "Video Course")
-        .reduce((a, b) => a + b.value, 0),
-      color: "#ffffff",
-    },
-    {
-      name: "Image Courses",
-      value: filteredCourses
-        .filter((c) => c.type === "Image Courses")
-        .reduce((a, b) => a + b.value, 0),
-      color: "#00f2e4",
-    },
-  ];
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -115,10 +83,90 @@ const Dashboard = () => {
         const response = await axios.get(`${API}/api/courses?userId=${userId}`);
 
         setRecentcourses(response.data);
-      } catch (error) {}
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
     };
+
     fetchCourses();
-  }, []);
+  }, [timeRange]);
+
+  const getLastMonthDateRange = () => {
+    const date = new Date();
+    const lastMonth = new Date(date.getFullYear(), date.getMonth() - 1);
+    const startOfMonth = new Date(
+      lastMonth.getFullYear(),
+      lastMonth.getMonth(),
+      1
+    );
+    const endOfMonth = new Date(
+      lastMonth.getFullYear(),
+      lastMonth.getMonth() + 1,
+      0
+    );
+    return { startOfMonth, endOfMonth };
+  };
+
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+  // Helper function to filter courses based on the selected filter
+  const getFilteredCourses = () => {
+    return recentcourses.filter((course) => {
+      const courseDate = new Date(course.date);
+      switch (timeRange) {
+        case "This Month":
+          return (
+            courseDate.getMonth() === currentMonth &&
+            courseDate.getFullYear() === currentYear
+          );
+        case "Last Month":
+          const { startOfMonth, endOfMonth } = getLastMonthDateRange();
+          return courseDate >= startOfMonth && courseDate <= endOfMonth;
+        case "Last 3 Months":
+          return courseDate >= new Date(currentDate.setMonth(currentMonth - 3));
+        case "Last 6 Months":
+          return courseDate >= new Date(currentDate.setMonth(currentMonth - 6));
+        case "Last 12 Months":
+          return (
+            courseDate >= new Date(currentDate.setMonth(currentMonth - 12))
+          );
+        default:
+          return true;
+      }
+    });
+  };
+
+  const filteredCourses = getFilteredCourses();
+
+  const totalCourses = filteredCourses.length;
+
+  const imageCoursesCount = filteredCourses.filter(
+    (course) => course.type === "text & image course"
+  ).length;
+  const videoCoursesCount = filteredCourses.filter(
+    (course) => course.type === "video & text course"
+  ).length;
+  const ActiveCoursesCount = filteredCourses.filter(
+    (course) => course.completed === false
+  ).length;
+  const CompletedCoursesCount = filteredCourses.filter(
+    (course) => course.completed === true
+  ).length;
+
+  const courseTypeData = [
+    {
+      name: "Video Course",
+      value: videoCoursesCount,
+      color: "#ffffff",
+    },
+    {
+      name: "Image Courses",
+      value: imageCoursesCount,
+      color: "#00f2e4",
+    },
+  ];
 
   const recentGroups = [
     {
@@ -161,8 +209,6 @@ const Dashboard = () => {
     });
   };
 
-  const totalCourses = courseTypeData.reduce((a, b) => a + b.value, 0);
-
   return (
     <div className="p-3 text-white font-poppins min-h-screen">
       <div className="flex justify-between items-center mb-2 ">
@@ -204,7 +250,7 @@ const Dashboard = () => {
               Total Courses
               <p className="lg:text-3xl md:text-3xl text-xl py-3 text-white">
                 {totalCourses}/
-                <span className="text-white">{allCourseData.length}</span>
+                <span className="text-white">{recentcourses.length}</span>
               </p>
             </div>
           </div>
@@ -213,9 +259,7 @@ const Dashboard = () => {
             <TfiBook className="size-12 lg:block md:block hidden" />
             <div className="text-center text-slate-400">
               Active Courses
-              <p className="text-3xl py-3 text-white">
-                {Math.floor(totalCourses * 0.8)}
-              </p>
+              <p className="text-3xl py-3 text-white">{ActiveCoursesCount}</p>
             </div>
           </div>
 
@@ -224,7 +268,7 @@ const Dashboard = () => {
             <div className="text-center text-slate-400">
               Completed Courses
               <p className="text-3xl py-3 text-white">
-                {Math.floor(totalCourses * 0.5)}
+                {CompletedCoursesCount}
               </p>
             </div>
           </div>
@@ -233,9 +277,7 @@ const Dashboard = () => {
             <TbFileExport className="size-14 lg:block md:block hidden" />
             <div className="text-center text-slate-400">
               Export Courses
-              <p className="text-3xl py-3 text-white">
-                {Math.floor(totalCourses * 0.3)}
-              </p>
+              <p className="text-3xl py-3 text-white">0</p>
             </div>
           </div>
         </div>
@@ -258,10 +300,11 @@ const Dashboard = () => {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
+              
             </PieChart>
           </ResponsiveContainer>
           <div>
-            {/* <p className="font-medium text-lg mb-2">Course Type</p> */}
+            <p className="font-medium text-lg mb-2">Course Type</p>
             <ul className="space-y-1">
               {courseTypeData.map((item, index) => (
                 <li key={index} className="flex items-center gap-2">
@@ -276,7 +319,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
       <div>
         <div className="flex justify-between items-center my-2">
           <h2 className="text-lg font-medium">Referral Revenue</h2>
@@ -300,7 +342,6 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </div>
       </div>
-
       <div className="mt-6 grid grid-cols-12  gap-3">
         <div className="col-span-12 md:col-span-8">
           <p className="text-xl mb-4">Recent Courses</p>
