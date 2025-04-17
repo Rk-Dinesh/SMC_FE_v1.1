@@ -119,7 +119,7 @@ const Exam = () => {
 
     return (
         <div className='h-screen flex flex-col'>
-            <div className='flex flex-1 justify-center items-center'>
+            <div className='flex flex-1 justify-center items-center -mt-24'>
                 {Object.keys(quizData).length === 0 ? (
                     <div className="text-center h-screen w-screen flex items-center justify-center">
                         <AiOutlineLoading size="xl" className='fill-white' />
@@ -140,10 +140,10 @@ const Exam = () => {
                             </div>
                         ) : (
                             <div>
-                                <h2 className='text-xl text-white'>
+                                <h2 className='text-xl text-white font-medium mb-4'>
                                     Question {currentQuestionIndex + 1} of {quizData.questions.length}
                                 </h2>
-                                <h3 className='text-xl text-white'>{quizData.questions[currentQuestionIndex].question}</h3>
+                                <h3 className='text-lg text-white mb-4'>{quizData.questions[currentQuestionIndex].question}</h3>
                                 <div className='flex flex-col'>
                                     {quizData.questions[currentQuestionIndex].options.map((option, index) => {
                                             const optionLetter = String.fromCharCode(65 + index); // Convert index to A, B, C, D
@@ -155,9 +155,9 @@ const Exam = () => {
                                                 <button
                                                     key={index}
                                                     onClick={() => handleAnswer(optionLetter)}
-                                                    className={`m-2 p-2 ${isWrong ? 'bg-red-500' : isCorrect && showCorrectAnswer ? 'bg-green-500' : 'bg-blue-500'} text-white`}
+                                                    className={`m-1.5 py-2 px-1 ${isWrong ? 'bg-red-500' : isCorrect && showCorrectAnswer ? 'bg-green-500' : 'bg-popup-gray border border-teal-500'} text-white`}
                                                 >
-                                                    {optionLetter}: {option}
+                                                     {option}
                                                 </button>
                                             );
                                         })}
@@ -170,7 +170,7 @@ const Exam = () => {
                                 )}
                                 <button
                                     onClick={handleNext}
-                                    className='mt-4 bg-black text-white px-4 py-2'
+                                    className='mt-4 bg-teal-500 text-white px-8 py-1.5 text-lg'
                                     disabled={currentQuestionIndex === quizData.questions.length - 1 && !selectedAnswer}
                                 >
                                     Next
