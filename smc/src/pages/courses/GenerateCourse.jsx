@@ -307,6 +307,7 @@ const GenerateCourse = () => {
                 onChange={handleRadioChange}
                 checked={selectedValue === "7"}
                 className="hidden peer"
+                disabled={type === "free"}
               />
               <label htmlFor="7" className="flex items-center cursor-pointer">
                 <span className="w-4 h-4 border-2 border-teal-300 rounded-full flex items-center justify-center peer-checked:border-blue-500 peer-checked:bg-blue-500">

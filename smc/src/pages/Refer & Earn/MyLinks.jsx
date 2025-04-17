@@ -123,10 +123,7 @@ const MyLinks = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center mx-2">
-        <div className="flex  items-center  bg-teal-400 rounded-full  py-3 px-6 ">
-          + Create a Link
-        </div>
+      <div className="flex justify-end items-center mx-2">
         <div className="flex items-center gap-2 px-4 ">
           <p onClick={downloadPDF}>
             <img src={Pdf} alt="Pdf icon" className="w-10" />

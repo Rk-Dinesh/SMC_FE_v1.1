@@ -11,7 +11,7 @@ const DeleteAccount = ({ handleDeleteCloseModal, setIsLoggedIn }) => {
   const handleDelete = async () => {
     try {
       setLoading(true);
-      const id = localStorage.getItem("userId");
+      const id = localStorage.getItem("user");
       const response = await axios.delete(`${API}/api/deleteuser?id=${id}`);
       setLoading(false);
       setIsLoggedIn(false);

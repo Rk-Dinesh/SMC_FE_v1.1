@@ -36,7 +36,7 @@ const Exam = () => {
   const handleAnswer = (answer) => {
     setSelectedAnswer(answer);
     setShowCorrectAnswer(true);
-    setErrorMessage(""); // Clear any previous error message
+    setErrorMessage(""); 
   };
 
   const handleNext = () => {
@@ -127,15 +127,15 @@ const Exam = () => {
             <AiOutlineLoading size={12} className="fill-white" />
           </div>
         ) : (
-          <div className="flex-1 flex justify-center items-center flex-col content-center text-center">
+          <div className="flex-1 flex justify-center items-center flex-col content-center text-center -mt-20">
             {completed ? (
               <div>
-                <p className="text-center font-black text-xl mt-4 text-white">
+                <p className="text-center  text-xl  font-medium my-4 text-white">
                   {passedQuiz
                     ? "You Have Passed The Quiz 🎉"
                     : "You Have Failed The Quiz 😔 Try again"}
                 </p>
-                <p className="text-center mt -2">
+                <p className="text-center text-white text-base mt -2">
                   You scored{" "}
                   {
                     userAnswers.filter(
@@ -145,13 +145,13 @@ const Exam = () => {
                   }{" "}
                   out of {quizData.questions.length} questions.
                 </p>
-                <p className="text-center mt-2">
-                  Total Score:{" "}
+                <p className="text-center text-white text-base my-3">
+                  Total Score : {"  "}
                   {userAnswers.filter(
                     (answer, index) =>
                       answer === quizData.questions[index].correctAnswer
                   ).length * 10}{" "}
-                  out of {quizData.questions.length * 10}.
+                  out of {quizData.questions.length * 10}
                 </p>
               </div>
             ) : (
@@ -219,7 +219,7 @@ const Exam = () => {
               <div className="flex flex-col">
                 <button
                   onClick={exitFullScreen}
-                  className="bg-black text-white items-center justify-center content-center w-52 px-5 py-2 mt-1 mb-4 font-medium dark:bg-white dark:text-black"
+                  className=" text-white items-center justify-center content-center w-44 px-3 py-2 mt-1 mb-4 font-medium bg-teal-500"
                 >
                   Finish
                 </button>
