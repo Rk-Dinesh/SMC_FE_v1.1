@@ -1,4 +1,5 @@
-export const API = "http://localhost:3000";
+// export const API = "http://localhost:3000";
+export const API = "https://smc-mvc-v1-1.onrender.com";
 
 export function formatDate(dateString) {
     const date = new Date(dateString);
