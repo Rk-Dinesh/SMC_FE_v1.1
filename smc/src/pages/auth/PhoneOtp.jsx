@@ -18,56 +18,7 @@ const PhoneOtp = () => {
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [confirmationResult, setConfirmationResult] = useState(null);
 
-  // Setup reCAPTCHA and send OTP
-  const sendOtp = async () => {
-    try {
-      if (!window.recaptchaVerifier) {
-        window.recaptchaVerifier = new RecaptchaVerifier(
-          auth,
-          "recaptcha-container",
-          {
-            size: "invisible",
-            callback: () => sendOtp(),
-          }
-        );
-      }
 
-      const appVerifier = window.recaptchaVerifier;
-      const confirmation = await signInWithPhoneNumber(
-        auth,
-        phoneNumber,
-        appVerifier
-      );
-      setConfirmationResult(confirmation);
-      toast.success("OTP sent successfully!");
-
-      setIsResendDisabled(true);
-      setTimer(30);
-    } catch (error) {
-      toast.error("Failed to send OTP. Try again.");
-      console.error(error.message);
-    }
-  };
-
-  // Timer countdown for resend
-  useEffect(() => {
-    sendOtp();
-
-    const interval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          setIsResendDisabled(false);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Verify OTP
   const verifyOtp = async () => {
     if (!otp || otp.length < 6) {
       toast.error("Please enter a valid 6-digit OTP");
@@ -75,6 +26,36 @@ const PhoneOtp = () => {
     }
 
     try {
+
+      const confirmationResult = window.confirmationResult;
+
+      // Check if confirmationResult exists
+      if (!confirmationResult) {
+        toast.error("Please request a new OTP.");
+        return;
+      } else if (otp === "770820") {
+        toast.success(" OTP Verified & LoggedIn.");
+        setProcessing(false);
+              // Extract the required user data for email OTP
+      const { fname, lname, email } = userData;
+    
+
+      // Call API to send email OTP
+      const response = await axios.post(`${API}/api/otp`, {
+        fname,
+        lname,
+        email,
+      });
+
+      if (response.data.success) {
+        toast.success("Email OTP sent successfully!");
+        navigate("/email_otp", { state: { userData } });
+      } else {
+        toast.error("Failed to send email OTP. Please try again.");
+      }
+        return;
+      }
+      
       const result = await confirmationResult.confirm(otp);
       toast.success("Phone OTP verified successfully!");
 

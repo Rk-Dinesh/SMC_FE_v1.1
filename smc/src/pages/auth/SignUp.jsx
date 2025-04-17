@@ -10,6 +10,8 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { FaRegUser } from "react-icons/fa";
 import { PiEnvelope } from "react-icons/pi";
 import Logo from "../../assets/images/logo.png";
+import { auth } from "../../Firebase.Config";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 
 const UserSchema = yup.object().shape({
   fname: yup.string().required("First name is required"),
@@ -25,24 +27,20 @@ const SignUp = () => {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [processing, setProcessing] = useState(false);
 
-    useEffect(() => {
-      return () => {
-        if (window.recaptchaVerifier) {
-          window.recaptchaVerifier.clear();
-          delete window.recaptchaVerifier;
-        }
-      };
-    }, []);
+  useEffect(() => {
+    return () => {
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear();
+        delete window.recaptchaVerifier;
+      }
+    };
+  }, []);
 
   const getReferralCode = () => {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get("ref");
   };
 
-  const handlePhoneChange = (value,data) => {
-    setPhone(value);
-    setCountryCode(data.dialCode);
-  };
 
   const {
     register,
@@ -52,7 +50,29 @@ const SignUp = () => {
     resolver: yupResolver(UserSchema),
   });
 
-  const onSubmit = (data) => {
+  const handlePhoneChange = (value, data) => {
+    setPhone(value);
+    setCountryCode(data.dialCode);
+  };
+
+
+  const setUpRecaptcha = () => {
+    if (window.recaptchaVerifier) {
+      return;
+    }
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      auth,
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: (response) => {
+          console.log("reCAPTCHA verified");
+        },
+      }
+    );
+  };
+
+  const onSubmit = async (data) => {
     if (!isCheckboxChecked) {
       toast.error("Please accept the terms and privacy policies to continue.");
       return;
@@ -62,23 +82,56 @@ const SignUp = () => {
       toast.error("Please enter a valid phone number");
       return;
     }
-    const localPhone = phone.slice(countryCode.length);
-    const userData = {
-      ...data,
-      phone:localPhone,
-      countryCode: countryCode,
-      type: "free",
-      referralCode: getReferralCode(),
-    };
-    navigate("/phone_otp", { state: { userData } });
+    try {
+      const localPhone = phone.slice(countryCode.length);
+      const userData = {
+        ...data,
+        phone: localPhone,
+        countryCode: countryCode,
+        type: "free",
+        referralCode: getReferralCode(),
+      };
+      setUpRecaptcha();
+      const appVerifier = window.recaptchaVerifier;
+      const formattedPhone = phone.startsWith("+") ? phone : "+" + phone;
+
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        formattedPhone,
+        appVerifier
+      );
+      window.confirmationResult = confirmationResult;
+
+      toast.success("OTP sent successfully!");
+      navigate("/phone_otp", { state: { userData } });
+    } catch (error) {
+      console.error("Invalid sign-in process", error);
+
+      if (error.code === "auth/invalid-phone-number") {
+        toast.error(
+          "Invalid phone number format. Please enter a valid number."
+        );
+        setProcessing(false);
+      } else if (error.code === "auth/quota-exceeded") {
+        toast.error("SMS quota exceeded. Try again later.");
+        setProcessing(false);
+      } else if (error.code === "auth/billing-not-enabled") {
+        toast.error(
+          "Billing is not enabled in your Firebase project. Please enable it."
+        );
+        setProcessing(false);
+      } else {
+        setProcessing(false);
+        toast.error("Invalid sign-in process");
+      }
+    }
   };
 
   return (
     <div className="bg-popup-gray h-screen flex justify-center items-center font-poppins text-white">
       <div className="lg:w-[430px] md:w-[430px] min-w-[300px] mx-1 bg-darkgray px-4 py-1 flex flex-col justify-center shadow-black shadow-md rounded-lg">
-       
         <img src={Logo} alt="" className="px-3 py-3" />
-       
+
         <form className="z-0" onSubmit={handleSubmit(onSubmit)}>
           <p className="text-center text-2xl my-2">Signup!</p>
           <div className="flex flex-col gap-2 mx-4 my-2 font-extralight">
