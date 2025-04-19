@@ -9,6 +9,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 const GenerateCourse = () => {
   const languages = [
     { code: "en", name: "English" },
+    { code: "ar", name: "Arabic" },
     { code: "hi", name: "Hindi" }
   ];
   const navigate = useNavigate();
