@@ -8,6 +8,8 @@ import {
   FaLinkedinIn,
   FaYoutube,
 } from "react-icons/fa";
+import MessageContainer from "./MessageContainer";
+import MessageBar from "./MessageBar";
 
 const ViewProfile = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,7 +73,7 @@ const ViewProfile = () => {
             />
             <Search className="size-6 stroke-3" />
           </div>
-          <div className="px-4  bg-darkgray h-[870px] grid items-center  text-white text-center rounded-4xl">
+          {/* <div className="px-4  bg-darkgray h-[870px] grid items-center  text-white text-center rounded-4xl">
             <p className="my-2">01-Jan-2025</p>
             <div className=" mx-4  flex justify-center items-center gap-4">
               <span className="bg-popup-gray rounded-full px-2 py-2 text-lg">
@@ -108,7 +110,12 @@ const ViewProfile = () => {
                 className="w-full bg-white outline-none py-4 rounded-lg"
               />
             </p>
-          </div>
+          </div> */}
+          <div className="fixed top-0 h-[100vh]  bg-[#1c1d25] flex flex-col md:static md:flex-1">
+      
+      <MessageContainer />
+      <MessageBar />
+    </div>
         </div>
       </div>
     </div>

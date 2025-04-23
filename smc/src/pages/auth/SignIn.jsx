@@ -9,9 +9,11 @@ import { API } from "../../Host";
 import Logo from "../../assets/images/logo.png";
 import { auth } from "../../Firebase.Config";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { useAppStore } from "../../store";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const { setUserInfo } = useAppStore();
   const [phone, setPhone] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [processing, setProcessing] = useState(false);
@@ -73,6 +75,7 @@ const SignIn = () => {
       localStorage.setItem("type", res.data.userId.type);
       localStorage.setItem("userName", res.data.userName);
       localStorage.setItem("totalCourse", res.data.totalCourse);
+      setUserInfo(res.data.userId);
      
 
       setUpRecaptcha();
