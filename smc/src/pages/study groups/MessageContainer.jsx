@@ -20,11 +20,13 @@ const MessageContainer = () => {
     setIsDownloading,
   } = useAppStore();
   const messageEndRef = useRef(null);
+  const userId = localStorage.getItem("user");
 
   useEffect(() => {
     const getMessages = async () => {
       const response = await axios.post(`${API}/get-messages`,
         {
+          userId: userId,
           id: selectedChatData._id,
         },
       );
@@ -114,7 +116,7 @@ const MessageContainer = () => {
           <div
             className={`${
               message.sender !== selectedChatData._id
-                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                ? "bg-[#8417ff]/5 text-teal-500 border-teal-500"
                 : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
             } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
           >
@@ -125,7 +127,7 @@ const MessageContainer = () => {
           <div
             className={`${
               message.sender !== selectedChatData._id
-                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                ? "bg-[#8417ff]/5 text-teal-500 border-teal-500"
                 : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
             } border inline-block p-4 rounded my-1 lg:max-w-[50%] break-words`}
           >
@@ -179,7 +181,7 @@ const MessageContainer = () => {
           <div
             className={`${
               message.sender._id === userInfo.id
-                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                ? "bg-[#8417ff]/5 text-teal-500 border-teal-500"
                 : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
             } border inline-block p-4 rounded my-1 max-w-[50%] break-words ml-9`}
           >
@@ -190,7 +192,7 @@ const MessageContainer = () => {
           <div
             className={`${
               message.sender._id === userInfo.id
-                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                ? "bg-[#8417ff]/5 text-teal-500 border-teal-500"
                 : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
             } border inline-block p-4 rounded my-1 max-w-[50%] break-words ml-9`}
           >
@@ -259,7 +261,7 @@ const MessageContainer = () => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto scrollbar-hidden p-4 px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full">
+    <div className="flex-1 overflow-y-auto scrollbar-hidden p-4 px-8  w-full">
       {renderMessages()}
       <div ref={messageEndRef} />
       {showImage && (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "../../store";
 import axios from "axios";
-import { API } from "../../Host";
+import { API, formatDate, formatDate1 } from "../../Host";
 import IMG from "../../assets/images/courses.jpeg";
 
 const Chats = () => {
@@ -15,19 +15,24 @@ const Chats = () => {
     selectedChatData,
     setDirectMessagesContacts,
     directMessagesContacts,
+    userInfo,
+    channels,
+    setChannels,
   } = useAppStore();
 
-console.log(selectedChatData, "selectedChatData");
+
 
   useEffect(() => {
     const getContactsWithMessages = async () => {
-      const response = await axios.get(`${API}/get-contacts-for-list`);
+      const userId = localStorage.getItem("user");
+      const response = await axios.get(`${API}/get-contacts-for-list?userId=${userId}`);
+      console.log(response.data, "response.data");
       if (response.data.contacts) {
         setDirectMessagesContacts(response.data.contacts);
       }
     };
     getContactsWithMessages();
-  }, [setDirectMessagesContacts,isOpen]);
+  }, [setDirectMessagesContacts]);
   
   
 
@@ -55,12 +60,12 @@ console.log(selectedChatData, "selectedChatData");
   };
 
   const handleClick = (contact) => {
-    if (isChannel) setSelectedChatType("channel");
-    else setSelectedChatType("contact");
+    setSelectedChatType("contact");
     setSelectedChatData(contact);
     if (selectedChatData && selectedChatData._id !== contact._id) {
       setSelectedChatMessages([]);
     }
+    navigate("/view_profile");
   };
 
   return (
@@ -74,20 +79,9 @@ console.log(selectedChatData, "selectedChatData");
         </p>
       </div>
       <div className="mt-5">
-      {directMessagesContacts.map((contact) => (
-        <div
-          key={contact._id}
-          className={`pl-10 py-2  transition-all duration-300 cursor-pointer ${
-            selectedChatData && selectedChatData._id === contact._id
-              ? "bg-[#8417ff] hover:bg-[#8417ff]"
-              : "hover:bg-[#f1f1f111] "
-          }`}
-          onClick={() => handleClick(contact)}
-        >
-         
-        </div>
-      ))}
+
     </div>
+    {directMessagesContacts.map((contact) => (
       <div className="bg-darkgray text-white py-4 px-6 rounded-4xl flex justify-between shadow-lg w-full  mx-auto mt-4">
         <div className="flex  space-x-4">
           <img
@@ -96,23 +90,23 @@ console.log(selectedChatData, "selectedChatData");
             className="w-32 h-32 rounded-full border-4 border-teal-400"
           />
           <div className="py-4 px-2">
-            <h2 className="text-4xl font-light py-1 ">Vishnu Nair</h2>
+            <h2 className="text-3xl font-light py-1 ">{`${contact.firstName} ${contact.lastName}`}</h2>
             <p className="text-gray-300 ">
-              Lorem ipsum is dummy text for replacement of dummy text instead of
-              original text
+              {contact.about}
             </p>
           </div>
         </div>
         <div className="flex flex-col items-end">
-          <p className="text-sm text-gray-200 mb-8">06-Apr-2025, 10:30 AM</p>
+          <p className="text-sm text-gray-200 mb-8">{formatDate(contact.lastMessageTime)}</p>
           <p
-            onClick={() => navigate("/view_profile")}
+            onClick={() => handleClick(contact)}
             className=" cursor-pointer bg-teal-400 text-black px-6 py-1 rounded-md font-semibold hover:bg-cyan-300"
           >
             View
           </p>
         </div>
       </div>
+       ))}
 
       {isOpen && (
         <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">

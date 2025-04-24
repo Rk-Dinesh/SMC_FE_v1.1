@@ -30,7 +30,7 @@ const ViewProfile = () => {
             <p className="text-xl">Learner Since: 01-MAR-2025</p>
             <p className="text-xl">No Of Courses Studied: 25</p>
           </div>
-          <div className="px-2">
+          <div className="px-2 overflow-auto h-[300px] w-full">
             <p className=" px-2 text-sm">
               BIO: Lorem, ipsum dolor sit amet consectetur adipisicing elit.
               Fugit tenetur consectetur consequuntur recusandae cumque
@@ -39,12 +39,15 @@ const ViewProfile = () => {
               rerum odio, sit corporis nesciunt unde quam necessitatibus
               dignissimos ipsum doloribus nam est, quidem officia recusandae
               adipisci eveniet laudantium dolore nisi harum veniam ab? Impedit
-              non accusamus maxime? Facere, repudiandae illum sed voluptatibus
-              quisquam sequi veniam esse tenetur ipsam, vero ullam inventore
-              repellat ad nemo odio, omnis recusandae voluptates velit
-              architecto iusto quod distinctio magnam cumque unde! Quia
-              architecto quisquam esse perspiciatis, ad quidem libero iste ab
-              dignissimos consequatur.
+              non accusamus maxime? .
+              BIO: Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Fugit tenetur consectetur consequuntur recusandae cumque
+              cupiditate exercitationem esse possimus incidunt totam dolore quo
+              officiis architecto, neque fuga natus enim quisquam. Porro minima
+              rerum odio, sit corporis nesciunt unde quam necessitatibus
+              dignissimos ipsum doloribus nam est, quidem officia recusandae
+              adipisci eveniet laudantium dolore nisi harum veniam ab? Impedit
+              non accusamus maxime? .
             </p>
           </div>
           <div className=" px-3 py-1 w-full mt-8">
@@ -65,53 +68,9 @@ const ViewProfile = () => {
           </div>
         </div>
         <div className=" col-span-8">
-          <div className=" flex justify-between bg-darkgray rounded-lg  py-3 px-4 my-2 text-white">
-            <input
-              type="text"
-              className=" outline-0 placeholder:text-white placeholder:text-sm px-2"
-              placeholder="Search...."
-            />
-            <Search className="size-6 stroke-3" />
-          </div>
-          {/* <div className="px-4  bg-darkgray h-[870px] grid items-center  text-white text-center rounded-4xl">
-            <p className="my-2">01-Jan-2025</p>
-            <div className=" mx-4  flex justify-center items-center gap-4">
-              <span className="bg-popup-gray rounded-full px-2 py-2 text-lg">
-                VN
-              </span>
-              <p className="bg-popup-gray rounded-3xl px-4 py-4 text-sm font-light ">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corporis consectetur explicabo quia omnis aperiam. Quaerat
-                voluptates dolorem recusandae? Adipisci quidem quibusdam
-                suscipit doloribus, ab pariatur eius quaerat odio porro illum in
-                commodi molestiae neque alias aperiam eveniet maxime laborum
-                velit, debitis earum. Suscipit itaque, cupiditate corrupti illo
-                dicta molestiae dignissimos!
-                <span className="text-end py-2 px-2">12.05 AM</span>
-              </p>
-            </div>
+      
 
-            <div className=" mx-4 flex items-center gap-4">
-              <span className="bg-popup-gray rounded-full px-2 py-2 text-lg">
-                VN
-              </span>
-              <p className="bg-popup-gray rounded-3xl px-4 py-4 mx-6 w-full">
-                <img
-                  src={IMG}
-                  alt="Image"
-                  className="rounded-4xl p-2 w-full "
-                />
-              </p>
-            </div>
-            <p className="flex justify-between items-center mt-4 gap-4">
-              <span className="text-white text-4xl ml-6">+</span>
-              <input
-                type="text"
-                className="w-full bg-white outline-none py-4 rounded-lg"
-              />
-            </p>
-          </div> */}
-          <div className="fixed top-0 h-[100vh]  bg-[#1c1d25] flex flex-col md:static md:flex-1">
+          <div className="fixed top-0 h-[870px]  bg-darkgray flex flex-col md:static md:flex-1  rounded-4xl">
       
       <MessageContainer />
       <MessageBar />

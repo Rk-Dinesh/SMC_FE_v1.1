@@ -19,7 +19,7 @@ export function formatDate(dateString) {
     const ampm = hours >= 12 ? 'pm' : 'am';
     const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
   
-    return `${day} ${month} ${year} - ${formattedHours}:${minutes.toString().padStart(2, '0')}${ampm}`;
+    return `${day} ${month} ${year} , ${formattedHours}:${minutes.toString().padStart(2, '0')}${ampm}`;
   }
 
   export function formatDate1(isoDate) {
