@@ -84,6 +84,9 @@ const MessageContainer = () => {
     setDownloadProgress(0);
   };
 
+  console.log(selectedChatMessages, "selectedChatMessages");
+  
+
   const renderMessages = () => {
     let lastDate = null;
     return selectedChatMessages.map((message, index) => {
@@ -174,13 +177,13 @@ const MessageContainer = () => {
     return (
       <div
         className={`mt-5  ${
-          message.sender._id !== userInfo.id ? "text-left" : "text-right"
+          message.sender._id !== userId ? "text-left" : "text-right"
         }`}
       >
         {message.messageType === MESSAGE_TYPES.TEXT && (
           <div
             className={`${
-              message.sender._id === userInfo.id
+              message.sender._id === userId
                 ? "bg-[#8417ff]/5 text-teal-500 border-teal-500"
                 : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
             } border inline-block p-4 rounded my-1 max-w-[50%] break-words ml-9`}
@@ -191,7 +194,7 @@ const MessageContainer = () => {
         {message.messageType === MESSAGE_TYPES.FILE && (
           <div
             className={`${
-              message.sender._id === userInfo.id
+              message.sender._id === userId
                 ? "bg-[#8417ff]/5 text-teal-500 border-teal-500"
                 : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
             } border inline-block p-4 rounded my-1 max-w-[50%] break-words ml-9`}
@@ -227,25 +230,9 @@ const MessageContainer = () => {
             )}
           </div>
         )}
-        {message.sender._id !== userInfo.id ? (
+        {message.sender._id !== userId ? (
           <div className="flex items-center justify-start gap-3">
-            {/* <Avatar className="h-8 w-8">
-              {message.sender.image && (
-                <AvatarImage
-                  src={`${HOST}/${message.sender.image}`}
-                  alt="profile"
-                  className="rounded-full"
-                />
-              )}
-              <AvatarFallback
-                className={`uppercase h-8 w-8 flex ${getColor(
-                  message.sender.color
-                )} items-center justify-center rounded-full`}
-              >
-                {message.sender.firstName.split("").shift()}
-              </AvatarFallback>
-            </Avatar> */}
-            <span className="text-sm text-white/60">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
+            <span className="text-sm text-white/60">{`${message.sender.fname} ${message.sender.lname}`}</span>
 
             <div className="text-xs text-white/60">
               {moment(message.timestamp).format("LT")}

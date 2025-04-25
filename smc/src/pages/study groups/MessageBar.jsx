@@ -21,6 +21,7 @@ const MessageBar = () => {
   const [message, setMessage] = useState("");
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
   const socket = useSocket();
+  const userId = localStorage.getItem("user");
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -43,13 +44,11 @@ const MessageBar = () => {
   };
 
   const handleSendMessage = async () => {
-    console.log(selectedChatType, "selectedChatType");
-    console.log(userInfo, "userInfo");
     
     
     if (selectedChatType === "contact") {
       socket.emit("sendMessage", {
-        sender: userInfo._id,
+        sender: userId,
         content: message,
         recipient: selectedChatData._id,
         messageType: MESSAGE_TYPES.TEXT,
@@ -58,7 +57,7 @@ const MessageBar = () => {
       });
     } else if (selectedChatType === "channel") {
       socket.emit("send-channel-message", {
-        sender: userInfo._id,
+        sender: userId,
         content: message,
         messageType: MESSAGE_TYPES.TEXT,
         audioUrl: undefined,
@@ -88,7 +87,7 @@ const MessageBar = () => {
           setIsUploading(false);
           if (selectedChatType === "contact") {
             socket.emit("sendMessage", {
-              sender: userInfo.id,
+              sender: userId,
               content: undefined,
               recipient: selectedChatData._id,
               messageType: MESSAGE_TYPES.FILE,
@@ -97,7 +96,7 @@ const MessageBar = () => {
             });
           } else if (selectedChatType === "channel") {
             socket.emit("send-channel-message", {
-              sender: userInfo.id,
+              sender: userId,
               content: undefined,
               messageType: MESSAGE_TYPES.FILE,
               audioUrl: undefined,
@@ -124,7 +123,7 @@ const MessageBar = () => {
       <div className="flex-1 flex bg-[#2a2b33] rounded-md items-center gap-5 pr-5">
         <input
           type="text"
-          className="flex-1 p-5 bg-transparent rounded-md focus:border-none focus:outline-none"
+          className="flex-1 p-5 bg-transparent rounded-md focus:border-none focus:outline-none text-white"
           placeholder="Enter message"
           value={message}
           onChange={handleMessageChange}

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Search } from "lucide-react";
 import IMG from "../../assets/images/courses.jpeg";
 import PaginationBar from "../../components/PaginationBar";
+import MessageContainer from "./MessageContainer";
+import MessageBar from "./MessageBar";
 
 const ViewGroup = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -65,46 +67,11 @@ const ViewGroup = () => {
           </div>
         </div>
         <div className=" col-span-8">
-          <div className=" flex justify-between bg-darkgray rounded-lg  py-3 px-4 my-2 text-white">
-            <input
-              type="text"
-              className=" outline-0 placeholder:text-white placeholder:text-sm px-2"
-              placeholder="Search...."
-            />
-            <Search className="size-6 stroke-3" />
-          </div>
-          <div className="px-4  bg-darkgray h-[870px] grid items-center  text-white text-center rounded-4xl">
-            <p className="my-2">01-Jan-2025</p>
-            <p className=" mx-4  flex justify-center items-center gap-4">
-              <span className="bg-popup-gray rounded-full px-2 py-2 text-lg">
-                VN
-              </span>
-              <p className="bg-popup-gray rounded-3xl px-4 py-4 text-sm font-light ">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corporis consectetur explicabo quia omnis aperiam. Quaerat
-                voluptates dolorem recusandae? Adipisci quidem quibusdam
-                suscipit doloribus, ab pariatur eius quaerat odio porro illum in
-                commodi molestiae neque alias aperiam eveniet maxime laborum
-                velit, debitis earum. Suscipit itaque, cupiditate corrupti illo
-                dicta molestiae dignissimos!
-                <p className="text-end py-2 px-2">12.05 AM</p>
-              </p>
-             
-            </p>
-
-            <p className=" mx-4 flex items-center gap-4">
-              <span className="bg-popup-gray rounded-full px-2 py-2 text-lg">
-                VN
-              </span>
-              <p className="bg-popup-gray rounded-3xl px-4 py-4 mx-6 w-full">
-                <img src={IMG} alt="Image" className="rounded-4xl p-2 w-full " />
-              </p>
-            </p>
-            <p className="flex justify-between items-center mt-4 gap-4">
-                <span className="text-white text-4xl ml-6">+</span>
-                <input type="text"  className="w-full bg-white outline-none py-4 rounded-lg" />
-            </p>
-          </div>
+        <div className="fixed top-0 h-[870px]  bg-darkgray flex flex-col md:static md:flex-1  rounded-4xl">
+      
+      <MessageContainer />
+      <MessageBar />
+    </div>
         </div>
       </div>
     </div>

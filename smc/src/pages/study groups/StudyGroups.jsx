@@ -6,7 +6,7 @@ import { StudyGroupData } from "../../components/Data";
 import { useNavigate } from "react-router-dom";
 import { API, formatDate } from "../../Host";
 import axios from "axios";
-import MultiSelect from "../../components/multipleselect"; 
+import MultiSelect from "../../components/multipleselect";
 import { useAppStore } from "../../store";
 import { useSocket } from "../../Context/SocketContext";
 
@@ -17,13 +17,20 @@ const StudyGroups = () => {
   const totalItems = 30;
   const [isOpen, setIsOpen] = useState(false);
   const [allContacts, setAllContacts] = useState([]);
-  const [selectedContacts, setSelectedContacts] = useState([]); 
-  const [groupName, setGroupName] = useState({})
-  const [description, setDescription] = useState("")
+  const [selectedContacts, setSelectedContacts] = useState([]);
+  const [groupName, setGroupName] = useState({});
+  const [description, setDescription] = useState("");
   const { addChannel } = useAppStore();
   const socket = useSocket();
   const userId = localStorage.getItem("user");
-  const { channels, setChannels } = useAppStore();
+  const {
+    channels,
+    setChannels,
+    setSelectedChatType,
+    setSelectedChatData,
+    selectedChatData,
+    setSelectedChatMessages
+  } = useAppStore();
 
   useEffect(() => {
     const getData = async () => {
@@ -35,9 +42,11 @@ const StudyGroups = () => {
 
   useEffect(() => {
     const getChannels = async () => {
-      const response = await axios.get(`${API}/get-user-channels?userId=${userId}`, );
+      const response = await axios.get(
+        `${API}/get-user-channels?userId=${userId}`
+      );
       console.log(response.data, "response.data");
-      
+
       if (response.data.channels) {
         setChannels(response.data.channels);
       }
@@ -50,19 +59,25 @@ const StudyGroups = () => {
       userId: localStorage.getItem("user"),
       name: groupName,
       members: selectedContacts,
-      desc:description,
+      desc: description,
+    };
+
+    const response = await axios.post(`${API}/create-channel`, formData);
+
+    setIsOpen(false);
+    setSelectedContacts([]);
+    addChannel(response.data.channel);
+    socket.emit("add-channel-notify", response.data.channel);
+  };
+
+  const handleClick = (contact) => {
+    setSelectedChatType("channel");
+    setSelectedChatData(contact);
+    if (selectedChatData && selectedChatData._id !== contact._id) {
+      setSelectedChatMessages([]);
     }
-
-    const response = await axios.post(`${API}/create-channel`,formData);
-   
-      setIsOpen(false);
-      setSelectedContacts([]);
-      addChannel(response.data.channel);
-      socket.emit("add-channel-notify", response.data.channel);
-    //  navigate("/view_profile");
-   
-  }
-
+    navigate("/view_group");
+  };
 
   return (
     <>
@@ -95,10 +110,12 @@ const StudyGroups = () => {
                 <div className="col-span-4 mx-1 my-1 bg-darkgray pb-3 w-56 text-gray-200 rounded-4xl ">
                   <img src={IMG} alt="Course" className="rounded-4xl p-2" />
 
-                  < div className="text-sm font-light px-2" key={index}>
+                  <div className="text-sm font-light px-2" key={index}>
                     <p>{data.name}</p>
                     <p>
-                      <span className="pr-1">Date Created : {formatDate(data.createdAt)}</span>
+                      <span className="pr-1">
+                        Date Created : {formatDate(data.createdAt)}
+                      </span>
                       {data.date}
                     </p>
                     <p>
@@ -109,12 +126,14 @@ const StudyGroups = () => {
                       {data.creator}
                     </p>
                     <p>
-                      <span className="">No of Learners :{data.members.length}</span>
+                      <span className="">
+                        No of Learners :{data.members.length}
+                      </span>
                     </p>
                   </div>
                   <div className="flex gap-2 mt-4 justify-center">
                     <button
-                      onClick={() => navigate("/view_group")}
+                      onClick={() => handleClick(data)}
                       className=" cursor-pointer bg-teal-400 text-black px-6 py-0.5 rounded-sm text-sm "
                     >
                       View Group
@@ -150,21 +169,24 @@ const StudyGroups = () => {
               placeholder="Group Name"
               onChange={(e) => setGroupName(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-400 my-2"
-            /> <label htmlFor="group"> Description :</label>
+            />{" "}
+            <label htmlFor="group"> Description :</label>
             <input
               type="text"
               placeholder="Description"
               onChange={(e) => setDescription(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-400 my-2"
             />
-            <label htmlFor="contacts" className="my-2">Select Contacts:</label>
+            <label htmlFor="contacts" className="my-2">
+              Select Contacts:
+            </label>
             <MultiSelect
               options={allContacts}
               selectedOptions={selectedContacts}
               setSelectedOptions={setSelectedContacts}
             />
             <button
-             onClick={()=> createChannel()}
+              onClick={() => createChannel()}
               className=" w-full py-1.5  bg-teal-500 hover:bg-teal-900 transition-all duration-300 mt-4 rounded-xl"
             >
               Create Channel
@@ -177,4 +199,3 @@ const StudyGroups = () => {
 };
 
 export default StudyGroups;
-

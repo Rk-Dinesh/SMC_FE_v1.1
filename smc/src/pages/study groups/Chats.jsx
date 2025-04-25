@@ -14,6 +14,7 @@ const Chats = () => {
     setSelectedChatData,
     selectedChatData,
     setDirectMessagesContacts,
+    setSelectedChatMessages,
     directMessagesContacts,
     userInfo,
     channels,
