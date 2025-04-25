@@ -84,8 +84,7 @@ const MessageContainer = () => {
     setDownloadProgress(0);
   };
 
-  console.log(selectedChatMessages, "selectedChatMessages");
-  
+
 
   const renderMessages = () => {
     let lastDate = null;

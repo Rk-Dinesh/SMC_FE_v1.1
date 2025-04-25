@@ -27,7 +27,7 @@ const Chats = () => {
     const getContactsWithMessages = async () => {
       const userId = localStorage.getItem("user");
       const response = await axios.get(`${API}/get-contacts-for-list?userId=${userId}`);
-      console.log(response.data, "response.data");
+     
       if (response.data.contacts) {
         setDirectMessagesContacts(response.data.contacts);
       }
@@ -88,12 +88,12 @@ const Chats = () => {
           <img
             src={IMG}
             alt="Profile"
-            className="w-32 h-32 rounded-full border-4 border-teal-400"
+            className="w-28 h-28 rounded-full border-2 border-teal-400"
           />
           <div className="py-4 px-2">
-            <h2 className="text-3xl font-light py-1 ">{`${contact.firstName} ${contact.lastName}`}</h2>
+            <h2 className="text-2xl font-light py-1 ">{`${contact.firstName} ${contact.lastName}`}</h2>
             <p className="text-gray-300 ">
-              {contact.about}
+              {contact.about || "No Info available"}
             </p>
           </div>
         </div>

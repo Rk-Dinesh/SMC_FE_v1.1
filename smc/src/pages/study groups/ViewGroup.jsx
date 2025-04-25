@@ -6,9 +6,6 @@ import MessageContainer from "./MessageContainer";
 import MessageBar from "./MessageBar";
 
 const ViewGroup = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6);
-  const totalItems = 30;
 
   return (
     <div className="font-poppins ">
@@ -17,24 +14,27 @@ const ViewGroup = () => {
           <img src={IMG} alt="Course" className="rounded-4xl w-96 p-2 " />
 
           <div className="text-sm font-medium px-2 py-2">
-            <p>Group Name</p>
-            <p>
-              <span className="">
-                Description : Lorem ipsum, dolor sit amet consectetur
-                adipisicing elit. Earum a rerum minima cum ea ex autem quidem
-                ducimus, quam ipsam rem blanditiis, ut quasi doloremque placeat
-                velit doloribus? Maxime iure necessitatibus eligendi quibusdam
-                sint nostrum cumque, quo nihil earum et sequi optio quia ea
-                impedit fuga tempora amet vitae! Adipisci eaque deleniti
-                consectetur quidem ut, voluptates rem unde expedita provident
-                cupiditate iure ullam, architecto molestiae. Libero ex cum
-                necessitatibus magnam? Vitae suscipit facilis dolore! Alias
-                dolorem iusto numquam eum cumque deserunt molestiae atque
-                obcaecati, ipsam, rem sit debitis ducimus, soluta magni amet
-                commodi asperiores doloribus. Dolor dolore nobis maiores
-                perferendis?
-              </span>
+            <p className="mb-2">Group Name</p>
+            <div className="px-2 overflow-auto h-[300px] w-full text-sm">
+            <p >
+              BIO: Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Fugit tenetur consectetur consequuntur recusandae cumque
+              cupiditate exercitationem esse possimus incidunt totam dolore quo
+              officiis architecto, neque fuga natus enim quisquam. Porro minima
+              rerum odio, sit corporis nesciunt unde quam necessitatibus
+              dignissimos ipsum doloribus nam est, quidem officia recusandae
+              adipisci eveniet laudantium dolore nisi harum veniam ab? Impedit
+              non accusamus maxime? .
+              BIO: Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              Fugit tenetur consectetur consequuntur recusandae cumque
+              cupiditate exercitationem esse possimus incidunt totam dolore quo
+              officiis architecto, neque fuga natus enim quisquam. Porro minima
+              rerum odio, sit corporis nesciunt unde quam necessitatibus
+              dignissimos ipsum doloribus nam est, quidem officia recusandae
+              adipisci eveniet laudantium dolore nisi harum veniam ab? Impedit
+              non accusamus maxime? .
             </p>
+          </div>
           </div>
           <div className="px-2">
             <p>Group Details</p>

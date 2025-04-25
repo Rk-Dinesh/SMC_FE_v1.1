@@ -82,10 +82,9 @@ const StudyGroups = () => {
   return (
     <>
       <div className="font-poppins ">
-        <div className="text-white flex justify-between border-b pb-2 pl-2 border-white">
+        <div className="text-white text-nowrap flex  items-center border-b  pl-2 border-white">
           <p>My Study Groups</p>
-        </div>
-        <div className="flex justify-between items-center w-full px-2 mt-2">
+          <div className="flex justify-end items-center gap-2 w-full px-2 ">
           <div className=" flex justify-end items-center w-fit place-self-end border border-darkgray bg-darkgray rounded-full  py-2 px-3 my-2 text-white">
             <input
               type="text"
@@ -102,6 +101,8 @@ const StudyGroups = () => {
             + Create Group
           </button>
         </div>
+        </div>
+       
 
         <div className="flex justify-center ">
           <div className="grid grid-cols-12 ">
@@ -143,7 +144,7 @@ const StudyGroups = () => {
               ))}
           </div>
         </div>
-        <div className=" fixed bottom-6 right-0 left-0 py-2">
+        <div className="left-0 py-2">
           <PaginationBar
             currentPage={currentPage}
             itemsPerPage={itemsPerPage}
