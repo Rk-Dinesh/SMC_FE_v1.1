@@ -45,7 +45,7 @@ const StudyGroups = () => {
       const response = await axios.get(
         `${API}/get-user-channels?userId=${userId}`
       );
-      console.log(response.data, "response.data");
+     
 
       if (response.data.channels) {
         setChannels(response.data.channels);
@@ -105,10 +105,10 @@ const StudyGroups = () => {
        
 
         <div className="flex justify-center ">
-          <div className="grid grid-cols-12 ">
+          <div className="grid grid-cols-12 gap-2  ">
             {channels &&
               channels.map((data, index) => (
-                <div className="col-span-4 mx-1 my-1 bg-darkgray pb-3 w-56 text-gray-200 rounded-4xl ">
+                <div className="lg:col-span-4 md:col-span-6 col-span-6 mx-1 my-1 bg-darkgray pb-3 p-0.5  text-gray-200 rounded-4xl ">
                   <img src={IMG} alt="Course" className="rounded-4xl p-2" />
 
                   <div className="text-sm font-light px-2" key={index}>

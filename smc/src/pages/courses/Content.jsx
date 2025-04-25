@@ -783,7 +783,7 @@ const Content = () => {
           ))}
         </div>
         <p
-          className="text-center mt-3 mx-4 flex flex-row items-center text-base font-bold  text-black dark:text-white cursor-pointer"
+          className="text-center mt-3 mx-4 flex flex-row items-center text-base font-bold  text-white cursor-pointer"
           onClick={redirectExam}
         >
           {" "}

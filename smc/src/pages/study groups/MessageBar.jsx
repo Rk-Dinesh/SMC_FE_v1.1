@@ -128,7 +128,7 @@ const MessageBar = () => {
           value={message}
           onChange={handleMessageChange}
         />
-        <button
+        {/* <button
           className="text-neutral-300 focus:border-none focus:outline-none focus:text-white transition-all duration-300"
           onClick={handleAttachmentClick} // Trigger the file input click
         >
@@ -139,8 +139,8 @@ const MessageBar = () => {
           className="hidden" // Hide the file input element
           ref={fileInputRef}
           onChange={handleAttachmentChange} // Handle file selection
-        />
-        <div className="relative">
+        /> */}
+        {/* <div className="relative">
           <button
             className="text-neutral-300 focus:border-none focus:outline-none focus:text-white transition-all duration-300"
             onClick={() => setEmojiPickerOpen(true)}
@@ -155,7 +155,7 @@ const MessageBar = () => {
               autoFocusSearch={false}
             />
           </div>
-        </div>
+        </div> */}
       </div>
       <button
         className="bg-teal-500 rounded-md flex items-center justify-center p-5 gap-2 focus:border-none focus:outline-none hover:bg-teal-500 focus:bg-teal-500 transition-all duration-300 "

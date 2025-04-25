@@ -52,7 +52,7 @@ const ViewProfile = () => {
     <div className="font-poppins ">
       <div className="grid grid-cols-12 gap-4">
         {User && (
-          <div className="col-span-4 mx-1 my-1 bg-darkgray py-3 flex flex-col  items-center   text-gray-200 rounded-4xl ">
+          <div className="lg:col-span-4 md:col-span-5 col-span-12 mx-1 my-1 bg-darkgray py-3 flex flex-col  items-center   text-gray-200 rounded-4xl ">
             <img
               src={IMG}
               alt="Profile"
@@ -68,7 +68,7 @@ const ViewProfile = () => {
               </p>
               <p className="text-lg">No Of Courses Studied: {courses}</p>
             </div>
-            <div className="px-2 overflow-auto h-[300px] w-full">
+            <div className="px-2 overflow-auto max-h-[200px] h-fit w-full text-sm">
               <p className=" px-2 text-sm">
                 BIO: {User.about || "No Info available"}
               </p>
@@ -121,8 +121,8 @@ const ViewProfile = () => {
             </div>
           </div>
         )}
-        <div className=" col-span-8">
-          <div className="fixed top-0 h-[870px]  bg-darkgray flex flex-col md:static md:flex-1  rounded-4xl">
+        <div className=" lg:col-span-8 md:col-span-7 col-span-12">
+          <div className="lg:top-0 md:top-0  lg:h-[870px] md:h-[700px] h-[600px]  bg-darkgray flex flex-col md:static md:flex-1  rounded-4xl">
             <MessageContainer />
             <MessageBar />
           </div>

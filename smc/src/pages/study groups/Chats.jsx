@@ -82,9 +82,9 @@ const Chats = () => {
       <div className="mt-5">
 
     </div>
-    {directMessagesContacts.map((contact) => (
+    {directMessagesContacts && directMessagesContacts.map((contact) => (
       <div className="bg-darkgray text-white py-4 px-6 rounded-4xl flex justify-between shadow-lg w-full  mx-auto mt-4">
-        <div className="flex  space-x-4">
+        <div className="flex  space-x-4 items-center">
           <img
             src={IMG}
             alt="Profile"
@@ -97,7 +97,7 @@ const Chats = () => {
             </p>
           </div>
         </div>
-        <div className="flex flex-col items-end">
+        <div className="flex flex-col items-end ">
           <p className="text-sm text-gray-200 mb-8">{formatDate(contact.lastMessageTime)}</p>
           <p
             onClick={() => handleClick(contact)}
