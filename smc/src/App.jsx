@@ -31,6 +31,7 @@ import Subscription_Invoice from "./pages/profile/tabs/subscription/Subscription
 import Exam from "./pages/courses/Exam";
 import Chats from "./pages/study groups/Chats";
 import ViewProfile from "./pages/study groups/ViewProfile";
+import ViewGroupMembers from "./pages/study groups/ViewGroupMembers";
 
 export const ThemeContext = createContext();
 
@@ -74,6 +75,7 @@ const App = () => {
               <Route path="/exam" element={<Exam />} />
               <Route path="/study_group" element={<StudyGroups />} />
               <Route path="/chats" element={<Chats/>} />
+              <Route path="/viewmembers" element={<ViewGroupMembers/>} />
               <Route path="/view_profile" element={<ViewProfile />} />
               <Route path="/view_group" element={<ViewGroup />} />
               <Route path="/refer_dashboard" element={<ReferralDashboard />} />

@@ -165,7 +165,7 @@ const SignIn = () => {
                 {processing ? (
                   <span className="flex justify-center gap-3">
                     <AiOutlineLoading className="h-6 w-6 animate-spin" />
-                    <p>Logging In...</p>
+                    <p>Logging...</p>
                   </span>
                 ) : (
                   "Login"

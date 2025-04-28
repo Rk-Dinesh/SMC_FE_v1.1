@@ -128,7 +128,7 @@ const StudyGroups = () => {
                     </p>
                     <p>
                       <span className="">
-                        No of Learners :{data.members.length}
+                        No of Learners : {data.members.length}
                       </span>
                     </p>
                   </div>

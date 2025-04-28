@@ -6,9 +6,15 @@ import MessageContainer from "./MessageContainer";
 import MessageBar from "./MessageBar";
 import { useAppStore } from "../../store";
 import { formatDate } from "../../Host";
+import { useNavigate } from "react-router-dom";
 
 const ViewGroup = () => {
  const { selectedChatData } = useAppStore();
+ const navigate = useNavigate();
+
+ const handleClick = () => {
+  navigate("/viewmembers", { state: { channelId: selectedChatData._id } });
+};
  
   return (
     <div className="font-poppins ">
@@ -41,7 +47,7 @@ const ViewGroup = () => {
             </p>
           </div>
           <div className="grid px-2 py-1 gap-4 w-full">
-            <button className="bg-teal-400 text-black px-6 py-2 rounded-md text-sm ">
+            <button className="bg-teal-400 text-black px-6 py-2 rounded-md text-sm " onClick={handleClick}>
               View Members
             </button>
             <button className="border-2 border-white text-white px-6 py-2 rounded-md text-sm ">
