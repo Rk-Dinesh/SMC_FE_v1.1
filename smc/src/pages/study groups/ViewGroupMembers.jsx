@@ -27,13 +27,25 @@ const ViewGroupMembers = () => {
         getMembers();
       }, []);
 
-      const handleClick = (contact) => {
-        setSelectedChatType("contact");
-        setSelectedChatData(contact);
-        if (selectedChatData && selectedChatData._id !== contact._id) {
-          setSelectedChatMessages([]);
+      const handleClick = async(contact) => {
+        try {
+          const formData = {
+            userId: localStorage.getItem("user"),
+            contactId: contact._id,
+          }
+          const response = await axios.post(
+            `${API}/get-chat-id`, formData 
+          );
+       
+          
+          if (response.data.chat) {
+            setSelectedChatType("p2p");
+            setSelectedChatData(response.data.chat);
+            navigate("/view_profile");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
         }
-        navigate("/view_profile");
       };
 
   return (

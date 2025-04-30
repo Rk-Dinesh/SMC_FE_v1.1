@@ -64,6 +64,15 @@ const MessageBar = () => {
         fileUrl: undefined,
         channelId: selectedChatData._id,
       });
+    } else if (selectedChatType === "p2p") {
+      socket.emit("send-pvsp-message", {
+        sender: userId,
+        content: message,
+        messageType: MESSAGE_TYPES.TEXT,
+        audioUrl: undefined,
+        fileUrl: undefined,
+        P2PId: selectedChatData._id,
+      });
     }
     setMessage("");
   };
@@ -99,6 +108,15 @@ const MessageBar = () => {
               sender: userId,
               content: undefined,
               messageType: MESSAGE_TYPES.FILE,
+              audioUrl: undefined,
+              fileUrl: response.data.filePath,
+              channelId: selectedChatData._id,
+            });
+          } else if (selectedChatType === "p2p") {
+            socket.emit("send-pvsp-message", {
+              sender: userId,
+              content: message,
+              messageType: MESSAGE_TYPES.TEXT,
               audioUrl: undefined,
               fileUrl: response.data.filePath,
               channelId: selectedChatData._id,

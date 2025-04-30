@@ -15,7 +15,7 @@ import axios from "axios";
 import { API, formatDate } from "../../Host";
 
 const ViewProfile = () => {
-  const { selectedChatData } = useAppStore();
+  const { selectedChatData } = useAppStore(); 
   const [User, setUser] = useState({});
   const [courses, setCourses] = useState(0);
 
@@ -23,7 +23,7 @@ const ViewProfile = () => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          `${API}/api/getusersbyidchat?id=${selectedChatData._id}`
+          `${API}/api/getusersbyidchat?id=${selectedChatData.members[0]._id}`
         );
         setUser(response.data.user.user);
         setCourses(response.data.user.course);

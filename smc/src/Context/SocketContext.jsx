@@ -66,9 +66,33 @@ export const SocketProvider = ({ children }) => {
         addChannel(channel);
       };
 
+      const handleReceiveChatMessage = (message) => {
+        const {
+          selectedChatData,
+          selectedChatType,
+          addChatMessage,
+          addP2PInP2PLists,
+        } = useAppStore.getState();
+
+        if (
+          selectedChatType !== undefined &&
+          selectedChatData._id === message.P2PId
+        ) {
+          addChatMessage(message);
+        }
+        addP2PInP2PLists(message);
+      };
+
+      const addNewChatChannel = (p2p) => {
+        const { addP2P } = useAppStore.getState();
+        addP2P(p2p);
+      };
+
       socket.current.on("receiveMessage", handleReceiveMessage);
       socket.current.on("recieve-channel-message", handleReceiveChannelMessage);
       socket.current.on("new-channel-added", addNewChannel);
+      socket.current.on("recieve-chat-message", handleReceiveChatMessage);
+      socket.current.on("new-chat-added", addNewChatChannel);
 
       return () => {
         socket.current.disconnect();

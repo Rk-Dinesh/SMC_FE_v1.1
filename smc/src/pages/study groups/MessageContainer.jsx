@@ -24,12 +24,10 @@ const MessageContainer = () => {
 
   useEffect(() => {
     const getMessages = async () => {
-      const response = await axios.post(`${API}/get-messages`,
-        {
-          userId: userId,
-          id: selectedChatData._id,
-        },
-      );
+      const response = await axios.post(`${API}/get-messages`, {
+        userId: userId,
+        id: selectedChatData._id,
+      });
 
       if (response.data.messages) {
         setSelectedChatMessages(response.data.messages);
@@ -37,14 +35,24 @@ const MessageContainer = () => {
     };
     const getChannelMessages = async () => {
       const response = await axios.get(
-        `${API}/get-channel-messages/${selectedChatData._id}`,
+        `${API}/get-channel-messages/${selectedChatData._id}`
       );
+      if (response.data.messages) {
+        setSelectedChatMessages(response.data.messages);
+      }
+    };
+    const getChatMessages = async () => {
+      const response = await axios.get(
+        `${API}/get-chat-messages/${selectedChatData._id}`
+      );
+
       if (response.data.messages) {
         setSelectedChatMessages(response.data.messages);
       }
     };
     if (selectedChatData._id) {
       if (selectedChatType === "contact") getMessages();
+      else if (selectedChatType === "p2p") getChatMessages();
       else if (selectedChatType === "channel") getChannelMessages();
     }
   }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
@@ -84,8 +92,6 @@ const MessageContainer = () => {
     setDownloadProgress(0);
   };
 
-
-
   const renderMessages = () => {
     let lastDate = null;
     return selectedChatMessages.map((message, index) => {
@@ -102,6 +108,7 @@ const MessageContainer = () => {
           )}
           {selectedChatType === "contact" && renderPersonalMessages(message)}
           {selectedChatType === "channel" && renderChannelMessages(message)}
+          {selectedChatType === "p2p" && renderChatMessages(message)}
         </div>
       );
     });
@@ -232,6 +239,80 @@ const MessageContainer = () => {
         {message.sender._id !== userId ? (
           <div className="flex items-center justify-start gap-3">
             <span className="text-sm text-white/60">{`${message.sender.fname} ${message.sender.lname}`}</span>
+
+            <div className="text-xs text-white/60">
+              {moment(message.timestamp).format("LT")}
+            </div>
+          </div>
+        ) : (
+          <div className="text-xs text-white/60 mt-1">
+            {moment(message.timestamp).format("LT")}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderChatMessages = (message) => {
+    return (
+      <div
+        className={`mt-5  ${
+          message.sender._id !== userId ? "text-left" : "text-right"
+        }`}
+      >
+        {message.messageType === MESSAGE_TYPES.TEXT && (
+          <div
+            className={`${
+              message.sender._id === userId
+                ? "bg-[#8417ff]/5 text-teal-500 border-teal-500"
+                : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
+            } border inline-block p-4 rounded my-1 max-w-[50%] break-words mb-1`}
+          >
+            {message.content}
+          </div>
+        )}
+        {message.messageType === MESSAGE_TYPES.FILE && (
+          <div
+            className={`${
+              message.sender._id === userId
+                ? "bg-[#8417ff]/5 text-teal-500 border-teal-500"
+                : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
+            } border inline-block p-4 rounded my-1 max-w-[50%] break-words ml-9`}
+          >
+            {checkIfImage(message.fileUrl) ? (
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  setShowImage(true);
+                  setImageURL(message.fileUrl);
+                }}
+              >
+                <img
+                  src={`${HOST}/${message.fileUrl}`}
+                  alt=""
+                  height={300}
+                  width={300}
+                />
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-5">
+                <span className="text-white/80 text-3xl bg-black/20 rounded-full p-3">
+                  <MdFolderZip />
+                </span>
+                <span>{message.fileUrl.split("/").pop()}</span>
+                <span
+                  className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+                  onClick={() => downloadFile(message.fileUrl)}
+                >
+                  <IoMdArrowRoundDown />
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+        {message.sender._id !== userId ? (
+          <div className="flex items-center justify-start gap-3">
+            {/* <span className="text-sm text-white/60">{`${message.sender.fname} ${message.sender.lname}`}</span> */}
 
             <div className="text-xs text-white/60">
               {moment(message.timestamp).format("LT")}

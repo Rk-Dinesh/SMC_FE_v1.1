@@ -4,6 +4,7 @@ export const createChatSlice = (set, get) => ({
   selectedChatMessages: [],
   directMessagesContacts: [],
   channels: [],
+  p2p:[],
   isUploading: false,
   fileUploadProgress: 0,
   isDownloading: false,
@@ -15,6 +16,7 @@ export const createChatSlice = (set, get) => ({
   setSelectedChatType: (selectedChatType) => set({ selectedChatType }),
   setSelectedChatData: (selectedChatData) => set({ selectedChatData }),
   setChannels: (channels) => set({ channels }),
+  setP2p: (p2p) => set({ p2p }),
   setSelectedChatMessages: (selectedChatMessages) =>
     set({ selectedChatMessages }),
   setDirectMessagesContacts: (directMessagesContacts) =>
@@ -45,9 +47,33 @@ export const createChatSlice = (set, get) => ({
       ],
     });
   },
+  addChatMessage: (message) => {
+    const selectedChatMessages = get().selectedChatMessages;
+    const selectedChatType = get().selectedChatType;
+    set({
+      selectedChatMessages: [
+        ...selectedChatMessages,
+        {
+          ...message,
+          recipient:
+            selectedChatType === "p2p"
+              ? message.recipent
+              : message.recipient._id,
+          sender:
+            selectedChatType === "p2p"
+              ? message.sender
+              : message.sender._id,
+        },
+      ],
+    });
+  },
   addChannel: (channel) => {
     const channels = get().channels;
     set({ channels: [channel, ...channels] });
+  },
+  addP2P: (p2p) => {
+    const p2pList = get().p2p;
+    set({ p2p: [p2p, ...p2pList] });
   },
   addContactInDMContacts: (message) => {
     // console.log({ message });
@@ -81,6 +107,15 @@ export const createChatSlice = (set, get) => ({
     if (index !== -1 && index !== undefined) {
       channels.splice(index, 1);
       channels.unshift(data);
+    }
+  },
+  addP2PInP2PLists: (message) => {
+    const p2p = get().p2p;
+    const data = p2p.find((p2p) => p2p._id === message.p2pId);
+    const index = p2p.findIndex((p2p) => p2p._id === message.p2pId);
+    if (index !== -1 && index !== undefined) {
+      p2p.splice(index, 1);
+      p2p.unshift(data);
     }
   },
 });
