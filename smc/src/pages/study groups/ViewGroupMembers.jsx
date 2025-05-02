@@ -74,12 +74,21 @@ const ViewGroupMembers = () => {
                >
                  View Profile
                </p>
-               <p
-                 onClick={() => handleClick(contact)}
-                 className=" cursor-pointer border border-teal-400  w-34 text-center py-1 rounded-md font-semibold text-white"
-               >
-                 Chat
-               </p>
+               {localStorage.getItem("user") === contact._id ? (
+                <p
+                className=" cursor-pointer border border-teal-400  w-34 text-center py-1 rounded-md font-semibold text-white"
+              >
+                You
+              </p>
+               ):(
+                <p
+                onClick={() => handleClick(contact)}
+                className=" cursor-pointer border border-teal-400  w-34 text-center py-1 rounded-md font-semibold text-white"
+              >
+                Chat
+              </p>
+               )}
+              
              </div>
            </div>
             ))}

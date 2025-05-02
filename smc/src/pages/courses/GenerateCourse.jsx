@@ -10,7 +10,14 @@ const GenerateCourse = () => {
   const languages = [
     { code: "en", name: "English" },
     { code: "ar", name: "Arabic" },
-    { code: "hi", name: "Hindi" }
+    { code: "hi", name: "Hindi" },
+    { code: "ta", name: "Tamil" },
+    { code: "ml", name: "Malayalam" },
+    { code: "te", name: "Telugu" },
+    { code: "kn", name: "Kannada" },
+    { code: "mr", name: "Marathi" },
+    { code: "ur", name: "Urdu" },
+    { code: "gu", name: "Gujarati" }
   ];
   const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = useState("4");

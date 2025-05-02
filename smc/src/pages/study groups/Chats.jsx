@@ -8,6 +8,7 @@ import { useSocket } from "../../Context/SocketContext";
 
 const Chats = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [searchedContacts, setSearchedContacts] = useState([]);
   const [chat, setChat] = useState([])
   const userId = localStorage.getItem("user");
@@ -50,7 +51,7 @@ const Chats = () => {
       }
     };
     getChat();
-  }, [setP2p]);
+  }, [setP2p,loading]);
 
   const searchContacts = async (searchTerm) => {
     try {
@@ -91,7 +92,9 @@ const Chats = () => {
       setSelectedChatType("p2p");
       setSelectedChatData(response.data.chat);
       setSearchedContacts([]);
-      navigate("/view_profile");
+      setP2p([])
+      setLoading(true)
+      // navigate("/view_profile");
     } catch (error) {
       console.log(error);
       

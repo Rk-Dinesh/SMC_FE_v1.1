@@ -7,6 +7,7 @@ import { useAppStore } from "../../store";
 import { useSocket } from "../../Context/SocketContext";
 import { API, MESSAGE_TYPES } from "../../Host";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const MessageBar = () => {
   const emojiRef = useRef();
@@ -65,14 +66,25 @@ const MessageBar = () => {
         channelId: selectedChatData._id,
       });
     } else if (selectedChatType === "p2p") {
-      socket.emit("send-pvsp-message", {
-        sender: userId,
-        content: message,
-        messageType: MESSAGE_TYPES.TEXT,
-        audioUrl: undefined,
-        fileUrl: undefined,
-        P2PId: selectedChatData._id,
-      });
+      try {
+        socket.emit("send-pvsp-message", {
+          sender: userId,
+          content: message,
+          recipient: selectedChatData.members[0]._id,
+          messageType: MESSAGE_TYPES.TEXT,
+          audioUrl: undefined,
+          fileUrl: undefined,
+          P2PId: selectedChatData._id,
+        });
+        // toast.error("You are blocked");
+      } catch (error) {
+        socket.emit("chat-error", {
+          status: 403,
+          message: "You are blocked by this user",
+        });
+        toast.error("You are blocked");
+      }
+  
     }
     setMessage("");
   };

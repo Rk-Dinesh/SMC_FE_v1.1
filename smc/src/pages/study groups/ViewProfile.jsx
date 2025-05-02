@@ -13,11 +13,15 @@ import MessageBar from "./MessageBar";
 import { useAppStore } from "../../store";
 import axios from "axios";
 import { API, formatDate } from "../../Host";
+import { toast } from "react-toastify";
 
 const ViewProfile = () => {
-  const { selectedChatData } = useAppStore(); 
+  const { selectedChatData } = useAppStore();
   const [User, setUser] = useState({});
   const [courses, setCourses] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  console.log(selectedChatData, "blockedby");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -33,7 +37,7 @@ const ViewProfile = () => {
     };
 
     fetchUser();
-  }, []);
+  }, [loading]);
 
   const isValidUrl = (url) => {
     const pattern = new RegExp(
@@ -48,6 +52,40 @@ const ViewProfile = () => {
     return !!pattern.test(url);
   };
 
+  const blockUser = async () => {
+    try {
+      setLoading(true);
+      const formData = {
+        userId: localStorage.getItem("user"),
+        blockUserId: selectedChatData.members[0]._id,
+      };
+      const response = await axios.post(`${API}/api/blockuser`, formData);
+      toast.success("User Blocked Successfully");
+      history.back();
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error blocking user:", error);
+    }
+  };
+
+  const unBlockUser = async () => {
+    try {
+      setLoading(true);
+      const formData = {
+        userId: localStorage.getItem("user"),
+        unblockUserId: selectedChatData.members[0]._id,
+      };
+      const response = await axios.post(`${API}/api/unblockuser`, formData);
+      toast.success("User UnBlocked Successfully");
+      history.back();
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error blocking user:", error);
+    }
+  };
+
   return (
     <div className="font-poppins ">
       <div className="grid grid-cols-12 gap-4">
@@ -59,14 +97,16 @@ const ViewProfile = () => {
               className="w-32 h-32 rounded-full border-4 border-teal-400 mt-2"
             />
             <div className="text-center py-4 font-light ">
-              <p className="text-2xl">{`${User.fname} ${User.lname}`}</p>
+              <p className="text-2xl">
+                {`${User.fname} ${User.lname}` || "Name"}
+              </p>
               <p className="text-lg font-medium ">
                 Learner Since:{" "}
                 <span className="block text-lg">
-                  {formatDate(User.verifyTokenExpires)}
+                  {formatDate(User.verifyTokenExpires) || "No Info available"}
                 </span>
               </p>
-              <p className="text-lg">No Of Courses Studied: {courses}</p>
+              <p className="text-lg">No Of Courses Studied: {courses || 0}</p>
             </div>
             <div className="px-2 overflow-auto max-h-[200px] h-fit w-full text-sm">
               <p className=" px-2 text-sm">
@@ -74,9 +114,21 @@ const ViewProfile = () => {
               </p>
             </div>
             <div className=" px-3 py-1 w-full mt-8">
-              <p className="bg-teal-400 text-black px-6 py-3 text-center rounded-md text-lg font-normal">
-                Block Users
-              </p>
+              {selectedChatData.blockedBy === localStorage.getItem("user") ? (
+                <p
+                  className="bg-red-400 text-white px-6 py-3 text-center rounded-md text-lg font-normal"
+                  onClick={unBlockUser}
+                >
+                  Unblock User
+                </p>
+              ) : (
+                <p
+                  className="bg-teal-400 text-black px-6 py-3 text-center rounded-md text-lg font-normal"
+                  onClick={blockUser}
+                >
+                  Block User
+                </p>
+              )}
             </div>
             <div className="flex w-full px-5 items-center justify-center space-x-4 mt-8">
               {isValidUrl(User.facebook) && (
@@ -124,7 +176,18 @@ const ViewProfile = () => {
         <div className=" lg:col-span-8 md:col-span-7 col-span-12">
           <div className="lg:top-0 md:top-0  lg:h-[870px] md:h-[700px] h-[600px]  bg-darkgray flex flex-col md:static md:flex-1  rounded-4xl">
             <MessageContainer />
-            <MessageBar />
+            {selectedChatData.blockedBy === localStorage.getItem("user") ? (
+              <p className="text-center text-white text-lg mb-20">
+                You have Blocked the User!!!
+              </p>
+            ) : selectedChatData.members[0]._id ===
+              selectedChatData.blockedBy ? (
+              <p className="text-center text-white text-lg mb-20">
+                You have been Blocked!!!
+              </p>
+            ) : (
+              <MessageBar />
+            )}
           </div>
         </div>
       </div>

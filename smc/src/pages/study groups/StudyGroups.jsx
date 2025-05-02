@@ -22,14 +22,15 @@ const StudyGroups = () => {
   const [description, setDescription] = useState("");
   const { addChannel } = useAppStore();
   const socket = useSocket();
-  const userId = localStorage.getItem("user");
+  const userId = localStorage.getItem("user");  
+  const [loading, setLoading] = useState(false)
   const {
     channels,
     setChannels,
     setSelectedChatType,
     setSelectedChatData,
     selectedChatData,
-    setSelectedChatMessages
+    setSelectedChatMessages,
   } = useAppStore();
 
   useEffect(() => {
@@ -45,7 +46,6 @@ const StudyGroups = () => {
       const response = await axios.get(
         `${API}/get-user-channels?userId=${userId}`
       );
-     
 
       if (response.data.channels) {
         setChannels(response.data.channels);
@@ -55,6 +55,7 @@ const StudyGroups = () => {
   }, [setChannels]);
 
   const createChannel = async () => {
+    setLoading(true);
     const formData = {
       userId: localStorage.getItem("user"),
       name: groupName,
@@ -65,6 +66,7 @@ const StudyGroups = () => {
     const response = await axios.post(`${API}/create-channel`, formData);
 
     setIsOpen(false);
+    setLoading(false);
     setSelectedContacts([]);
     addChannel(response.data.channel);
     socket.emit("add-channel-notify", response.data.channel);
@@ -85,24 +87,23 @@ const StudyGroups = () => {
         <div className="text-white text-nowrap flex  items-center border-b  pl-2 border-white">
           <p>My Study Groups</p>
           <div className="flex justify-end items-center gap-2 w-full px-2 ">
-          <div className=" flex justify-end items-center w-fit place-self-end border border-darkgray bg-darkgray rounded-full  py-2 px-3 my-2 text-white">
-            <input
-              type="text"
-              className=" outline-0 placeholder:text-white placeholder:text-sm px-2"
-              placeholder="Search by group name"
-            />
-            <Search className="size-6 stroke-3" />
+            <div className=" flex justify-end items-center w-fit place-self-end border border-darkgray bg-darkgray rounded-full  py-2 px-3 my-2 text-white">
+              <input
+                type="text"
+                className=" outline-0 placeholder:text-white placeholder:text-sm px-2"
+                placeholder="Search by group name"
+              />
+              <Search className="size-6 stroke-3" />
+            </div>
+            <button
+              className="bg-teal-500 px-4 py-1.5 rounded-lg "
+              onClick={() => setIsOpen(true)}
+            >
+              {" "}
+              + Create Group
+            </button>
           </div>
-          <button
-            className="bg-teal-500 px-4 py-1.5 rounded-lg "
-            onClick={() => setIsOpen(true)}
-          >
-            {" "}
-            + Create Group
-          </button>
         </div>
-        </div>
-       
 
         <div className="flex justify-center ">
           <div className="grid grid-cols-12 gap-2  ">
@@ -190,7 +191,7 @@ const StudyGroups = () => {
               onClick={() => createChannel()}
               className=" w-full py-1.5  bg-teal-500 hover:bg-teal-900 transition-all duration-300 mt-4 rounded-xl"
             >
-              Create Channel
+             {loading ? "Creating..." : "Create Group"}
             </button>
           </div>
         </div>
