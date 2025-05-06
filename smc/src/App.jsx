@@ -13,11 +13,9 @@ import MyLinks from "./pages/Refer & Earn/MyLinks";
 import BankDetails from "./pages/Refer & Earn/BankDetails";
 import PayOutDetails from "./pages/Refer & Earn/PayOutDetails";
 import ReferralTerms from "./pages/Refer & Earn/ReferralTerms";
-import ViewGroup from "./pages/study groups/ViewGroup";
 import GenerateCourse from "./pages/courses/GenerateCourse";
 import ListTopics from "./pages/courses/ListTopics";
 import Content from "./pages/courses/Content";
-import StudyGroups from "./pages/study groups/StudyGroups";
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
 import PhoneOtp from "./pages/auth/PhoneOtp";
@@ -29,9 +27,12 @@ import SubscriptionPlans from "./pages/subscribtion/SubscriptionPlan";
 import ViewCertificate from "./pages/certificate/ViewCertificate";
 import Subscription_Invoice from "./pages/profile/tabs/subscription/Subscription_Invoice";
 import Exam from "./pages/courses/Exam";
-import Chats from "./pages/study groups/Chats";
-import ViewProfile from "./pages/study groups/ViewProfile";
-import ViewGroupMembers from "./pages/study groups/ViewGroupMembers";
+import StudyGroups from "./pages/study groups/studyGroup/StudyGroups";
+import ViewGroupMembers from "./pages/study groups/studyGroup/ViewGroupMembers";
+import ViewGroup from "./pages/study groups/studyGroup/ViewGroup";
+import Chats from "./pages/study groups/p2pChat/Chats";
+import ViewProfile from "./pages/study groups/p2pChat/ViewProfile";
+import CreateStudyGroup from "./pages/study groups/studyGroup/CreateStudyGroup";
 
 export const ThemeContext = createContext();
 
@@ -74,8 +75,9 @@ const App = () => {
               <Route path="/topics" element={<ListTopics />} />
               <Route path="/exam" element={<Exam />} />
               <Route path="/study_group" element={<StudyGroups />} />
-              <Route path="/chats" element={<Chats/>} />
-              <Route path="/viewmembers" element={<ViewGroupMembers/>} />
+              <Route path="/createStudyGroup" element={<CreateStudyGroup />} />
+              <Route path="/chats" element={<Chats />} />
+              <Route path="/viewmembers" element={<ViewGroupMembers />} />
               <Route path="/view_profile" element={<ViewProfile />} />
               <Route path="/view_group" element={<ViewGroup />} />
               <Route path="/refer_dashboard" element={<ReferralDashboard />} />

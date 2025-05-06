@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-import IMG from "../../assets/images/courses.jpeg";
-import PaginationBar from "../../components/PaginationBar";
-import { StudyGroupData } from "../../components/Data";
+import IMG from "../../../assets/images/courses.jpeg";
+import PaginationBar from "../../../components/PaginationBar";
 import { useNavigate } from "react-router-dom";
-import { API, formatDate } from "../../Host";
+import { API, formatDate } from "../../../Host";
 import axios from "axios";
-import MultiSelect from "../../components/multipleselect";
-import { useAppStore } from "../../store";
-import { useSocket } from "../../Context/SocketContext";
+import MultiSelect from "../../../components/multipleselect";
+import { useAppStore } from "../../../store";
+import { useSocket } from "../../../Context/SocketContext";
 
 const StudyGroups = () => {
   const navigate = useNavigate();
@@ -22,8 +21,8 @@ const StudyGroups = () => {
   const [description, setDescription] = useState("");
   const { addChannel } = useAppStore();
   const socket = useSocket();
-  const userId = localStorage.getItem("user");  
-  const [loading, setLoading] = useState(false)
+  const userId = localStorage.getItem("user");
+  const [loading, setLoading] = useState(false);
   const {
     channels,
     setChannels,
@@ -84,9 +83,9 @@ const StudyGroups = () => {
   return (
     <>
       <div className="font-poppins ">
-        <div className="text-white text-nowrap flex  items-center border-b  pl-2 border-white">
+        <div className="text-white text-nowrap flex  items-center border-b  pl-2 border-white lg:flex-nowrap md:flex-wrap flex-wrap">
           <p>My Study Groups</p>
-          <div className="flex justify-end items-center gap-2 w-full px-2 ">
+          <div className="flex lg:justify-end md:justify-end justify-center items-center gap-2 w-full px-2 flex-wrap mb-1 ">
             <div className=" flex justify-end items-center w-fit place-self-end border border-darkgray bg-darkgray rounded-full  py-2 px-3 my-2 text-white">
               <input
                 type="text"
@@ -97,7 +96,7 @@ const StudyGroups = () => {
             </div>
             <button
               className="bg-teal-500 px-4 py-1.5 rounded-lg "
-              onClick={() => setIsOpen(true)}
+              onClick={() => navigate("/createStudyGroup")}
             >
               {" "}
               + Create Group
@@ -109,7 +108,7 @@ const StudyGroups = () => {
           <div className="grid grid-cols-12 gap-2  ">
             {channels &&
               channels.map((data, index) => (
-                <div className="lg:col-span-4 md:col-span-6 col-span-6 mx-1 my-1 bg-darkgray pb-3 p-0.5  text-gray-200 rounded-4xl ">
+                <div className="lg:col-span-4 md:col-span-6 col-span-12 mx-1 my-1 bg-darkgray pb-3 p-0.5  text-gray-200 rounded-4xl ">
                   <img src={IMG} alt="Course" className="rounded-4xl p-2" />
 
                   <div className="text-sm font-light px-2" key={index}>
@@ -191,7 +190,7 @@ const StudyGroups = () => {
               onClick={() => createChannel()}
               className=" w-full py-1.5  bg-teal-500 hover:bg-teal-900 transition-all duration-300 mt-4 rounded-xl"
             >
-             {loading ? "Creating..." : "Create Group"}
+              {loading ? "Creating..." : "Create Group"}
             </button>
           </div>
         </div>

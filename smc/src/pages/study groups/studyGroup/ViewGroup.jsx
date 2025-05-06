@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Search } from "lucide-react";
-import IMG from "../../assets/images/courses.jpeg";
-import PaginationBar from "../../components/PaginationBar";
-import MessageContainer from "./MessageContainer";
-import MessageBar from "./MessageBar";
-import { useAppStore } from "../../store";
-import { API, formatDate } from "../../Host";
+import IMG from "../../../assets/images/courses.jpeg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import MessageContainer from "../MessageContainer";
+import MessageBar from "../MessageBar";
+import { useAppStore } from "../../../store";
+import { API, formatDate } from "../../../Host";
 
 const ViewGroup = () => {
   const { selectedChatData } = useAppStore();
@@ -56,15 +55,15 @@ const ViewGroup = () => {
 
   const selectNewContact = async (contact) => {
     setIsOpen(false);
-  
+
     const formData = {
       userId: contact._id,
       channelId: selectedChatData._id,
     };
-  
+
     try {
       const response = await axios.post(`${API}/invite-user`, formData);
-  
+
       toast.success("User Invited Successfully");
       setSearchedContacts([]);
       history.back();
@@ -77,7 +76,6 @@ const ViewGroup = () => {
       setSearchedContacts([]);
     }
   };
-  
 
   return (
     <>

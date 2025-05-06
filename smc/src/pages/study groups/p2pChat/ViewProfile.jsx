@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-import IMG from "../../assets/images/courses.jpeg";
+import IMG from "../../../assets/images/courses.jpeg";
 import {
   FaFacebookF,
   FaInstagram,
@@ -8,20 +8,18 @@ import {
   FaLinkedinIn,
   FaYoutube,
 } from "react-icons/fa";
-import MessageContainer from "./MessageContainer";
-import MessageBar from "./MessageBar";
-import { useAppStore } from "../../store";
 import axios from "axios";
-import { API, formatDate } from "../../Host";
+import { API, formatDate } from "../../../Host";
 import { toast } from "react-toastify";
+import MessageContainer from "../MessageContainer";
+import MessageBar from "../MessageBar";
+import { useAppStore } from "../../../store";
 
 const ViewProfile = () => {
   const { selectedChatData } = useAppStore();
   const [User, setUser] = useState({});
   const [courses, setCourses] = useState(0);
   const [loading, setLoading] = useState(false);
-
-  console.log(selectedChatData, "blockedby");
 
   useEffect(() => {
     const fetchUser = async () => {

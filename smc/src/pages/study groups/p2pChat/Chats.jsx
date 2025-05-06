@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppStore } from "../../store";
 import axios from "axios";
-import { API, formatDate, formatDate1 } from "../../Host";
-import IMG from "../../assets/images/courses.jpeg";
-import { useSocket } from "../../Context/SocketContext";
+import { API, formatDate, formatDate1 } from "../../../Host";
+import IMG from "../../../assets/images/courses.jpeg";
+import { useSocket } from "../../../Context/SocketContext";
+import { useAppStore } from "../../../store";
 
 const Chats = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [searchedContacts, setSearchedContacts] = useState([]);
-  const [chat, setChat] = useState([])
+  const [chat, setChat] = useState([]);
   const userId = localStorage.getItem("user");
   const socket = useSocket();
   const navigate = useNavigate();
@@ -23,26 +23,23 @@ const Chats = () => {
     directMessagesContacts,
     addP2P,
     p2p,
-    setP2p
-   
+    setP2p,
   } = useAppStore();
-
-
 
   // useEffect(() => {
   //   const getContactsWithMessages = async () => {
   //     const userId = localStorage.getItem("user");
   //     const response = await axios.get(`${API}/get-contacts-for-list?userId=${userId}`);
-     
+
   //     if (response.data.contacts) {
   //       setDirectMessagesContacts(response.data.contacts);
   //     }
   //   };
   //   getContactsWithMessages();
   // }, [setDirectMessagesContacts]);
-  
+
   useEffect(() => {
-    const getChat = async () => {      
+    const getChat = async () => {
       const response = await axios.get(
         `${API}/get-user-chats?userId=${userId}`
       );
@@ -51,7 +48,7 @@ const Chats = () => {
       }
     };
     getChat();
-  }, [setP2p,loading]);
+  }, [setP2p, loading]);
 
   const searchContacts = async (searchTerm) => {
     try {
@@ -76,30 +73,25 @@ const Chats = () => {
   //   navigate("/view_profile");
   // };
 
-  const selectNewContact = async(contact) => {
+  const selectNewContact = async (contact) => {
     setIsOpen(false);
     try {
       const formData = {
         userId: contact._id,
-        members:[
-          contact._id,
-          localStorage.getItem("user")
-        ]
-      }
-      const response =await axios.post(`${API}/create-chat`, formData) 
+        members: [contact._id, localStorage.getItem("user")],
+      };
+      const response = await axios.post(`${API}/create-chat`, formData);
       addP2P(response.data.chat);
-      socket.emit("add-chat-notify", response.data.chat);  
+      socket.emit("add-chat-notify", response.data.chat);
       setSelectedChatType("p2p");
       setSelectedChatData(response.data.chat);
       setSearchedContacts([]);
-      setP2p([])
-      setLoading(true)
+      setP2p([]);
+      setLoading(true);
       // navigate("/view_profile");
     } catch (error) {
       console.log(error);
-      
     }
-  
   };
 
   const handleClick = (contact) => {
@@ -121,35 +113,36 @@ const Chats = () => {
           + Add People
         </p>
       </div>
-      <div className="mt-5">
-
-    </div>
-    {p2p && p2p.map((contact) => (
-      <div className="bg-darkgray text-white py-4 px-6 rounded-4xl flex justify-between shadow-lg w-full  mx-auto mt-4">
-        <div className="flex  space-x-4 items-center">
-          <img
-            src={IMG}
-            alt="Profile"
-            className="w-28 h-28 rounded-full border-2 border-teal-400"
-          />
-          <div className="py-4 px-2">
-            <h2 className="text-2xl font-light py-1 ">{`${contact.members[0].fname} ${contact.members[0].lname}`}</h2>
-            <p className="text-gray-300 ">
-              {contact.members[0].about || "No Info available"}
-            </p>
+      <div className="mt-5"></div>
+      {p2p &&
+        p2p.map((contact) => (
+          <div className="bg-darkgray text-white py-4 px-6 rounded-4xl flex justify-between shadow-lg w-full  mx-auto mt-4">
+            <div className="flex  space-x-4 items-center">
+              <img
+                src={IMG}
+                alt="Profile"
+                className="w-28 h-28 rounded-full border-2 border-teal-400"
+              />
+              <div className="py-4 px-2">
+                <h2 className="text-2xl font-light py-1 ">{`${contact.members[0].fname} ${contact.members[0].lname}`}</h2>
+                <p className="text-gray-300 ">
+                  {contact.members[0].about || "No Info available"}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col items-end ">
+              <p className="text-sm text-gray-200 mb-8">
+                {formatDate(contact.updatedAt)}
+              </p>
+              <p
+                onClick={() => handleClick(contact)}
+                className=" cursor-pointer bg-teal-400 text-black px-6 py-1 rounded-md font-semibold hover:bg-cyan-300"
+              >
+                View
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col items-end ">
-          <p className="text-sm text-gray-200 mb-8">{formatDate(contact.updatedAt)}</p>
-          <p
-            onClick={() => handleClick(contact)}
-            className=" cursor-pointer bg-teal-400 text-black px-6 py-1 rounded-md font-semibold hover:bg-cyan-300"
-          >
-            View
-          </p>
-        </div>
-      </div>
-       ))}
+        ))}
 
       {isOpen && (
         <div className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50">
