@@ -47,6 +47,10 @@ const ViewGroupMembers = () => {
     }
   };
 
+  const handleNavigate = (contact) => {
+    navigate("/learnerProfile",{state : { userId: contact._id }});
+  }
+
   return (
     <div>
       {members &&
@@ -72,7 +76,7 @@ const ViewGroupMembers = () => {
             <div className="flex lg:flex-col md:flex-col flex-row  items-center gap-3 pt-4  ">
               {index === 0 && <p className="text-sm ">Group Admin</p>}
               <p
-                //onClick={() => handleClick(contact)}
+                onClick={() => handleNavigate(contact)}
                 className=" cursor-pointer bg-teal-400 text-black w-34 text-center  py-1 rounded-md font-semibold hover:bg-cyan-300"
               >
                 View Profile

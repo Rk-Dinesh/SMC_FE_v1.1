@@ -104,7 +104,7 @@ const StudyGroups = () => {
           </div>
         </div>
 
-        <div className="flex justify-center ">
+        <div className="flex justify-center mt-2 ">
           <div className="grid grid-cols-12 gap-2  ">
             {channels &&
               channels.map((data, index) => (

@@ -33,6 +33,7 @@ import ViewGroup from "./pages/study groups/studyGroup/ViewGroup";
 import Chats from "./pages/study groups/p2pChat/Chats";
 import ViewProfile from "./pages/study groups/p2pChat/ViewProfile";
 import CreateStudyGroup from "./pages/study groups/studyGroup/CreateStudyGroup";
+import ViewLearner from "./pages/study groups/studyGroup/ViewLearner";
 
 export const ThemeContext = createContext();
 
@@ -80,6 +81,7 @@ const App = () => {
               <Route path="/viewmembers" element={<ViewGroupMembers />} />
               <Route path="/view_profile" element={<ViewProfile />} />
               <Route path="/view_group" element={<ViewGroup />} />
+              <Route path="/learnerProfile" element={<ViewLearner />} />
               <Route path="/refer_dashboard" element={<ReferralDashboard />} />
               <Route path="/view_earning" element={<EarningView />} />
               <Route path="/my_links" element={<MyLinks />} />
