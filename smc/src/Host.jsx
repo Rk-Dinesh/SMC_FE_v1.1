@@ -1,9 +1,9 @@
-export const API = "http://localhost:3000";
-export const SOCKET_HOST = "http://localhost:3000"
-// export const API = "https://smc-mvc-v1-1.onrender.com";
-//export const SOCKET_HOST = "https://smc-mvc-v1-1.onrender.com"
-export const HOST = "http://localhost:5173";
-
+// export const API = "http://localhost:3000";
+// export const SOCKET_HOST = "http://localhost:3000"
+//export const HOST = "http://localhost:5173";
+export const API = "https://smc-mvc-v1-1.onrender.com";
+export const SOCKET_HOST = "https://smc-mvc-v1-1.onrender.com"
+export const HOST = "https://app.seekmycourse.com";
 
 export const MESSAGE_TYPES = {
   TEXT: "text",
