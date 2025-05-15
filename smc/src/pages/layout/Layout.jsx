@@ -271,6 +271,21 @@ const Layout = ({ setIsLoggedIn }) => {
 
       {/* Main Content */}
       <div className="w-full overflow-x-auto lg:mx-4 md:mx-4 mx-2 no-scrollbar">
+       
+        <Navbar />
+        <div className="lg:w-10/12 md:w-full lg:block md:block hidden  text-white text-base font-light overflow-auto ">
+          <p className=" absolute bottom-0 right-2   ">
+            Made With
+            <span className="text-red-600 px-1">
+              &#x2764;<span className="text-white  pl-1">Morpheus Code</span>
+            </span>
+          </p>
+        </div>
+        <div className="">
+          <Outlet />
+         
+        </div>
+        
         <Headers
           Menus={Menus}
           Setsubmenuopen={Setsubmenuopen}
@@ -279,21 +294,9 @@ const Layout = ({ setIsLoggedIn }) => {
           submenuopen1={submenuopen1}
           open1 = {open1}
         />
-        <Navbar />
-        <div className="lg:w-10/12 md:w-full w-full  text-white text-base font-light overflow-auto ">
-          <p className=" absolute bottom-0 right-2   ">
-            Made With
-            <span className="text-red-600 px-1">
-              &#x2764;<span className="text-white  pl-1">Morpheus Code</span>
-            </span>
-          </p>
-        </div>
-        {/* Content Area */}
-        <div className="">
-          {/* Outlet for nested routes */}
-          <Outlet />
-        </div>
+        
       </div>
+      
       {isLogOutModalOpen && (
         <LogOut
           handleCloseModal={handleCloseModal}

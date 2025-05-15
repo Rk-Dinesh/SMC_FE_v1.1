@@ -103,7 +103,7 @@ const Certificate = () => {
           </div>
         ))}
       </div>
-      <div className=" text-end fixed bottom-2 right-0">
+     
         <PaginationBar
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
@@ -111,7 +111,7 @@ const Certificate = () => {
           onItemsPerPageChange={setItemsPerPage}
           onPageChange={setCurrentPage}
         />
-      </div>
+   
     </div>
   );
 };
