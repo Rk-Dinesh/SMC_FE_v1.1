@@ -11,21 +11,38 @@ const Courses = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
-  const [courses, setCourses] = useState([]);
   const userId = localStorage.getItem("user");
   const navigate = useNavigate();
-  const itemsPerPage = 8;
+  const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentItems, setCurrentItems] = useState([]);
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(`${API}/api/courses?userId=${userId}`);
+        const response = await axios.get(`${API}/api/courseslimit`, {
+          params: {
+            userId: userId,
+            page: currentPage,
+            limit: itemsPerPage,
+            search: searchQuery, // Send search query to backend
+          },
+        });
+        const responseData = response.data.data;
 
-        setCourses(response.data);
-      } catch (error) {}
+        setCurrentItems(responseData); // Set current items directly
+        setTotalPages(response.data.metadata.totalPages); // Update total pages
+        setTotalItems(response.data.metadata.totalItems); // Update total items
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+        // Optionally, you can set an error state here to inform the user
+      }
     };
+
     fetchCourses();
-  }, []);
+  }, [userId, currentPage, itemsPerPage, searchQuery]);
+
   const handleCourse = (content, mainTopic, type, courseId, completed, end) => {
     const jsonData = JSON.parse(content);
     localStorage.setItem("courseId", courseId);
@@ -53,7 +70,7 @@ const Courses = () => {
     });
   };
 
-  const filteredCourses = courses
+  const filteredCourses = currentItems
     .filter((course) =>
       course.mainTopic.toLowerCase().includes(searchQuery.toLowerCase())
     )
@@ -63,10 +80,18 @@ const Courses = () => {
       return true;
     });
 
-  const paginatedCourses = filteredCourses.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  useEffect(() => {
+    if (searchQuery.trim() !== "") {
+      setCurrentPage(1); // Reset to the first page
+    }
+  }, [searchQuery]);
+
+  // Handle pagination
+  const paginate = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
 
   return (
     <div className="pb-8">
@@ -130,7 +155,7 @@ const Courses = () => {
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
-            setCurrentPage(1); // Reset to first page on new search
+            setCurrentPage(1);
           }}
         />
         <button className="text-white font-bold bg-black rounded-r-full pr-4 py-2">
@@ -139,7 +164,7 @@ const Courses = () => {
       </span>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12 gap-4 py-4 ">
-        {paginatedCourses.map((course, index) => (
+        {filteredCourses.map((course, index) => (
           <div
             key={index}
             className="col-span-3 bg-darkgray pb-2 text-white rounded-4xl"
@@ -200,10 +225,15 @@ const Courses = () => {
       </div>
 
       <PaginationBar
+        Length={currentItems.length}
         currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        paginate={paginate}
+        hasNextPage={currentPage < totalPages}
+        setItemsPerPage={setItemsPerPage}
+        setCurrentPage={setCurrentPage}
         itemsPerPage={itemsPerPage}
-        totalItems={filteredCourses.length}
-        onPageChange={setCurrentPage}
       />
     </div>
   );

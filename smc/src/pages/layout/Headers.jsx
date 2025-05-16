@@ -10,8 +10,18 @@ import axios from "axios";
 import { API } from "../../Host";
 import UpdateImage from "../profile/UpdateImage";
 import { MdArrowBackIos } from "react-icons/md";
+import LogOut from "../auth/LogOut";
+import DeleteAccount from "../auth/DeleteAccount";
 
-const Headers = ({}) => {
+const Headers = ({
+  setIsLoggedIn,
+  isLogOutModalOpen,
+  setLogOutModalOpen,
+  isDeleteModalOpen,
+  setDeleteModalOpen,
+  handleCloseModal,
+  handleDeleteCloseModal,
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const location = useLocation();
@@ -54,7 +64,7 @@ const Headers = ({}) => {
       }
     };
     fetchImage();
-  }, [userImage]);
+  }, []);
 
   const Menus = [
     { title: "Dashboard", to: "/dashboard" },
@@ -73,6 +83,10 @@ const Headers = ({}) => {
         {
           title: "My Study Groups",
           to: "/study_group",
+        },
+        {
+          title: "Create Study Groups",
+          to: "/createStudyGroup",
         },
         {
           title: "Chats",
@@ -120,12 +134,18 @@ const Headers = ({}) => {
     {
       title: "Delete Account",
       to: "#",
-      onClick: () => setDeleteModalOpen(true),
+      onClick: () => {
+        setDeleteModalOpen(true);
+        toggleDropdown();
+      },
     },
     {
       title: "Logout",
       to: "#",
-      onClick: () => setLogOutModalOpen(true),
+      onClick: () => {
+        setLogOutModalOpen(true);
+        toggleDropdown();
+      },
     },
     {
       title: "Terms & Conditions",
@@ -180,7 +200,7 @@ const Headers = ({}) => {
     <>
       <div className=" fixed bottom-0 w-full -mx-2">
         <hr className="w-full border-2 text-gray-400" />
-        <div className="flex justify-around items-center md:hidden lg:hidden bg-black">
+        <div className="flex justify-around items-center md:hidden lg:hidden bg-black py-1">
           <div
             className={`flex flex-col items-center  ${
               location.pathname && location.pathname.startsWith(`/dashboard`)
@@ -217,7 +237,10 @@ const Headers = ({}) => {
       {isDropdownOpen && (
         <div className="fixed overflow-auto w-full h-full  top-0  -mx-2 py-2 bg-darkgray text-gray-200 shadow-2xl lg:hidden md:hidden block  drop-shadow-2xl z-50 hover:">
           <div className="bg-black w-full p-3 -mt-2 ">
-            <MdArrowBackIos className="size-8 ml-2" onClick={() => toggleDropdown()}/>
+            <MdArrowBackIos
+              className="size-8 ml-2"
+              onClick={() => toggleDropdown()}
+            />
           </div>
           <div className=" flex gap-5 items-center mt-3 px-3">
             <div className=" flex flex-col items-center gap-2">
@@ -341,6 +364,18 @@ const Headers = ({}) => {
         </div>
       )}
       {isProfileModal && <UpdateImage CloseProfileModal={CloseProfileModal} />}
+      {isLogOutModalOpen && (
+        <LogOut
+          handleCloseModal={handleCloseModal}
+          setIsLoggedIn={setIsLoggedIn}
+        />
+      )}
+      {isDeleteModalOpen && (
+        <DeleteAccount
+          handleDeleteCloseModal={handleDeleteCloseModal}
+          setIsLoggedIn={setIsLoggedIn}
+        />
+      )}
     </>
   );
 };

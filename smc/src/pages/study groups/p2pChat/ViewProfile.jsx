@@ -20,17 +20,21 @@ const ViewProfile = () => {
   const [User, setUser] = useState({});
   const [courses, setCourses] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsLoading(true)
       try {
         const response = await axios.get(
           `${API}/api/getusersbyidchat?id=${selectedChatData.members[0]._id}`
         );
         setUser(response.data.user.user);
         setCourses(response.data.user.course);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setIsLoading(false);
       }
     };
 
@@ -84,6 +88,9 @@ const ViewProfile = () => {
     }
   };
 
+  if(isLoading){
+    return  <p className="fixed inset-0 z-30  backdrop-blur-sm flex justify-center items-center">Loading...</p>
+  }
   return (
     <div className="font-poppins ">
       <div className="grid grid-cols-12 gap-4">

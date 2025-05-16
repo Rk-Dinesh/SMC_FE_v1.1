@@ -115,23 +115,23 @@ const Chats = () => {
       </div>
       <div className="mt-5"></div>
       {p2p &&
-        p2p.map((contact) => (
-          <div className="bg-darkgray text-white py-4 px-6 rounded-4xl flex justify-between shadow-lg w-full  mx-auto mt-4">
+        p2p.map((contact,index) => (
+          <div className="bg-darkgray text-white py-3 px-6 rounded-4xl flex justify-between shadow-lg w-full  mx-auto mt-4" key={index}>
             <div className="flex  space-x-4 items-center">
               <img
                 src={IMG}
                 alt="Profile"
-                className="w-28 h-28 rounded-full border-2 border-teal-400"
+                className="lg:w-26 md:w-26 w-20 lg:h-26 md:h-26 h-20 rounded-full border-2 border-teal-400"
               />
               <div className="py-4 px-2">
-                <h2 className="text-2xl font-light py-1 ">{`${contact.members[0].fname} ${contact.members[0].lname}`}</h2>
-                <p className="text-gray-300 ">
+                <h2 className="lg:text-2xl md:text-2xl text-lg font-light py-1 ">{`${contact.members[0].fname} ${contact.members[0].lname}`}</h2>
+                <p className=" lg:text-xl md:text-xl text-base text-gray-300 ">
                   {contact.members[0].about || "No Info available"}
                 </p>
               </div>
             </div>
             <div className="flex flex-col items-end ">
-              <p className="text-sm text-gray-200 mb-8">
+              <p className="lg:text-base md:text-base  text-xs text-gray-200 mb-8">
                 {formatDate(contact.updatedAt)}
               </p>
               <p

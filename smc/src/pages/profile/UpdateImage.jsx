@@ -73,14 +73,14 @@ const UpdateImage = ({ CloseProfileModal }) => {
     <Modal>
       <div className="w-[530px] min-h-[330px] my-3 mx-8 font-extralight font-poppins">
         <p
-          className="text-end text-2xl font-medium"
+          className="text-end text-white text-2xl font-medium"
           onClick={() => CloseProfileModal()}
         >
           x
         </p>
-        <p className="mx-16 text-xl my-2">Choose Profile Image</p>
+        <p className="sm:mx-16 lg:text-xl md:text-xl text-lg text-center text-white my-2">Choose Profile Image</p>
 
-        <div className="relative mt-6 mx-16 bg-white  rounded-lg ">
+        <div className="relative mt-6 sm:mx-16  bg-white  rounded-lg ">
           <label className="block">
             <span className="sr-only">Choose File</span>
             <input
@@ -94,7 +94,7 @@ const UpdateImage = ({ CloseProfileModal }) => {
           </label>
           <button
               className="bg-gray-300 text-black px-4 py-2.5 rounded-md"
-              for="file-input"
+              htmlFor="file-input"
               onClick={openFileDialog}
             >
               Choose Files

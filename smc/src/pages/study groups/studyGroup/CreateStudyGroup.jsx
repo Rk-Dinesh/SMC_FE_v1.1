@@ -24,6 +24,7 @@ const CreateStudyGroup = () => {
   useEffect(() => {
     const getData = async () => {
       const response = await axios.get(`${API}/all-contacts`);
+      
 
       const allContacts = response.data.contacts.filter(
         (contact) => contact.value !== user

@@ -78,6 +78,7 @@ const SignInOtp = ({ setIsLoggedIn }) => {
           {phoneNumber}
         </p>
         <p className="py-2">Enter OTP</p>
+        <div className="flex justify-center items-center">
         <OtpInput
           value={otp}
           onChange={setOtp}
@@ -85,8 +86,8 @@ const SignInOtp = ({ setIsLoggedIn }) => {
           renderInput={(props) => <input {...props} />}
           inputStyle={{
             border: "2px solid White",
-            width: "55px",
-            height: "65px",
+            width: "45px",
+            height: "50px",
             borderRadius: "10px",
             margin: "8px",
             outline: "none",
@@ -95,6 +96,7 @@ const SignInOtp = ({ setIsLoggedIn }) => {
             color: "white",
           }}
         />
+        </div>
         <p className="text-end text-sm py-2">
           {isResendDisabled ? (
             `Resend in 00:${timer}s`

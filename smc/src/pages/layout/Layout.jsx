@@ -67,11 +67,11 @@ const Layout = ({ setIsLoggedIn }) => {
         //   icon: <BiBarChartAlt2 size={24} />,
         //   to: "/all_studygroup",
         // },
-        // {
-        //   title: "Create Study Groups",
-        //   icon: <FiLink size={24} />,
-        //   to: "/create_studygroup",
-        // },
+        {
+          title: "Create Study Groups",
+          icon: <FiLink size={24} />,
+          to: "/createStudyGroup",
+        },
         {
           title: "Chats",
           icon: <TbUnlink size={24} />,
@@ -281,18 +281,18 @@ const Layout = ({ setIsLoggedIn }) => {
             </span>
           </p>
         </div>
-        <div className="">
+        <div className="lg:mb-0 md:mb-0 mb-18">
           <Outlet />
-         
         </div>
         
         <Headers
-          Menus={Menus}
-          Setsubmenuopen={Setsubmenuopen}
-          submenuopen={submenuopen}
-          Setsubmenuopen1={Setsubmenuopen1}
-          submenuopen1={submenuopen1}
-          open1 = {open1}
+         isLogOutModalOpen={isLogOutModalOpen}
+         setLogOutModalOpen={setLogOutModalOpen}
+         isDeleteModalOpen={isDeleteModalOpen}
+         setDeleteModalOpen={setDeleteModalOpen}
+         handleCloseModal={handleCloseModal}
+         handleDeleteCloseModal={handleDeleteCloseModal} 
+         setIsLoggedIn={setIsLoggedIn} 
         />
         
       </div>

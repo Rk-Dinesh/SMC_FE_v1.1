@@ -12,8 +12,7 @@ import { useSocket } from "../../../Context/SocketContext";
 const StudyGroups = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6);
-  const totalItems = 30;
+  const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [allContacts, setAllContacts] = useState([]);
   const [selectedContacts, setSelectedContacts] = useState([]);
@@ -31,6 +30,10 @@ const StudyGroups = () => {
     selectedChatData,
     setSelectedChatMessages,
   } = useAppStore();
+  const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [currentItems, setCurrentItems] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -42,16 +45,22 @@ const StudyGroups = () => {
 
   useEffect(() => {
     const getChannels = async () => {
-      const response = await axios.get(
-        `${API}/get-user-channels?userId=${userId}`
-      );
-
-      if (response.data.channels) {
-        setChannels(response.data.channels);
-      }
+      const response = await axios.get(`${API}/get-user-channels`, {
+        params: {
+          userId: userId,
+          page: currentPage,
+          limit: itemsPerPage,
+          search: searchQuery, // Send search query to backend
+        },
+      });
+      const responseData = response.data.data;
+      setCurrentItems(responseData); // Set current items directly
+      setChannels(responseData);
+      setTotalPages(response.data.metadata.totalPages); // Update total pages
+      setTotalItems(response.data.metadata.totalItems); // Update total items
     };
     getChannels();
-  }, [setChannels]);
+  }, [setChannels, userId, currentPage, itemsPerPage, searchQuery]);
 
   const createChannel = async () => {
     setLoading(true);
@@ -80,6 +89,19 @@ const StudyGroups = () => {
     navigate("/view_group");
   };
 
+  useEffect(() => {
+    if (searchQuery.trim() !== "") {
+      setCurrentPage(1); // Reset to the first page
+    }
+  }, [searchQuery]);
+
+  // Handle pagination
+  const paginate = (pageNumber) => {
+    if (pageNumber > 0 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
   return (
     <>
       <div className="font-poppins ">
@@ -91,16 +113,14 @@ const StudyGroups = () => {
                 type="text"
                 className=" outline-0 placeholder:text-white placeholder:text-sm px-2"
                 placeholder="Search by group name"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1);
+                }}
               />
               <Search className="size-6 stroke-3" />
             </div>
-            <button
-              className="bg-teal-500 px-4 py-1.5 rounded-lg "
-              onClick={() => navigate("/createStudyGroup")}
-            >
-              {" "}
-              + Create Group
-            </button>
           </div>
         </div>
 
@@ -146,11 +166,15 @@ const StudyGroups = () => {
         </div>
         <div className="left-0 py-2">
           <PaginationBar
+            Length={currentItems.length}
             currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
+            totalPages={totalPages}
             totalItems={totalItems}
-            onItemsPerPageChange={setItemsPerPage}
-            onPageChange={setCurrentPage}
+            paginate={paginate}
+            hasNextPage={currentPage < totalPages}
+            setItemsPerPage={setItemsPerPage}
+            setCurrentPage={setCurrentPage}
+            itemsPerPage={itemsPerPage}
           />
         </div>
       </div>

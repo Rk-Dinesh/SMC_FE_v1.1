@@ -15,12 +15,12 @@ const ListTopics = () => {
 
   useEffect(() => {
     if (!jsonData) {
-      navigate("/create");
+      navigate("/generate_courses");
     }
   }, []);
 
   const redirectform = () => {
-    navigate("/create");
+    navigate("/generate_courses");
   };
 
   function redirectCourse() {

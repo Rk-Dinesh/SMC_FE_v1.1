@@ -2,51 +2,55 @@ import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const PaginationBar = ({
-  itemsPerPage = 6,
-  totalItems = 30,
-  currentPage = 1,
-  onItemsPerPageChange = () => {},
-  onPageChange = () => {},
+  Length,
+  currentPage,
+  totalPages,
+  totalItems, // Add this prop
+  paginate,
+  hasNextPage,
+  setItemsPerPage,
+  setCurrentPage,
+  itemsPerPage,
 }) => {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const start = (currentPage - 1) * itemsPerPage + 1;
-  const end = Math.min(start + itemsPerPage - 1, totalItems);
+  const firstIndex = (currentPage - 1) * itemsPerPage + 1;
+  const lastIndex = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
     <div className="flex items-center justify-end space-x-4   text-gray-100 px-4 py-2 rounded-md">
       <div className="flex items-center space-x-2">
         <span className="text-xs font-normal">Items per page</span>
         <select
-          className="bg-popup-gray border-2 border-gray-100 rounded px-2 py-1 text-sm outline-none"
+          id="itemsPerPage"
           value={itemsPerPage}
           onChange={(e) => {
-            onItemsPerPageChange(Number(e.target.value));
-            onPageChange(1); 
+            setItemsPerPage(Number(e.target.value));
+            setCurrentPage(1);
           }}
+          className=" bg-popup-gray border-2 border-gray-100 rounded px-2 py-1 text-sm outline-none"
         >
-          {[6, 10, 20].map((num) => (
-            <option key={num} value={num}>
-              {String(num).padStart(2, "0")}
-            </option>
-          ))}
+          {/* <option value="1">1</option> */}
+          <option value="8">8</option>
+          <option value="12">12</option>
+          <option value="16">16</option>
+          <option value="20">20</option>
         </select>
       </div>
       <span className="text-sm">
-        {String(start).padStart(2, "0")}–{String(end).padStart(2, "0")} of {totalItems}
+        {firstIndex} to {lastIndex} of {totalItems}
       </span>
 
       <div className="flex items-center ">
         <button
           className=" hover:bg-gray-700 rounded disabled:opacity-50"
+          onClick={() => paginate(currentPage - 1)}
           disabled={currentPage === 1}
-          onClick={() => onPageChange(currentPage - 1)}
         >
           <ChevronLeft size={30} />
         </button>
         <button
           className=" hover:bg-gray-700 rounded disabled:opacity-50"
-          disabled={currentPage === totalPages}
-          onClick={() => onPageChange(currentPage + 1)}
+          onClick={() => paginate(currentPage + 1)}
+          disabled={!hasNextPage}
         >
           <ChevronRight size={30} />
         </button>
