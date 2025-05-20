@@ -2,12 +2,13 @@ import { IoSend } from "react-icons/io5";
 import { GrAttachment } from "react-icons/gr";
 import { RiEmojiStickerLine } from "react-icons/ri";
 import EmojiPicker from "emoji-picker-react";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useAppStore } from "../../store";
 import { useSocket } from "../../Context/SocketContext";
 import { API, MESSAGE_TYPES } from "../../Host";
 import axios from "axios";
 import { toast } from "react-toastify";
+
 
 const MessageBar = () => {
   const emojiRef = useRef();
@@ -87,6 +88,7 @@ const MessageBar = () => {
   
     }
     setMessage("");
+  
   };
 
   const handleAttachmentChange = async (event) => {

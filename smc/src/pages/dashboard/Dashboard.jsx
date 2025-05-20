@@ -12,6 +12,8 @@ import axios from "axios";
 import { API } from "../../Host";
 import { useNavigate } from "react-router-dom";
 import Logo from '../../assets/images/Courses.jpeg'
+import { useAppStore } from "../../store";
+
 
 const allReferralData = [
   { month: "Jan", value: Math.floor(Math.random() * 100), date: "2025-01-01" },
@@ -73,11 +75,19 @@ const Dashboard = () => {
   const [recentcourses, setRecentcourses] = useState([]);
   const [timeRange, setTimeRange] = useState("This Month");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [userChannels, setUserChannels] = useState([])
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("user");
 
   const filteredReferrals = filterDataByRange(allReferralData, timeRange);
+
+   const {
+      setSelectedChatType,
+      setSelectedChatData,
+      selectedChatData,
+      setSelectedChatMessages,
+    } = useAppStore();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -89,8 +99,23 @@ const Dashboard = () => {
         console.error("Error fetching courses:", error);
       }
     };
+    const fetchChannels = async () => {
+      try {
+        const response = await axios.get(`${API}/get-user-channels`, {
+          params: {
+            userId: userId,
+          },
+        });
+
+        setUserChannels(response.data.data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
 
     fetchCourses();
+    fetchChannels()
   }, [timeRange]);
 
   const getLastMonthDateRange = () => {
@@ -170,26 +195,26 @@ const Dashboard = () => {
     },
   ];
 
-  const recentGroups = [
-    {
-      id: 1,
-      name: "Frontend Wizards",
-      learners: 12,
-      img: "https://images.unsplash.com/photo-1524321956859-97d9031fa723?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxtZXJuJTIwc3RhY2t8ZW58MHwwfHx8MTc0NDYzMTQ5OHww&ixlib=rb-4.0.3&q=80&w=1080",
-    },
-    {
-      id: 2,
-      name: "Backend Masters",
-      learners: 8,
-      img: "https://images.unsplash.com/photo-1524321956859-97d9031fa723?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxtZXJuJTIwc3RhY2t8ZW58MHwwfHx8MTc0NDYzMTQ5OHww&ixlib=rb-4.0.3&q=80&w=1080",
-    },
-    {
-      id: 3,
-      name: "React Champs",
-      learners: 15,
-      img: "https://images.unsplash.com/photo-1524321956859-97d9031fa723?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxtZXJuJTIwc3RhY2t8ZW58MHwwfHx8MTc0NDYzMTQ5OHww&ixlib=rb-4.0.3&q=80&w=1080",
-    },
-  ];
+  // const recentGroups = [
+  //   {
+  //     id: 1,
+  //     name: "Frontend Wizards",
+  //     learners: 12,
+  //     img: "https://images.unsplash.com/photo-1524321956859-97d9031fa723?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxtZXJuJTIwc3RhY2t8ZW58MHwwfHx8MTc0NDYzMTQ5OHww&ixlib=rb-4.0.3&q=80&w=1080",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Backend Masters",
+  //     learners: 8,
+  //     img: "https://images.unsplash.com/photo-1524321956859-97d9031fa723?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxtZXJuJTIwc3RhY2t8ZW58MHwwfHx8MTc0NDYzMTQ5OHww&ixlib=rb-4.0.3&q=80&w=1080",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "React Champs",
+  //     learners: 15,
+  //     img: "https://images.unsplash.com/photo-1524321956859-97d9031fa723?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w2MzQyNTB8MHwxfHNlYXJjaHwxfHxtZXJuJTIwc3RhY2t8ZW58MHwwfHx8MTc0NDYzMTQ5OHww&ixlib=rb-4.0.3&q=80&w=1080",
+  //   },
+  // ];
 
   const handleCourse = (content, mainTopic, type, courseId, completed, end) => {
     const jsonData = JSON.parse(content);
@@ -209,6 +234,15 @@ const Dashboard = () => {
         end: ending,
       },
     });
+  };
+
+  const handleClick = (contact) => {
+    setSelectedChatType("channel");
+    setSelectedChatData(contact);
+    if (selectedChatData && selectedChatData._id !== contact._id) {
+      setSelectedChatMessages([]);
+    }
+    navigate("/view_group");
   };
 
   return (
@@ -402,20 +436,21 @@ const Dashboard = () => {
         <div className="col-span-12 md:col-span-4">
           <p className="text-xl mb-4">Recent Active Study Groups</p>
           <div className="bg-darkgray p-4 rounded-xl h-[400px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {recentGroups && recentGroups.length > 0 ? (
-              recentGroups.map((group) => (
+            {userChannels && userChannels.length > 0 ? (
+              userChannels.slice(0,4).map((group) => (
                 <div
                   key={group.id}
                   className="flex items-center justify-start gap-4 mb-4 border-b border-white/20 pb-2"
+                  onClick={() => handleClick(group)}
                 >
                   <img
-                    src={group.img}
+                    src={Logo}
                     alt={group.name}
                     className="w-12 h-12 rounded-full object-cover"
                   />
                   <div>
                     <p className="font-medium">{group.name}</p>
-                    <p className="text-sm">No of Learners: {group.learners}</p>
+                    <p className="text-sm">No of Learners: {group.members.length}</p>
                   </div>
                 </div>
               ))
