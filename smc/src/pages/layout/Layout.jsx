@@ -84,39 +84,39 @@ const Layout = ({ setIsLoggedIn }) => {
         },
       ].filter(Boolean),
     },
-    {
-      title: "Refer & Earn",
-      icon: <RiTeamLine size={24} />,
-      submenu: true,
-      submenuItems: [
-        {
-          title: "Dashboard",
-          icon: <LayoutDashboard size={24} />,
-          to: "/refer_dashboard",
-        },
-        {
-          title: "My Earnings",
-          icon: <BiBarChartAlt2 size={24} />,
-          to: "/my_earnings",
-        },
-        { title: "My Links", icon: <FiLink size={24} />, to: "/my_links" },
-        {
-          title: "Bank Details",
-          icon: <TbUnlink size={24} />,
-          to: "/bank_details",
-        },
-        {
-          title: "Payout",
-          icon: <LayoutDashboard size={24} />,
-          to: "/payout_details",
-        },
-        {
-          title: "Referral Program Terms",
-          icon: <LayoutDashboard size={24} />,
-          to: "/referral_terms",
-        },
-      ].filter(Boolean),
-    },
+    // {
+    //   title: "Refer & Earn",
+    //   icon: <RiTeamLine size={24} />,
+    //   submenu: true,
+    //   submenuItems: [
+    //     {
+    //       title: "Dashboard",
+    //       icon: <LayoutDashboard size={24} />,
+    //       to: "/refer_dashboard",
+    //     },
+    //     {
+    //       title: "My Earnings",
+    //       icon: <BiBarChartAlt2 size={24} />,
+    //       to: "/my_earnings",
+    //     },
+    //     { title: "My Links", icon: <FiLink size={24} />, to: "/my_links" },
+    //     {
+    //       title: "Bank Details",
+    //       icon: <TbUnlink size={24} />,
+    //       to: "/bank_details",
+    //     },
+    //     {
+    //       title: "Payout",
+    //       icon: <LayoutDashboard size={24} />,
+    //       to: "/payout_details",
+    //     },
+    //     {
+    //       title: "Referral Program Terms",
+    //       icon: <LayoutDashboard size={24} />,
+    //       to: "/referral_terms",
+    //     },
+    //   ].filter(Boolean),
+    // },
     {
       title: "Help & Support",
       icon: <AiOutlineQuestionCircle size={24} />,

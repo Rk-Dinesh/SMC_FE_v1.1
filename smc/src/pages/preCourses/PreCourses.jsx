@@ -166,7 +166,7 @@ const PreCourses = () => {
             setCategory(e.target.value);
             setCurrentPage(1);
           }}
-          className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
+          className="text-black placeholder:text-black rounded-full px-4 py-2 bg-darkest-blue outline-none"
         >
           <option value="" disabled>
             Select Category
@@ -185,7 +185,7 @@ const PreCourses = () => {
             setSubCategory1(e.target.value);
             setCurrentPage(1);
           }}
-          className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
+          className="text-black placeholder:text-black rounded-full px-4 py-2 bg-darkest-blue outline-none"
         >
           <option value="" disabled>
             Select Sub Category 1
@@ -203,7 +203,7 @@ const PreCourses = () => {
             setSubCategory2(e.target.value);
             setCurrentPage(1);
           }}
-          className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
+          className="text-black placeholder:text-black rounded-full px-4 py-2 bg-darkest-blue outline-none"
         >
           <option value="" disabled>
             Select Sub Category 2
