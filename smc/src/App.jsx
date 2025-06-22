@@ -34,6 +34,8 @@ import Chats from "./pages/study groups/p2pChat/Chats";
 import ViewProfile from "./pages/study groups/p2pChat/ViewProfile";
 import CreateStudyGroup from "./pages/study groups/studyGroup/CreateStudyGroup";
 import ViewLearner from "./pages/study groups/studyGroup/ViewLearner";
+import PreCourses from "./pages/preCourses/PreCourses";
+import PreContent from "./pages/preCourses/PreContent";
 
 export const ThemeContext = createContext();
 
@@ -49,6 +51,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/content" element={<Content />} />
+            <Route path="/precontent" element={<PreContent />} />
             <Route path="" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route
@@ -89,6 +92,7 @@ const App = () => {
               <Route path="/payout_details" element={<PayOutDetails />} />
               <Route path="/referral_terms" element={<ReferralTerms />} />
               <Route path="/my_courses" element={<Courses />} />
+              <Route path="/pre_courses" element={<PreCourses />} />
               <Route path="/certificate" element={<Certificate />} />
               <Route path="/viewcertificate" element={<ViewCertificate />} />
               <Route path="/terms_conditions" element={<Terms_Conditions />} />

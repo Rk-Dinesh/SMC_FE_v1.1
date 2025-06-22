@@ -43,6 +43,11 @@ const Layout = ({ setIsLoggedIn }) => {
       to: "/my_courses",
     },
     {
+      title: "Pre Courses",
+      icon: <FaGraduationCap size={24} />,
+      to: "/pre_courses",
+    },
+    {
       title: "My Certificates",
       icon: <FaAward size={24} />,
       to: "/certificate",

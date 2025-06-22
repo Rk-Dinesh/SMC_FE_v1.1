@@ -26,7 +26,7 @@ const Courses = () => {
             userId: userId,
             page: currentPage,
             limit: itemsPerPage,
-            search: searchQuery, // Send search query to backend
+            search: searchQuery, 
           },
         });
         const responseData = response.data.data;
