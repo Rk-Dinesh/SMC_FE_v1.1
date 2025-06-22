@@ -166,14 +166,14 @@ const PreCourses = () => {
             setCategory(e.target.value);
             setCurrentPage(1);
           }}
-          className="text-black placeholder:text-black rounded-full px-4 py-2 bg-darkest-blue outline-none"
+          className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
         >
           <option value="" disabled>
             Select Category
           </option>
           <option value="">All</option>
           {options.map((cat) => (
-            <option key={cat.category} value={cat.category}>
+            <option key={cat.category} value={cat.category} className="text-black bg-white">
               {cat.category}
             </option>
           ))}
@@ -185,13 +185,13 @@ const PreCourses = () => {
             setSubCategory1(e.target.value);
             setCurrentPage(1);
           }}
-          className="text-black placeholder:text-black rounded-full px-4 py-2 bg-darkest-blue outline-none"
+          className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
         >
           <option value="" disabled>
             Select Sub Category 1
           </option>
           {options.map((cat) => (
-            <option key={cat.subCategory1} value={cat.subCategory1}>
+            <option key={cat.subCategory1} value={cat.subCategory1} className="text-black bg-white">   
               {cat.subCategory1}
             </option>
           ))}
@@ -203,13 +203,13 @@ const PreCourses = () => {
             setSubCategory2(e.target.value);
             setCurrentPage(1);
           }}
-          className="text-black placeholder:text-black rounded-full px-4 py-2 bg-darkest-blue outline-none"
+          className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
         >
           <option value="" disabled>
             Select Sub Category 2
           </option>
           {options.map((cat) => (
-            <option key={cat.subCategory2} value={cat.subCategory2}>
+            <option key={cat.subCategory2} value={cat.subCategory2} className="text-black bg-white">
               {cat.subCategory2}
             </option>
           ))}
