@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
 import { LayoutDashboard } from "lucide-react";
 import Navbar from "../../components/Navbar";
@@ -26,6 +26,8 @@ import { FaRupeeSign } from "react-icons/fa";
 import { BiBarChartAlt2 } from "react-icons/bi";
 import { FiLink } from "react-icons/fi";
 import { TbUnlink } from "react-icons/tb";
+import axios from "axios";
+import { API } from "../../Host";
 
 const Layout = ({ setIsLoggedIn }) => {
   const location = useLocation();
@@ -35,6 +37,43 @@ const Layout = ({ setIsLoggedIn }) => {
   const [submenuopen1, Setsubmenuopen1] = useState(false);
   const [isLogOutModalOpen, setLogOutModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [accessLevels, setAccessLevels] = useState({});
+  const type = localStorage.getItem("type");
+
+  useEffect(() => {
+    if (type !== "free") {
+      fetchSubscriptionStatus();
+    }
+  }, []);
+
+  const fetchSubscriptionStatus = async () => {
+    try {
+      if (type === "Pro") {
+        setAccessLevels({
+          preCourses: "Yes",
+          studyGroupAccess: "Yes",
+        });
+        return;
+      } else if (type === "free") {
+        setAccessLevels({
+          preCourses: "No",
+          studyGroupAccess: "No",
+        });
+        return;
+      } else {
+        const response = await axios.get(
+          `${API}/api/getsubscriptionplanbypackagename?packagename=${type}`
+        );
+        if (response.status === 200) {
+          setAccessLevels(response.data.data);
+         // console.log("Access Levels:", response.data.data);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching subscription status:", error);
+    }
+  };
+
   const Menus = [
     { title: "Dashboard", icon: <LayoutDashboard />, to: "/dashboard" },
     {
@@ -42,11 +81,15 @@ const Layout = ({ setIsLoggedIn }) => {
       icon: <FaGraduationCap size={24} />,
       to: "/my_courses",
     },
-    {
-      title: "Pre Courses",
-      icon: <FaGraduationCap size={24} />,
-      to: "/pre_courses",
-    },
+    ...(accessLevels.preCourses === "Yes"
+      ? [
+          {
+            title: "Pre Courses",
+            icon: <FaGraduationCap size={24} />,
+            to: "/pre_courses",
+          },
+        ]
+      : []),
     {
       title: "My Certificates",
       icon: <FaAward size={24} />,
@@ -57,33 +100,37 @@ const Layout = ({ setIsLoggedIn }) => {
       icon: <MdOutlineWeb size={24} />,
       to: "/generate_courses",
     },
-    {
-      title: "My Study Groups",
-      icon: <FaUsers size={24} />,
-      submenu1: true,
-      submenuItems1: [
-        {
-          title: "My Study Groups",
-          icon: <LayoutDashboard size={24} />,
-          to: "/study_group",
-        },
-        // {
-        //   title: "All Study Groups",
-        //   icon: <BiBarChartAlt2 size={24} />,
-        //   to: "/all_studygroup",
-        // },
-        {
-          title: "Create Study Groups",
-          icon: <FiLink size={24} />,
-          to: "/createStudyGroup",
-        },
-        {
-          title: "Chats",
-          icon: <TbUnlink size={24} />,
-          to: "/chats",
-        },
-      ].filter(Boolean),
-    },
+    ...(accessLevels.studyGroupAccess === "Yes"
+      ? [
+          {
+            title: "My Study Groups",
+            icon: <FaUsers size={24} />,
+            submenu1: true,
+            submenuItems1: [
+              {
+                title: "My Study Groups",
+                icon: <LayoutDashboard size={24} />,
+                to: "/study_group",
+              },
+              // {
+              //   title: "All Study Groups",
+              //   icon: <BiBarChartAlt2 size={24} />,
+              //   to: "/all_studygroup",
+              // },
+              {
+                title: "Create Study Groups",
+                icon: <FiLink size={24} />,
+                to: "/createStudyGroup",
+              },
+              {
+                title: "Chats",
+                icon: <TbUnlink size={24} />,
+                to: "/chats",
+              },
+            ].filter(Boolean),
+          },
+        ]
+      : []),
     // {
     //   title: "Refer & Earn",
     //   icon: <RiTeamLine size={24} />,
@@ -167,7 +214,7 @@ const Layout = ({ setIsLoggedIn }) => {
               <React.Fragment key={index}>
                 {menu.target ? (
                   <a
-                  className={`cursor-pointer `}
+                    className={`cursor-pointer `}
                     href={menu.target}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -176,7 +223,9 @@ const Layout = ({ setIsLoggedIn }) => {
                       <span className="bg-popup-gray px-1 py-1 rounded-lg text-white">
                         {menu.icon}
                       </span>
-                      <span className={`font-poppins text-lg duration-3 text-gray-300`}>
+                      <span
+                        className={`font-poppins text-lg duration-3 text-gray-300`}
+                      >
                         {menu.title}
                       </span>
                     </div>
@@ -276,32 +325,30 @@ const Layout = ({ setIsLoggedIn }) => {
 
       {/* Main Content */}
       <div className="w-full overflow-x-auto lg:mx-4 md:mx-4 mx-2 no-scrollbar">
-       
         <Navbar />
-        <div className="lg:w-10/12 md:w-full lg:block md:block hidden  text-white text-base font-light overflow-auto ">
+        {/* <div className="lg:w-10/12 md:w-full lg:block md:block hidden  text-white text-base font-light overflow-auto ">
           <p className=" absolute bottom-0 right-2   ">
             Made With
             <span className="text-red-600 px-1">
               &#x2764;<span className="text-white  pl-1">Morpheus Code</span>
             </span>
           </p>
-        </div>
+        </div> */}
         <div className="lg:mb-0 md:mb-0 mb-18">
           <Outlet />
         </div>
-        
+
         <Headers
-         isLogOutModalOpen={isLogOutModalOpen}
-         setLogOutModalOpen={setLogOutModalOpen}
-         isDeleteModalOpen={isDeleteModalOpen}
-         setDeleteModalOpen={setDeleteModalOpen}
-         handleCloseModal={handleCloseModal}
-         handleDeleteCloseModal={handleDeleteCloseModal} 
-         setIsLoggedIn={setIsLoggedIn} 
+          isLogOutModalOpen={isLogOutModalOpen}
+          setLogOutModalOpen={setLogOutModalOpen}
+          isDeleteModalOpen={isDeleteModalOpen}
+          setDeleteModalOpen={setDeleteModalOpen}
+          handleCloseModal={handleCloseModal}
+          handleDeleteCloseModal={handleDeleteCloseModal}
+          setIsLoggedIn={setIsLoggedIn}
         />
-        
       </div>
-      
+
       {isLogOutModalOpen && (
         <LogOut
           handleCloseModal={handleCloseModal}

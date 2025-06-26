@@ -14,7 +14,7 @@ import { AiFillHome } from "react-icons/ai";
 import { HiDownload } from "react-icons/hi";
 import { RiShareFill } from "react-icons/ri";
 import { BiSolidFilePdf } from "react-icons/bi";
-import html2pdf from 'html2pdf.js';
+import html2pdf from "html2pdf.js";
 
 // import robot from "../../assets/robot.png";
 import { motion } from "framer-motion";
@@ -23,14 +23,14 @@ import NotesWidget from "../../components/notesWidget";
 import { ThemeContext } from "../../App";
 
 const PreContent = () => {
-    const { global, setGlobal } = useContext(ThemeContext);
+  const { global, setGlobal } = useContext(ThemeContext);
   const [isOpen, setIsOpen] = useState(false);
   const [key, setkey] = useState("");
   const { state } = useLocation();
   const { mainTopic, type, courseId, end, pass, lang } = state || {};
 
   const jsonData = JSON.parse(localStorage.getItem("jsonData"));
- 
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [selected, setSelected] = useState("");
@@ -45,20 +45,56 @@ const PreContent = () => {
   const handleOnClose = () => setIsOpenDrawer(false);
   const [isAnimationVisible, setIsAnimationVisible] = useState(false);
   const user = localStorage.getItem("user");
+  const [accessLevels, setAccessLevels] = useState({});
+  const Substype = localStorage.getItem("type");
+
+  useEffect(() => {
+    if (type !== "free") {
+      fetchSubscriptionStatus();
+    }
+  }, []);
+
+   const fetchSubscriptionStatus = async () => {
+    try {
+      if (type === "Pro") {
+        setAccessLevels({
+          preCourses: "Yes",
+          studyGroupAccess: "Yes",
+          quizAccess: "Yes",
+        });
+        return;
+      } else if (type === "free") {
+        setAccessLevels({
+          preCourses: "No",
+          studyGroupAccess: "No",
+          quizAccess: "No",
+        });
+        return;
+      } else {
+        const response = await axios.get(
+          `${API}/api/getsubscriptionplanbypackagename?packagename=${type}`
+        );
+        if (response.status === 200) {
+          setAccessLevels(response.data.data);
+          //console.log("Access Levels:", response.data.data);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching subscription status:", error);
+    }
+  };
 
   const CountDoneTopics = () => {
     let doneCount = 0;
     let totalTopics = 0;
 
     jsonData[mainTopic.toLowerCase()].forEach((topic) => {
-
-        topic.subtopics.forEach((subtopic) => {
-
-            if (subtopic.done) {
-                doneCount++;
-            }
-            totalTopics++;
-        });
+      topic.subtopics.forEach((subtopic) => {
+        if (subtopic.done) {
+          doneCount++;
+        }
+        totalTopics++;
+      });
     });
     totalTopics = totalTopics + 1;
     // if(pass){
@@ -66,10 +102,10 @@ const PreContent = () => {
     // }
     const completionPercentage = Math.round((doneCount / totalTopics) * 100);
     setPercentage(completionPercentage);
-    if (completionPercentage >= '100') {
-        setIsCompleted(true);
+    if (completionPercentage >= "100") {
+      setIsCompleted(true);
     }
-}
+  };
 
   const [openTopics, setOpenTopics] = useState({});
 
@@ -89,64 +125,6 @@ const PreContent = () => {
     height: "250px",
     width: "100%",
   };
-
-  async function redirectExam() {
-    const id = toast.loading("Please wait...");
-    const mainTopicExam = jsonData[mainTopic.toLowerCase()];
-    let subtopicsString = "";
-    mainTopicExam.map((topicTemp) => {
-      let titleOfSubTopic = topicTemp.title;
-      subtopicsString = subtopicsString + " , " + titleOfSubTopic;
-    });
-
-    const postURL = API + "/api/aiexam";
-    const response = await axios.post(postURL, {
-      courseId,
-      mainTopic,
-      subtopicsString,
-      lang,
-    });
-    if (response.data.success) {
-      const element = document.documentElement; // or you can use a specific container if you want
-      if (element.requestFullscreen) {
-        element.requestFullscreen();
-      } else if (element.mozRequestFullScreen) {
-        // Firefox
-        element.mozRequestFullScreen();
-      } else if (element.webkitRequestFullscreen) {
-        // Chrome, Safari and Opera
-        element.webkitRequestFullscreen();
-      } else if (element.msRequestFullscreen) {
-        // IE/Edge
-        element.msRequestFullscreen();
-      } else {
-        console.error("Full-screen mode is not supported by this browser.");
-      }
-      let questions = JSON.parse(response.data.message);
-
-      
-      navigate("/exam", {
-        state: { topic: mainTopic, courseId: courseId, questions: questions },
-      });
-      toast.update(id, {
-        render: "Starting Quiz",
-        type: "success",
-        isLoading: false,
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-      });
-    } else {
-      toast.update(id, {
-        render: "Internal Server Error",
-        type: "error",
-        isLoading: false,
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-      });
-    }
-  }
 
   async function htmlDownload() {
     const id = toast.loading("Please wait exporting...");
@@ -310,35 +288,38 @@ const PreContent = () => {
   }
 
   async function finish() {
-    if (sessionStorage.getItem('first') === 'true') {
-        if (!end) {
-            const today = new Date();
-            const formattedDate = today.toLocaleDateString('en-GB');
-            navigate('/certificate', { state: { courseTitle: mainTopic, end: formattedDate } });
-        } else {
-            navigate('/certificate', { state: { courseTitle: mainTopic, end: end } });
-        }
-
+    if (sessionStorage.getItem("first") === "true") {
+      if (!end) {
+        const today = new Date();
+        const formattedDate = today.toLocaleDateString("en-GB");
+        navigate("/certificate", {
+          state: { courseTitle: mainTopic, end: formattedDate },
+        });
+      } else {
+        navigate("/certificate", {
+          state: { courseTitle: mainTopic, end: end },
+        });
+      }
     } else {
-        const dataToSend = {
-            courseId: courseId
-        };
-        try {
-            const postURL = API + '/api/finish';
-            const response = await axios.post(postURL, dataToSend);
-            if (response.data.success) {
-                const today = new Date();
-                const formattedDate = today.toLocaleDateString('en-GB');
-                sessionStorage.setItem('first', 'true');
-                sendEmail(formattedDate);
-            } else {
-                finish()
-            }
-        } catch (error) {
-            finish()
+      const dataToSend = {
+        courseId: courseId,
+      };
+      try {
+        const postURL = API + "/api/finish";
+        const response = await axios.post(postURL, dataToSend);
+        if (response.data.success) {
+          const today = new Date();
+          const formattedDate = today.toLocaleDateString("en-GB");
+          sessionStorage.setItem("first", "true");
+          sendEmail(formattedDate);
+        } else {
+          finish();
         }
+      } catch (error) {
+        finish();
+      }
     }
-}
+  }
 
   async function sendEmail(formattedDate) {
     const userName = localStorage.getItem("fname");
@@ -578,7 +559,6 @@ const PreContent = () => {
     CountDoneTopics();
     localStorage.setItem("jsonData", JSON.stringify(jsonData));
 
-    
     const dataToSend = {
       content: JSON.stringify(jsonData),
       courseId: courseId,
@@ -782,14 +762,19 @@ const PreContent = () => {
             </div>
           ))}
         </div>
-        <p
+        {accessLevels && accessLevels.quizAccess === "Yes" ? (
+           <p
           className="text-center mt-3 mx-4 flex flex-row items-center text-base font-bold  text-white cursor-pointer"
-          onClick={redirectExam}
+          onClick={() =>
+            navigate("/pre_exam", { state: { courseId: courseId } })
+          }
         >
           {" "}
           {mainTopic} Quiz
           {pass === true ? <FaCheck className="ml-2" size={12} /> : <></>}
         </p>
+        ): null}
+       
       </>
     );
   };
@@ -797,7 +782,11 @@ const PreContent = () => {
   return (
     <>
       {!mainTopic ? null : (
-        <div className={`flex flex-col h-screen  text-white lg:mt-0 md:mt-0  bg-black ${isSidebarOpen ? "mt-0" : "mt-8"}`}>
+        <div
+          className={`flex flex-col h-screen  text-white lg:mt-0 md:mt-0  bg-black ${
+            isSidebarOpen ? "mt-0" : "mt-8"
+          }`}
+        >
           <div className="flex flex-row overflow-y-auto  ">
             <div
               className={`${
@@ -839,7 +828,9 @@ const PreContent = () => {
                           style={{ width: `${percentage}%` }}
                         ></div>
                       </div>
-                      <p className="mx-6 mt-0.5 text-sm whitespace-nowrap">Completion status</p>
+                      <p className="mx-6 mt-0.5 text-sm whitespace-nowrap">
+                        Completion status
+                      </p>
                     </span>
                   )}
                 </div>
@@ -851,13 +842,16 @@ const PreContent = () => {
                       color={"#31C48D"}
                     />
                   </div>
-               
-                  <div className="flex gap-2 items-center" onClick={htmlDownload}>
-                    <BiSolidFilePdf
-                      size={30}
-                      color={"#31C48D"}
-                    />
-                    <span className="lg:block md:block hidden"> Export Course as PDF</span>
+
+                  <div
+                    className="flex gap-2 items-center"
+                    onClick={htmlDownload}
+                  >
+                    <BiSolidFilePdf size={30} color={"#31C48D"} />
+                    <span className="lg:block md:block hidden">
+                      {" "}
+                      Export Course as PDF
+                    </span>
                   </div>
                 </div>
               </nav>

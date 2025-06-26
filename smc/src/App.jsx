@@ -36,6 +36,7 @@ import CreateStudyGroup from "./pages/study groups/studyGroup/CreateStudyGroup";
 import ViewLearner from "./pages/study groups/studyGroup/ViewLearner";
 import PreCourses from "./pages/preCourses/PreCourses";
 import PreContent from "./pages/preCourses/PreContent";
+import PreExam from "./pages/preCourses/PreExam";
 
 export const ThemeContext = createContext();
 
@@ -78,6 +79,7 @@ const App = () => {
               <Route path="/generate_courses" element={<GenerateCourse />} />
               <Route path="/topics" element={<ListTopics />} />
               <Route path="/exam" element={<Exam />} />
+              <Route path="/pre_exam" element={<PreExam />} />
               <Route path="/study_group" element={<StudyGroups />} />
               <Route path="/createStudyGroup" element={<CreateStudyGroup />} />
               <Route path="/chats" element={<Chats />} />

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import Logo from "../../assets/images/logo.png";
 import { data, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,39 +8,40 @@ import { ThemeContext } from "../../App";
 
 const SubscriptionPlans = () => {
   const {global,setGlobal} = useContext(ThemeContext);
+  const [SubscriptionPlans, setSubscriptionPlans] = useState([]);
   const navigate = useNavigate();
   const handleSelect = () => {
     navigate("/dashboard");
     toast.success("Welcome To SeekMyCourse!");
   };
 
-  const handlebasicPayment = () => {
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+const fetchCourses = async () => {
+  try {
+    const response = await axios.get(`${API}/api/getsubscriptionplan`);
+    setSubscriptionPlans(response.data.plans);
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+  }
+};
+
+  const handlebasicPayment = ({amount, duration, plan, course, subtopics}) => {
     const dataToSend = {
       paymentMethod: "razorpay",
-      amount: "999",
+      amount: amount,
       currency: "INR",
-      duration: "1 Year",
-      plan: "Basic",
-      course: 10,
-      subtopics: 10,
+      duration: duration,
+      plan: plan,
+      course: course,
+      subtopics: subtopics,
     };
 
     onSubmit(dataToSend);
   };
 
-  const handleProPayment = () => {
-    const dataToSend = {
-      paymentMethod: "razorpay",
-      amount: "1999",
-      currency: "INR",
-      duration: "1 Year",
-      plan: "Pro",
-      course: 25,
-      subtopics: 10,
-    };
-
-    onSubmit(dataToSend);
-  };
 
   const onSubmit = async (data) => {
     const { amount, currency, plan, course, subtopics ,duration} = data;
@@ -152,7 +153,7 @@ const SubscriptionPlans = () => {
           <img src={Logo} alt="logo Image" className="w-1/4"  />
         </p>
 
-        <div className="flex lg:flex-row md:flex-row flex-col justify-center  gap-6 text-white lg:h-9/12 md:h-9/12 lg:mx-0 md:mx-0 mx-6 ">
+        <div className="flex lg:flex-row md:flex-row flex-col justify-center  gap-4 text-white lg:h-9/12 md:h-9/12 lg:mx-0 md:mx-0 mx-6 ">
           <div className=" bg-darkgray border-2 border-gray-100 rounded-4xl  shadow-md p-4 h-auto ">
             <h2 className="text-teal-400 text-2xl font-medium m-1.5">
               Starter
@@ -176,55 +177,40 @@ const SubscriptionPlans = () => {
               </ul>
             </div>
           </div>
-
-          <div className=" bg-teal-400 text-black rounded-4xl  shadow-md p-4">
-            <h2 className="text-black text-2xl font-medium m-2">Basic</h2>
+             {SubscriptionPlans && SubscriptionPlans.map((plan, index) => ( 
+          <div className=" bg-teal-400 text-black rounded-4xl  shadow-md p-4" key={index}>
+            <h2 className="text-black text-2xl font-medium m-2">{plan.packagename}</h2>
             <div className="grid  items-center justify-center ">
               <p className="text-3xl text-center font-semibold">
-                ₹999 <span className="text-xl ">/ Year</span>
+                ₹{plan.inr} <span className="text-xl ">/ Year</span>
               </p>
-              <p className="text-lg text-center my-2">Billed Annually</p>
+              <p className="text-lg text-center my-2">Billed {plan.duration}</p>
               <p
-                onClick={handlebasicPayment}
+                onClick={()=>handlebasicPayment({
+                  amount: plan.inr,
+                  duration: plan.duration,
+                  plan: plan.packagename,
+                  course: plan.course,
+                  subtopics: plan.subtopic,
+                })}
                 className="bg-darkgray text-center cursor-pointer text-white font-medium py-1.5 w-36 mx-auto rounded-md "
               >
                 Select
               </p>
               <ul className="space-y-2 text-base font-medium mt-7">
-                <li>Generate 10 Course / Year</li>
+                <li>Generate {plan.course} Course / {plan.duration}</li>
                 <li>Theory & Image Course</li>
-                <li>Theory & Video Course</li>
-                <li>Up to 10 Subtopics</li>
+                <li>{plan.coursetype === "Video & Text Course" ? "Theory & Video Course" : ""}</li>
+                <li>Up to {plan.subtopic} Subtopics</li>
                 <li>AI Tutor for doubt solving</li>
-                <li>Create / Join Study Groups</li>
+                <li>{plan.studyGroupAccess === "Yes" ? "Create / Join Study Groups" : ""}</li>
+                <li>{plan.quizAccess === "Yes" ? " Access Quizzes" : ""}</li>
                 <li>Export Course as PDF</li>
               </ul>
             </div>
           </div>
-          <div className="  bg-darkgray border border-gray-100 rounded-4xl shadow-md p-3">
-            <h2 className="text-teal-400 text-2xl font-medium m-2">Pro</h2>
-            <div className="grid  items-center justify-center ">
-              <p className="text-3xl  text-center text-teal-400 font-semibold">
-                ₹ 1999 <span className="text-xl">/ Year</span>
-              </p>
-              <p className="text-lg text-center my-2 ">Billed Annually</p>
-              <p
-                onClick={handleProPayment}
-                className="bg-teal-400 text-center cursor-pointer text-black font-medium py-1.5 w-36 mx-auto rounded-md mb-6"
-              >
-                Select
-              </p>
-              <ul className="space-y-2 text-base font-light mt-2">
-                <li>Generate 25 Course / Year</li>
-                <li>Theory & Image Course</li>
-                <li>Theory & Video Course</li>
-                <li>Up to 10 Subtopics</li>
-                <li>AI Tutor for doubt solving</li>
-                <li>Create / Join Study Groups</li>
-                <li>Export Course as PDF</li>
-              </ul>
-            </div>
-          </div>
+          ))}
+         
         </div>
       </div>
     </>

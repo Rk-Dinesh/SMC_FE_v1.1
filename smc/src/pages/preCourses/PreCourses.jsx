@@ -222,7 +222,7 @@ const PreCourses = () => {
             key={index}
             className="col-span-3 bg-darkgray pb-2 text-white rounded-4xl"
           >
-            <img src={IMG} alt="Course" className="rounded-4xl w-full p-2" />
+            <img src={course.photo || IMG} alt="Course" className="rounded-4xl w-full p-2" />
             <div className="text-sm px-6 leading-relaxed">
               <p className="font-semibold text-lg">{course.mainTopic}</p>
               <p>

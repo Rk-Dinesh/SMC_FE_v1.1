@@ -45,6 +45,44 @@ const Content = () => {
   const handleOnClose = () => setIsOpenDrawer(false);
   const [isAnimationVisible, setIsAnimationVisible] = useState(false);
   const user = localStorage.getItem("user");
+  const [accessLevels, setAccessLevels] = useState({});
+    const Substype = localStorage.getItem("type");
+  
+    useEffect(() => {
+      if (type !== "free") {
+        fetchSubscriptionStatus();
+      }
+    }, []);
+  
+   const fetchSubscriptionStatus = async () => {
+    try {
+      if (type === "Pro") {
+        setAccessLevels({
+          preCourses: "Yes",
+          studyGroupAccess: "Yes",
+          quizAccess: "Yes",
+        });
+        return;
+      } else if (type === "free") {
+        setAccessLevels({
+          preCourses: "No",
+          studyGroupAccess: "No",
+          quizAccess: "No",
+        });
+        return;
+      } else {
+        const response = await axios.get(
+          `${API}/api/getsubscriptionplanbypackagename?packagename=${type}`
+        );
+        if (response.status === 200) {
+          setAccessLevels(response.data.data);
+         // console.log("Access Levels:", response.data.data);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching subscription status:", error);
+    }
+  };
 
   const CountDoneTopics = () => {
     let doneCount = 0;
@@ -782,6 +820,7 @@ const Content = () => {
             </div>
           ))}
         </div>
+         {accessLevels && accessLevels.quizAccess === "Yes" ? (
         <p
           className="text-center mt-3 mx-4 flex flex-row items-center text-base font-bold  text-white cursor-pointer"
           onClick={redirectExam}
@@ -789,7 +828,7 @@ const Content = () => {
           {" "}
           {mainTopic} Quiz
           {pass === true ? <FaCheck className="ml-2" size={12} /> : <></>}
-        </p>
+        </p>): null}
       </>
     );
   };

@@ -174,3 +174,42 @@ const Chats = () => {
 };
 
 export default Chats;
+
+// {
+//   kPIs:{
+//     totalUsers: 1000,
+//     activeUsers: 800,
+//     courseCompleted: 600,
+//     quizessAttempted: 400,
+//     newRegistrations: 50,
+//     courseGenerated: 20,
+//     totalStudyGroups: 10,
+//     reccuringRevenue: 5000,
+//     referaalSignUps: 100,
+//     commisionsPaid: 2000,
+//   },
+//   subscribtions: {
+//     seekPro: 120,
+//     seekPremium: 80,
+    
+//   },
+//   subscriptionRevenue: {
+//     seekPro: 12000, 
+//     seekPremium: 8000,
+//   },
+//   RevenueByMonthbasedOnYear:{
+
+//   },
+//   customerChurnRatebasedOnMonth:{
+
+//   } , 
+//   preGenratedCourses: {
+//     totalCourses: 50,
+//     completedCourses: 30,
+//     inProgressCourses: 15,
+//   },
+//   Quiz:{
+//     totalQuizzes: 100,
+//     completedQuizzes: 80,
+//   }
+//}

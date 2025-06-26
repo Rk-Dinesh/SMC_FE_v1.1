@@ -439,7 +439,7 @@ const Dashboard = () => {
             {userChannels && userChannels.length > 0 ? (
               userChannels.slice(0,4).map((group) => (
                 <div
-                  key={group.id}
+                  key={group._id}
                   className="flex items-center justify-start gap-4 mb-4 border-b border-white/20 pb-2"
                   onClick={() => handleClick(group)}
                 >
