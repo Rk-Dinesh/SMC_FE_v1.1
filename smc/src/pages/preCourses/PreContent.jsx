@@ -564,7 +564,7 @@ const PreContent = () => {
       courseId: courseId,
     };
     try {
-      const postURL = API + "/api/update";
+      const postURL = API + "/api/preupdate";
       await axios.post(postURL, dataToSend);
     } catch (error) {
       updateCourse();
