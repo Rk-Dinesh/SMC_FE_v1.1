@@ -105,7 +105,7 @@ const Navbar = () => {
 
         <div className="flex gap-4  items-center  lg:mx-0 md:mx-0 mx-auto">
           <div className="flex justify-between lg:px-4 py-2 w-full bg-darkgray items-center text-center rounded-full">
-            <select
+            {/* <select
               onChange={handleLanguageChange}
               className="bg-darkgray text-white px-3 py-1 rounded-full text-sm focus:outline-none"
             >
@@ -113,13 +113,13 @@ const Navbar = () => {
               <option value="es">Español</option>
               <option value="fr">Français</option>
               <option value="de">Deutsch</option>
-              {/* Add more as needed */}
-            </select>
+              
+            </select> 
             <img
               src={Localisation}
               alt="Language icon"
               className="size-10 rounded-full mx-2"
-            />
+            />*/}
             <div className="flex items-center gap-2 text-nowrap">
               <div className="relative mr-5" onClick={togglenotify}>
                 <Bell className="lg:w-7 lg:h-7 md:w-6 md:h-6 w-5 h-5 text-white cursor-pointer" />

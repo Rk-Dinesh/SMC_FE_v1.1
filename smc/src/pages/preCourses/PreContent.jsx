@@ -49,21 +49,21 @@ const PreContent = () => {
   const Substype = localStorage.getItem("type");
 
   useEffect(() => {
-    if (type !== "free") {
+ 
       fetchSubscriptionStatus();
-    }
+ 
   }, []);
 
    const fetchSubscriptionStatus = async () => {
     try {
-      if (type === "Pro") {
+      if (Substype === "Pro" ) {
         setAccessLevels({
           preCourses: "Yes",
           studyGroupAccess: "Yes",
           quizAccess: "Yes",
         });
         return;
-      } else if (type === "free") {
+      } else if (Substype === "free") {
         setAccessLevels({
           preCourses: "No",
           studyGroupAccess: "No",
@@ -72,7 +72,7 @@ const PreContent = () => {
         return;
       } else {
         const response = await axios.get(
-          `${API}/api/getsubscriptionplanbypackagename?packagename=${type}`
+          `${API}/api/getsubscriptionplanbypackagename?packagename=${Substype}`
         );
         if (response.status === 200) {
           setAccessLevels(response.data.data);

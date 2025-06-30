@@ -41,9 +41,9 @@ const Layout = ({ setIsLoggedIn }) => {
   const type = localStorage.getItem("type");
 
   useEffect(() => {
-    if (type !== "free") {
+    
       fetchSubscriptionStatus();
-    }
+
   }, []);
 
   const fetchSubscriptionStatus = async () => {
