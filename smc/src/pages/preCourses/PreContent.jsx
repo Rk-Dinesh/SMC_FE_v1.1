@@ -295,6 +295,7 @@ const PreContent = () => {
       const response = await axios.post(postURL, dataToSend);
       if (response.data.success) {
         toast.success("Course completed successfully!");
+         navigate('/certificate', { state: { courseId: courseId, userIds: user } });
       }
     } catch (error) {
       error = error.response ? error.response.data : error;

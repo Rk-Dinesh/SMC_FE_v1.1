@@ -309,6 +309,18 @@ const ViewCertificate = () => {
         <p className="text-base mb-6">
           Completion Date: {formatDate1(certificateDetails.issueDate)}
         </p>
+         <div className="absolute bottom-16 left-24 flex justify-center items-center  rounded-full shadow-lg">
+          {qrCodeDataUrl ? (
+            <img
+              src={qrCodeDataUrl}
+              alt="Certificate QR Code"
+              width="100"
+              height="100"
+            />
+          ) : (
+            <p>Loading QR...</p>
+          )}
+        </div>
         <p className="text-sm text-teal-400 text-center">
           Click the button below to download your certificate.
         </p>
