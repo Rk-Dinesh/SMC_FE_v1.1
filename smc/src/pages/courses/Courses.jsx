@@ -26,7 +26,7 @@ const Courses = () => {
             userId: userId,
             page: currentPage,
             limit: itemsPerPage,
-            search: searchQuery, 
+            search: searchQuery,
           },
         });
         const responseData = response.data.data;
@@ -63,10 +63,9 @@ const Courses = () => {
     });
   };
 
-  const handleCertificate = (mainTopic, end) => {
-    const ending = new Date(end).toLocaleDateString();
+  const handleCertificate = (_id, user) => {
     navigate("/viewcertificate", {
-      state: { courseTitle: mainTopic, end: ending },
+      state: { courseId: _id, userIds: user },
     });
   };
 
@@ -169,7 +168,11 @@ const Courses = () => {
             key={index}
             className="col-span-3 bg-darkgray pb-2 text-white rounded-4xl"
           >
-            <img src={course.photo} alt="Course" className="rounded-4xl w-full p-2" />
+            <img
+              src={course.photo}
+              alt="Course"
+              className="rounded-4xl w-full p-2"
+            />
             <div className="text-sm px-6 leading-relaxed">
               <p className="font-semibold text-lg">{course.mainTopic}</p>
               <p>
@@ -211,9 +214,7 @@ const Courses = () => {
               </p>
               {course.completed === true && (
                 <p
-                  onClick={() =>
-                    handleCertificate(course.mainTopic, course.end)
-                  }
+                  onClick={() => handleCertificate(course._id, course.user)}
                   className="cursor-pointer bg-white text-black px-4 py-1 rounded-md text-sm"
                 >
                   Certificate

@@ -21,7 +21,7 @@ const Certificate = () => {
     const fetchCompletedCourses = async () => {
       try {
         const response = await axios.get(
-          `${API}/api/completedcourseslimit`
+          `${API}/api/certificatebyuserPagelimit`
         ,{
           params: {
             userId: userId,
@@ -39,10 +39,11 @@ const Certificate = () => {
     fetchCompletedCourses();
   }, [userId, currentPage, itemsPerPage, searchQuery]);
 
-  const handleCertificate = (mainTopic, end) => {
-    const ending = new Date(end).toLocaleDateString();
+  const handleCertificate = (courseId, userId) => {
+    
+    
     navigate("/viewcertificate", {
-      state: { courseTitle: mainTopic, end: ending },
+      state: { courseId: courseId, userIds: userId },
     });
   };
 
@@ -84,7 +85,7 @@ const Certificate = () => {
           <div className=" col-span-3 bg-darkgray pb-3 text-white rounded-4xl " key={index}>
             <img src={IMG} alt="Course" className="rounded-4xl w-full p-2" />
             <div className="text-sm px-6 leading-relaxed">
-              <p className="font-semibold text-lg">{course.mainTopic}</p>
+              <p className="font-semibold text-lg">{course.courseName}</p>
               <p>
                 <span>Type:</span> {course.type}
               </p>
@@ -92,11 +93,11 @@ const Certificate = () => {
                 <span>No of Subtopics:</span> {course.subtopics}
               </p> */}
               <p>
-                <span>Language:</span> {course.lang}
+                <span>Language:</span> {course.language}
               </p>
               <p>
                 <span>Date:</span>{" "}
-                {new Date(course.date)
+                {new Date(course.issueDate)
                   .toLocaleDateString("en-GB", {
                     day: "2-digit",
                     month: "short",
@@ -109,7 +110,7 @@ const Certificate = () => {
             <div className="flex gap-2 mt-4 justify-center">
               <button
                 className="bg-teal-400 text-black px-4 py-1 rounded-md text-sm "
-                onClick={() => handleCertificate(course.mainTopic, course.end)}
+                onClick={() => handleCertificate(course.courseId, course.userId)}
               >
                 View Certificate
               </button>

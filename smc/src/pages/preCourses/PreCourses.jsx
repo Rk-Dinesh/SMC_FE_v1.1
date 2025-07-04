@@ -17,7 +17,7 @@ const PreCourses = () => {
   const [currentItems, setCurrentItems] = useState([]);
   const [options, setOptions] = useState([]);
 
-    const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [subCategories1, setSubCategories1] = useState([]);
   const [subCategories2, setSubCategories2] = useState([]);
 
@@ -128,7 +128,6 @@ const PreCourses = () => {
     subcategory2,
   ]);
 
-
   const handleCourse = async (
     content,
     mainTopic,
@@ -167,10 +166,9 @@ const PreCourses = () => {
     }
   };
 
-  const handleCertificate = (mainTopic, end) => {
-    const ending = new Date(end).toLocaleDateString();
+  const handleCertificate = (_id, user) => {
     navigate("/viewcertificate", {
-      state: { courseTitle: mainTopic, end: ending },
+      state: { courseId: _id, userIds: user },
     });
   };
 
@@ -208,101 +206,101 @@ const PreCourses = () => {
             <Search />
           </button>
         </p>
-       <select
-            value={category}
-            onChange={(e) => {
-              const selectedId = e.target.value;
-              const selectedCat = categories.find(
-                (cat) => cat._id === selectedId
-              );
+        <select
+          value={category}
+          onChange={(e) => {
+            const selectedId = e.target.value;
+            const selectedCat = categories.find(
+              (cat) => cat._id === selectedId
+            );
 
-              if (selectedCat) {
-                setCategory(selectedId);
-                setCategoryName(selectedCat.name);
-              } else {
-                setCategory("");
-                setCategoryName("");
-              }
+            if (selectedCat) {
+              setCategory(selectedId);
+              setCategoryName(selectedCat.name);
+            } else {
+              setCategory("");
+              setCategoryName("");
+            }
 
-              // Reset child selects
+            // Reset child selects
+            setSubCategory1("");
+            setSubCategory1Name("");
+            setSubCategory2("");
+            setSubCategory2Name("");
+
+            setCurrentPage(1);
+          }}
+          className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
+        >
+          <option value="">All Categories</option>
+          {categories.map((cat) => (
+            <option key={cat._id} value={cat._id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={subcategory1}
+          onChange={(e) => {
+            const selectedId = e.target.value;
+            const selectedSC1 = subCategories1.find(
+              (sc1) => sc1._id === selectedId
+            );
+
+            if (selectedSC1) {
+              setSubCategory1(selectedId);
+              setSubCategory1Name(selectedSC1.name);
+            } else {
               setSubCategory1("");
               setSubCategory1Name("");
+            }
+
+            // Reset subCategory2
+            setSubCategory2("");
+            setSubCategory2Name("");
+
+            setCurrentPage(1);
+          }}
+          className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
+          disabled={!category}
+        >
+          <option value="">All SubCategory1</option>
+          {subCategories1.map((sc1) => (
+            <option key={sc1._id} value={sc1._id}>
+              {sc1.name}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={subcategory2}
+          onChange={(e) => {
+            const selectedId = e.target.value;
+            const selectedSC2 = subCategories2.find(
+              (sc2) => sc2._id === selectedId
+            );
+
+            if (selectedSC2) {
+              setSubCategory2(selectedId);
+              setSubCategory2Name(selectedSC2.name);
+            } else {
               setSubCategory2("");
               setSubCategory2Name("");
+            }
 
-              setCurrentPage(1);
-            }}
-            className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
-          >
-            <option value="">All Categories</option>
-            {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={subcategory1}
-            onChange={(e) => {
-              const selectedId = e.target.value;
-              const selectedSC1 = subCategories1.find(
-                (sc1) => sc1._id === selectedId
-              );
-
-              if (selectedSC1) {
-                setSubCategory1(selectedId);
-                setSubCategory1Name(selectedSC1.name);
-              } else {
-                setSubCategory1("");
-                setSubCategory1Name("");
-              }
-
-              // Reset subCategory2
-              setSubCategory2("");
-              setSubCategory2Name("");
-
-              setCurrentPage(1);
-            }}
-            className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
-            disabled={!category}
-          >
-            <option value="">All SubCategory1</option>
-            {subCategories1.map((sc1) => (
-              <option key={sc1._id} value={sc1._id}>
-                {sc1.name}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={subcategory2}
-            onChange={(e) => {
-              const selectedId = e.target.value;
-              const selectedSC2 = subCategories2.find(
-                (sc2) => sc2._id === selectedId
-              );
-
-              if (selectedSC2) {
-                setSubCategory2(selectedId);
-                setSubCategory2Name(selectedSC2.name);
-              } else {
-                setSubCategory2("");
-                setSubCategory2Name("");
-              }
-
-              setCurrentPage(1);
-            }}
-            className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
-            disabled={!subcategory1}
-          >
-            <option value="">All SubCategory2</option>
-            {subCategories2.map((sc2) => (
-              <option key={sc2._id} value={sc2._id}>
-                {sc2.name}
-              </option>
-            ))}
-          </select>
+            setCurrentPage(1);
+          }}
+          className="text-white placeholder:text-white rounded-full px-4 py-2 bg-darkest-blue outline-none"
+          disabled={!subcategory1}
+        >
+          <option value="">All SubCategory2</option>
+          {subCategories2.map((sc2) => (
+            <option key={sc2._id} value={sc2._id}>
+              {sc2.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12 gap-4 py-4 ">
@@ -311,7 +309,11 @@ const PreCourses = () => {
             key={index}
             className="col-span-3 bg-darkgray pb-2 text-white rounded-4xl"
           >
-            <img src={course.photo || IMG} alt="Course" className="rounded-4xl w-full p-2" />
+            <img
+              src={course.photo || IMG}
+              alt="Course"
+              className="rounded-4xl w-full p-2"
+            />
             <div className="text-sm px-6 leading-relaxed">
               <p className="font-semibold text-lg">{course.mainTopic}</p>
               <p>
@@ -326,10 +328,10 @@ const PreCourses = () => {
               <p>
                 <span>Category:</span> {course.category}
               </p>
-               <p>
+              <p>
                 <span>SubCategory 01:</span> {course.subCategory1}
               </p>
-               <p>
+              <p>
                 <span>SubCategory 02:</span> {course.subCategory2}
               </p>
               <p>
@@ -382,6 +384,18 @@ const PreCourses = () => {
                 >
                   Continue
                 </p>
+                {course.user.some(
+                  (user) =>
+                    user.userId.toString() === userId.toString() &&
+                    user.completed === true
+                ) && (
+                  <p
+                    onClick={() => handleCertificate(course._id, userId)}
+                    className="cursor-pointer bg-white text-black px-4 py-1 rounded-md text-sm"
+                  >
+                    Certificate
+                  </p>
+                )}
               </div>
             ) : (
               <div className="flex gap-2 mt-4 justify-center">
@@ -401,18 +415,10 @@ const PreCourses = () => {
                 >
                   Start
                 </p>
-                {/* {course.completed === true && (
-                <p
-                  onClick={() =>
-                    handleCertificate(course.mainTopic, course.end)
-                  }
-                  className="cursor-pointer bg-white text-black px-4 py-1 rounded-md text-sm"
-                >
-                  Certificate
-                </p>
-              )} */}
+                
               </div>
             )}
+            
           </div>
         ))}
       </div>

@@ -1,149 +1,228 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
-
+import QRCode from "qrcode";
 import Logo from "../../assets/images/logo.png";
 import AI from "../../assets/images/certificate bg.png";
-import Badge from "../../assets/images/complete.png";
 import Completed from "../../assets/images/completed.png";
 import { useLocation } from "react-router-dom";
-import { formatDate1 } from "../../Host";
+import { API, formatDate1 } from "../../Host";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const ViewCertificate = () => {
   const certificateRef = useRef(null);
-  const [isContentVisible, setContentVisible] = useState(false);
+  const [certificateDetails, setCertificateDetails] = useState({});
   const { state } = useLocation();
   const userName = localStorage.getItem("userName");
-  const { courseTitle, end } = state || {};
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState("");
+  const { courseId, userIds } = state || {};
 
-  const handleDownload1 = () => {
-    setContentVisible(true);
-    const element = certificateRef.current;
+  console.log("Course ID:", courseId);
+  console.log("User IDs:", userIds);
+  
 
-    // Store original styles
-    const originalWidth = element.style.width;
-    const originalVisibility = element.style.visibility;
-    const originalDisplay = element.style.display;
+  useEffect(() => {
+    if (courseId && userIds) {
+      fetchCertificateDetails();
+    } else {
+      toast.error("Invalid course or user ID.");
+    }
+  }, [courseId, userIds]);
 
-    // Temporarily show for download
-    element.style.width = "900px";
-    element.style.visibility = "visible";
-    element.style.display = "block";
+  useEffect(() => {
+    const generateQRCode = async () => {
+      if (courseId && userIds) {
+        const urlToEncode = `${window.location.origin}/verify-certificate/${courseId}/${userIds}`;
+        try {
+          const dataUrl = await QRCode.toDataURL(urlToEncode);
+          setQrCodeDataUrl(dataUrl);
+        } catch (err) {
+          console.error("Error generating QR code:", err);
+        }
+      }
+    };
 
-    html2canvas(element, { scale: 2 })
-      .then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("landscape", "mm", "a4");
+    generateQRCode();
+  }, [courseId, userIds]);
 
-        const imgWidth = 297;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        const x = (297 - imgWidth) / 2;
-        const y = (210 - imgHeight) / 2;
-
-        pdf.addImage(imgData, "PNG", x, y, imgWidth, imgHeight);
-        pdf.save(`SMC ${courseTitle} Certificate.pdf`);
-
-        // Revert styles
-        element.style.width = originalWidth;
-        element.style.visibility = originalVisibility;
-        element.style.display = originalDisplay;
-      })
-      .catch((err) => {
-        console.error("Error generating canvas for PDF:", err);
-      });
+  const fetchCertificateDetails = async () => {
+    try {
+      const response = await axios.get(
+        `${API}/api/certificate/${courseId}/${userIds}`
+      );
+      console.log("Certificate Details:", response.data);
+      setCertificateDetails(response.data.data);
+    } catch (error) {
+      console.error("Error fetching certificate details:", error);
+      toast.error("Failed to fetch certificate details.");
+    }
   };
 
   const handleDownload = async () => {
     try {
       const pdf = new jsPDF("landscape", "mm", "a4");
-      pdf.setFillColor(0, 0, 0); // RGB for black
-      pdf.rect(0, 0, 297, 210, "F");
+      const pageW = 297;
+      const pageH = 210;
 
-      // Background
-      pdf.addImage(AI, "JPEG", 0, 0, 297, 210);
+      const border = 4;
+      pdf.setFillColor(20, 184, 166); // #14b8a6 (Tailwind teal-400)
+      pdf.rect(0, 0, pageW, pageH, "F");
 
-      // Logo
-      pdf.addImage(Logo, "PNG", 78.5, 20, 140, 25); // Centered horizontally
+      // 2️⃣ Inner dark-gray content area
+      const ix = border;
+      const iy = border;
+      const iw = pageW - 2 * border;
+      const ih = pageH - 2 * border;
+      pdf.setFillColor("#1D1D1D"); // Tailwind bg-darkgray
+      pdf.rect(ix, iy, iw, ih, "F");
 
-      // 1) Teal sidebar (25 mm wide)
-      pdf.setFillColor(20, 184, 166); // Tailwind’s #14b8a6
-      pdf.rect(0, 0, 15, 210, "F");
+      // 3️⃣ Right faded background image
+      pdf.addImage(AI, "JPEG", ix + iw / 2, iy, iw / 2, ih);
 
-      // 2) Draw vertical text bottom-to-top rotated 90 degrees
+      // === 4️⃣ Compute dynamic ribbon height to fit text + padding ===
       const verticalText = "AI COURSE GENERATOR";
+      const chars = verticalText.replace(/\s/g, "").length;
+      const stepY = 9; // spacing between letters
+      const textBlockHeight = chars * stepY;
+      const paddingY = 8; // 10 mm top/bottom padding
+      const ribbonH = textBlockHeight + 2 * paddingY;
+      const ribbonW = 20; // ribbon width
+      const ribbonX = ix;
+      const ribbonY = iy + (ih - ribbonH) / 2; // center ribbon vertically
+
+      pdf.setFillColor(255, 255, 255);
+      // Ribbon dimensions
+      const radius = 16;
+
+      // Start path
+      pdf.setFillColor(255, 255, 255);
+      pdf.setDrawColor(255, 255, 255);
+      pdf.setLineJoin("round");
+
+      // Start path for right side ribbon with rounded corners
+      pdf.moveTo(ribbonX + ribbonW - radius, ribbonY); // Starting just before the top-right rounded corner
+
+      // Top-right corner curve
+      pdf.lineTo(ribbonX, ribbonY); // top edge
+      pdf.lineTo(ribbonX, ribbonY + ribbonH); // left edge
+      pdf.lineTo(ribbonX + ribbonW - radius, ribbonY + ribbonH); // bottom edge before curve
+
+      // Bottom-right curve
+      pdf.curveTo(
+        ribbonX + ribbonW,
+        ribbonY + ribbonH,
+        ribbonX + ribbonW,
+        ribbonY + ribbonH,
+        ribbonX + ribbonW,
+        ribbonY + ribbonH - radius
+      );
+
+      // Right vertical
+      pdf.lineTo(ribbonX + ribbonW, ribbonY + radius);
+
+      // Top-right curve
+      pdf.curveTo(
+        ribbonX + ribbonW,
+        ribbonY,
+        ribbonX + ribbonW,
+        ribbonY,
+        ribbonX + ribbonW - radius,
+        ribbonY
+      );
+
+      // Close and fill
+      pdf.close();
+      pdf.fill();
+
+      const textX = ribbonX + ribbonW / 2 + 4; // center of ribbon
+      let startY = ribbonY + ribbonH - paddingY - stepY / 2; // start from bottom inside ribbon
+
       pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(38); // roughly a Tailwind text-2xl
-      pdf.setTextColor(0, 0, 0); // black letters
+      pdf.setFontSize(32);
+      pdf.setTextColor(0, 0, 0);
 
-      const startY = 200; // Start near the bottom of A4 (210)
-      const stepY = 10.5; // Spacing for each letter
-
+      let drawn = 0;
       for (let i = 0; i < verticalText.length; i++) {
         const ch = verticalText[i];
         if (ch !== " ") {
-          // Rotate each letter 90 degrees and place it ascending from bottom to top
-          pdf.text(ch, 12, startY - i * stepY, { angle: 90 });
+          pdf.text(ch, textX, startY - drawn * stepY, {
+            angle: 90,
+          });
+          drawn++;
         }
       }
 
-      // BADGE (top right)
-      pdf.addImage(Badge, "PNG", 255, 0, 35, 70); // Outer badge
+      // 6️⃣ Logo (centered inside the content area)
+      pdf.addImage(Logo, "PNG", ix + 30, iy + 10, iw - 60, 20);
 
-      // COMPLETED STAMP
-      pdf.addImage(Completed, "PNG", 253, 18, 40, 35); // Inner stamp
+      // 7️⃣ Certificate content (centered text)
+      const cx = ix + iw / 2;
+      pdf.setTextColor(255, 255, 255);
+      pdf
+        .setFontSize(30)
+        .setFont("helvetica", "bold")
+        .text("CERTIFICATE OF COMPLETION", cx, iy + 50, { align: "center" });
+      pdf
+        .setFontSize(16)
+        .text("This is to certify that", cx, iy + 65, { align: "center" });
+      pdf
+        .setFontSize(22)
+        .text(formatName(userName), cx, iy + 82, { align: "center" });
 
-      // Text OVER the Completed stamp
-      pdf.setFontSize(15); // Smaller font fits better
-      pdf.setTextColor(0, 0, 0); // Black color
+      // Underline
+      pdf
+        .setDrawColor(226, 232, 240)
+        .setLineWidth(1)
+        .line(cx - 74, iy + 86, cx + 74, iy + 86);
 
-      // Centered text on stamp (adjusted manually)
-      const text = "Completed";
-      const textX = 272; // X-center of the stamp
-      const textY = 38; // Y-center of the stamp
+      pdf
+        .setFontSize(16)
+        .text("has successfully completed the course on", cx, iy + 102, {
+          align: "center",
+        });
+      pdf
+        .setFontSize(20)
+        .text(formatName(certificateDetails.courseName), cx, iy + 118, {
+          align: "center",
+        });
+      pdf
+        .setFontSize(14)
+        .text(`On ${formatDate1(certificateDetails.issueDate)}`, cx, iy + 132, {
+          align: "center",
+        });
 
-      // Center-align the text (visually aligned)
-      pdf.text(text, textX, textY, { align: "center", baseline: "middle" });
+      // Add QR Code to PDF (bottom-left)
+      if (qrCodeDataUrl) {
+        const qrWidth = 40;
+        const qrHeight = 40;
+        const qrX = ix + 35; // bottom-left margin X
+        const qrY = pageH - qrHeight - 25; // bottom-left margin Y
 
-      // Main certificate content
-      pdf.setFontSize(24);
-      pdf.setTextColor("#FFFFFF");
-      pdf.text("CERTIFICATE OF COMPLETION", 148.5, 70, { align: "center" });
+        pdf.addImage(qrCodeDataUrl, "PNG", qrX, qrY, qrWidth, qrHeight);
+      }
 
-      pdf.setFontSize(18);
-      pdf.text("This is to certify that", 148.5, 88, { align: "center" });
+      // 8️⃣ Footer text
+      // 8️⃣ Footer text
+      pdf.setFontSize(12).setTextColor(255, 255, 255);
+      pdf.text("This is a system generated certificate", ix + 6, pageH - 10);
+      pdf.text("A product of Morpheus Code", pageW - 80, pageH - 10);
 
-      pdf.setFontSize(22);
-      pdf.text(userName, 148.5, 106, { align: "center" });
+      // 9️⃣ "Completed" badge (centered at the bottom)
+      const badgeWidth = 60;
+      const badgeHeight = 50;
+      const badgeX = (pageW - badgeWidth) / 2;
+      const badgeY = pageH - badgeHeight - 10; // 10mm padding from bottom
 
-      pdf.setDrawColor(71, 85, 105);
-      pdf.setLineWidth(0.5);
-      pdf.line(64.5, 110, 232.5, 110);
-
-      pdf.setFontSize(16);
-      pdf.text("has successfully completed the course on", 148.5, 125, {
-        align: "center",
-      });
-
-      pdf.setFontSize(20);
-      pdf.text(courseTitle, 148.5, 142, { align: "center" });
-
-      pdf.setFontSize(16);
-      pdf.text(`on ${formatDate1(end)}`, 148.5, 157, { align: "center" });
-
-      // Footer
-      pdf.setFontSize(10);
-      pdf.setTextColor("#9ca3af");
-      pdf.text("This is a system generated certificate", 20, 200);
-      pdf.text("A product of Morpheus Code", 240, 200);
-
-      pdf.save(`SMC_${courseTitle}_certificate.pdf`);
+      pdf.addImage(Completed, "PNG", badgeX, badgeY, badgeWidth, badgeHeight);
+      pdf.save(`SMC_${certificateDetails.courseName}_certificate.pdf`);
       toast.success("Certificate downloaded successfully!");
-    } catch (error) {
-      console.error("Error generating PDF:", error);
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to download certificate.");
     }
   };
+
   const formatName = (name) => {
     if (!name) return "";
     return name
@@ -154,225 +233,94 @@ const ViewCertificate = () => {
 
   return (
     <>
-      <div
-        style={{
-          color: "#ffffff",
-          borderBottom: "1px solid white",
-          paddingBottom: "0.5rem",
-          marginBottom: "2rem",
-        }}
-      >
+      <div className="text-white border-b border-white pb-2 mb-8">
         <p>My Certificates</p>
       </div>
 
       <div
         ref={certificateRef}
-        className=" lg:block md:block hidden mx-auto"
-        style={{
-          position: "relative",
-          color: "#ffffff",
-          fontFamily: "Poppins, sans-serif",
-          boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-          width: "100%",
-          maxWidth: "900px",
-          padding: "40px",
-          backgroundColor: "#000000",
-        }}
+        className="hidden md:block lg:block mx-auto relative text-white font-poppins w-full h-[540px] px-6 max-w-3xl text-center  bg-darkgray border-[14px] border-teal-400"
       >
-        {/* Background Image */}
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            top: 0,
-            height: "100%",
-            width: "50%",
-            zIndex: 0,
-          }}
-        >
-          <img
-            src={AI}
-            alt="AI background"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              objectPosition: "right",
-            }}
-          />
+        <div className="absolute top-0 -right-4 h-full w-1/2 z-0 opacity-40">
+          <img src={AI} alt="AI background" className="w-full h-full" />
         </div>
 
-        {/* Left Banner */}
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            height: "100%",
-            width: "4rem",
-            backgroundColor: "#14b8a6",
-            zIndex: 10,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <span
-            style={{
-              transform: "rotate(-90deg)",
-              color: "#000000",
-              fontWeight: "900",
-              fontSize: "2.2rem",
-              letterSpacing: "0.1em",
-              whiteSpace: "nowrap",
-            }}
-          >
+        <div className="absolute top-14 left-0  h-96 w-16 bg-white z-10 flex items-center justify-center rounded-r-3xl">
+          <span className="transform -rotate-90 text-black font-extrabold text-3xl tracking-wide whitespace-nowrap ">
             AI COURSE GENERATOR
           </span>
         </div>
 
-        {/* Content */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 10,
-            paddingLeft: "2.5rem",
-            paddingRight: "2.5rem",
-            paddingBottom: "1.5rem",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div className="flex flex-col justify-center items-center p-8">
-            <img src={Logo} alt="Logo" className="w-1/2" />
-            <h3
-              style={{
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-                marginTop: "0.5rem",
-              }}
-            >
+        <div className="relative z-10 px-10 pb-6 flex flex-col items-center justify-center w-full">
+          <div className="flex flex-col justify-center items-center p-2 mx-8">
+            <img src={Logo} alt="Logo" className="w-2/3" />
+            <p className="lg:text-3xl md:text-xl font-extrabold mt-2 whitespace-nowrap ">
               CERTIFICATE OF COMPLETION
-            </h3>
-          </div>
-          <p style={{ marginTop: "0.5rem", fontSize: "1.125rem" }}>
-            This is to certify that
-          </p>
-          <h1
-            style={{
-              fontSize: "1.875rem",
-              fontWeight: "bold",
-              marginTop: "0.75rem",
-            }}
-          >
-            {formatName(localStorage.getItem("userName"))}
-          </h1>
-          <div
-            style={{
-              height: "2px",
-              width: "83.333333%",
-              marginTop: "0.5rem",
-              backgroundColor: "#475569",
-            }}
-          ></div>
-          <p style={{ marginTop: "1rem", fontSize: "1.125rem" }}>
-            has successfully completed the course on
-          </p>
-          <h2
-            className="first-letter:uppercase"
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: 600,
-              marginTop: "0.5rem",
-            }}
-          >
-            {courseTitle}
-          </h2>
-          <p style={{ marginTop: "0.5rem", fontSize: "1rem" }}>
-            On{" "}
-            {new Date(end)
-              .toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              })
-              .toUpperCase()
-              .replace(/\s/g, "-")}
-          </p>
-        </div>
-
-        {/* Badge */}
-        <div className="absolute sm:top-1 sm:-right-40  md:-right-32 z-20">
-          <img src={Badge} alt="Badge" className="md:w-[34%] sm:w-[25%]" />
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <img
-              className="relative md:w-[50%] md:top-2 md:right-24 sm:right-[100px]   sm:w-[40%] "
-              src={Completed}
-              alt="image"
-            />
-            <p
-              className="absolute md:right-48 md:top-26 sm:top-16 sm:right-48 text-[17px] "
-              style={{
-                transform: "rotate(-45deg)",
-                color: "#000000",
-                fontWeight: "900",
-              }}
-            >
-              Completed
             </p>
           </div>
+          <p className="mt-2 text-lg">This is to certify that</p>
+          <p className="text-3xl font-bold mt-3">
+            {certificateDetails.userName || userName}
+          </p>
+          <div className="h-[2px] w-4/6 mt-2 bg-slate-100"></div>
+          <p className="mt-4 text-lg">
+            has successfully completed the course on
+          </p>
+          <p className="capitalize text-2xl font-semibold mt-2">
+            {certificateDetails.courseName || "Course Title"}
+          </p>
+          <p className="mt-2 text-base">
+            On {formatDate1(certificateDetails.issueDate)}
+          </p>
         </div>
 
-        {/* Footer */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "1rem",
-            left: "5rem",
-            right: "1.5rem",
-            zIndex: 10,
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "0.75rem",
-            color: "#9ca3af",
-          }}
-        >
-          <span>This is a system generated certificate</span>
-          <span>A product of Morpheus Code</span>
+        <div className="absolute bottom-16 left-24 flex justify-center items-center  rounded-full shadow-lg">
+          {qrCodeDataUrl ? (
+            <img
+              src={qrCodeDataUrl}
+              alt="Certificate QR Code"
+              width="100"
+              height="100"
+            />
+          ) : (
+            <p>Loading QR...</p>
+          )}
+        </div>
+
+        <div className=" absolute bottom-0 right-0  flex justify-evenly items-end  text-sm text-gray-200">
+          <span className="mb-6">This is a system generated certificate</span>
+          <img src={Completed} alt="image" className="w-1/5" />
+
+          <span className="mb-6">A product of Morpheus Code</span>
         </div>
       </div>
 
-      <div className="visible sm:invisible flex flex-col mx-3 justify-center items-center text-gray-200 ">
+      <div className="visible sm:invisible flex flex-col mx-3 justify-center items-center text-gray-200">
         <h1 className="text-2xl font-bold mb-6">Your Certificate Details</h1>
         <p className="text-base text-center mb-6">
           Congratulations! You have successfully completed the course:
         </p>
-        <h2 className="text-xl font-bold mb-4">{courseTitle}</h2>
-        <p className="text-base mb-6">Name: {userName}</p>
-        <p className="text-base mb-6">Completion Date: {formatDate1(end)}</p>
-        <p className="text-sm text-teal-400  text-center">
+        <h2 className="text-xl font-bold mb-4">
+          {certificateDetails.courseName || "Course Title"}
+        </h2>
+        <p className="text-base mb-6">
+          Name: {certificateDetails.userName || userName}
+        </p>
+        <p className="text-base mb-6">
+          Completion Date: {formatDate1(certificateDetails.issueDate)}
+        </p>
+        <p className="text-sm text-teal-400 text-center">
           Click the button below to download your certificate.
         </p>
       </div>
 
-      {/* Download Button */}
       <div className="fixed bottom-60 left-0 right-0 flex justify-center sm:relative sm:mt-6">
-        <button
+        <p
           onClick={handleDownload}
           className="bg-teal-500 text-black py-2 px-6 rounded-md font-medium"
         >
           Download
-        </button>
+        </p>
       </div>
     </>
   );

@@ -49,14 +49,12 @@ const PreContent = () => {
   const Substype = localStorage.getItem("type");
 
   useEffect(() => {
- 
-      fetchSubscriptionStatus();
- 
+    fetchSubscriptionStatus();
   }, []);
 
-   const fetchSubscriptionStatus = async () => {
+  const fetchSubscriptionStatus = async () => {
     try {
-      if (Substype === "Pro" ) {
+      if (Substype === "Pro") {
         setAccessLevels({
           preCourses: "Yes",
           studyGroupAccess: "Yes",
@@ -288,36 +286,19 @@ const PreContent = () => {
   }
 
   async function finish() {
-    if (sessionStorage.getItem("first") === "true") {
-      if (!end) {
-        const today = new Date();
-        const formattedDate = today.toLocaleDateString("en-GB");
-        navigate("/certificate", {
-          state: { courseTitle: mainTopic, end: formattedDate },
-        });
-      } else {
-        navigate("/certificate", {
-          state: { courseTitle: mainTopic, end: end },
-        });
+    const dataToSend = {
+      courseId: courseId,
+      userId: user,
+    };
+    try {
+      const postURL = API + "/api/prefinish";
+      const response = await axios.post(postURL, dataToSend);
+      if (response.data.success) {
+        toast.success("Course completed successfully!");
       }
-    } else {
-      const dataToSend = {
-        courseId: courseId,
-      };
-      try {
-        const postURL = API + "/api/finish";
-        const response = await axios.post(postURL, dataToSend);
-        if (response.data.success) {
-          const today = new Date();
-          const formattedDate = today.toLocaleDateString("en-GB");
-          sessionStorage.setItem("first", "true");
-          sendEmail(formattedDate);
-        } else {
-          finish();
-        }
-      } catch (error) {
-        finish();
-      }
+    } catch (error) {
+      error = error.response ? error.response.data : error;
+      toast.error(error.message || "Error finishing course");
     }
   }
 
@@ -763,18 +744,17 @@ const PreContent = () => {
           ))}
         </div>
         {accessLevels && accessLevels.quizAccess === "Yes" ? (
-           <p
-          className="text-center mt-3 mx-4 flex flex-row items-center text-base font-bold  text-white cursor-pointer"
-          onClick={() =>
-            navigate("/pre_exam", { state: { courseId: courseId } })
-          }
-        >
-          {" "}
-          {mainTopic} Quiz
-          {pass === true ? <FaCheck className="ml-2" size={12} /> : <></>}
-        </p>
-        ): null}
-       
+          <p
+            className="text-center mt-3 mx-4 flex flex-row items-center text-base font-bold  text-white cursor-pointer"
+            onClick={() =>
+              navigate("/pre_exam", { state: { courseId: courseId } })
+            }
+          >
+            {" "}
+            {mainTopic} Quiz
+            {pass === true ? <FaCheck className="ml-2" size={12} /> : <></>}
+          </p>
+        ) : null}
       </>
     );
   };

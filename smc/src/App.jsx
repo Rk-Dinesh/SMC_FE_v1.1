@@ -37,6 +37,7 @@ import ViewLearner from "./pages/study groups/studyGroup/ViewLearner";
 import PreCourses from "./pages/preCourses/PreCourses";
 import PreContent from "./pages/preCourses/PreContent";
 import PreExam from "./pages/preCourses/PreExam";
+import VerifyCertificate from "./pages/certificate/VerifyCertificate";
 
 export const ThemeContext = createContext();
 
@@ -51,6 +52,7 @@ const App = () => {
       <ThemeContext.Provider value={{ global, setGlobal }}>
         <BrowserRouter>
           <Routes>
+            <Route path="/verify-certificate/:courseId/:userId" element={<VerifyCertificate />} />
             <Route path="/content" element={<Content />} />
             <Route path="/precontent" element={<PreContent />} />
             <Route path="" element={<SignIn />} />

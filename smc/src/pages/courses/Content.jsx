@@ -311,16 +311,7 @@ const Content = () => {
   }
 
   async function finish() {
-    if (sessionStorage.getItem('first') === 'true') {
-        if (!end) {
-            const today = new Date();
-            const formattedDate = today.toLocaleDateString('en-GB');
-            navigate('/certificate', { state: { courseTitle: mainTopic, end: formattedDate } });
-        } else {
-            navigate('/certificate', { state: { courseTitle: mainTopic, end: end } });
-        }
-
-    } else {
+ 
         const dataToSend = {
             courseId: courseId
         };
@@ -328,16 +319,17 @@ const Content = () => {
             const postURL = API + '/api/finish';
             const response = await axios.post(postURL, dataToSend);
             if (response.data.success) {
+               navigate('/certificate', { state: { courseId: courseId, userIds: user } });
                 const today = new Date();
                 const formattedDate = today.toLocaleDateString('en-GB');
                 sessionStorage.setItem('first', 'true');
                 sendEmail(formattedDate);
-            } else {
-                finish()
-            }
+            } 
         } catch (error) {
-            finish()
-        }
+          error = error.response ? error.response.data : error;
+          toast.error(error.message || "Error finishing course");
+         //  console.log("Error finishing course:", error);
+           
     }
 }
 
@@ -368,25 +360,25 @@ const Content = () => {
 </html>
 `;
 
-    try {
-      const postURL = API + "/api/sendcertificate";
-      await axios
-        .post(postURL, { html, email })
-        .then((res) => {
-          navigate("/viewcertificate", {
-            state: { courseTitle: mainTopic, end: formattedDate },
-          });
-        })
-        .catch((error) => {
-          navigate("/viewcertificate", {
-            state: { courseTitle: mainTopic, end: formattedDate },
-          });
-        });
-    } catch (error) {
-      navigate("/viewcertificate", {
-        state: { courseTitle: mainTopic, end: formattedDate },
-      });
-    }
+    // try {
+    //   const postURL = API + "/api/sendcertificate";
+    //   await axios
+    //     .post(postURL, { html, email })
+    //     .then((res) => {
+    //       navigate("/viewcertificate", {
+    //         state: { courseTitle: mainTopic, end: formattedDate },
+    //       });
+    //     })
+    //     .catch((error) => {
+    //       navigate("/viewcertificate", {
+    //         state: { courseTitle: mainTopic, end: formattedDate },
+    //       });
+    //     });
+    // } catch (error) {
+    //   navigate("/viewcertificate", {
+    //     state: { courseTitle: mainTopic, end: formattedDate },
+    //   });
+    // }
   }
 
   useEffect(() => {
